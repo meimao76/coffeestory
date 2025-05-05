@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>3D Trade Flow Globe</title>
+    <style>
+        body { margin: 0; overflow: hidden; }
+        #globeViz { width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <div id="globeViz"></div>
+
+    <!-- 引入 d3 和 Globe.gl -->
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://unpkg.com/globe.gl"></script>
+
+    <script>
+        // 初始化地球
+        const globe = Globe()
+            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
+            .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+            .arcDashLength(0.5)
+            .arcDashGap(1)
+            .arcDashAnimateTime(3000)
+            .arcColor(() => ['#ff6b6b', '#87ceeb'])
+            .arcStroke(0.8);
+
+        globe(document.getElementById('globeViz'));
+
+        // 加载 CSV 数据
+        d3.csv("data/raw_cleaned.csv").then(data => {
+            console.log('数据预览', data.slice(0, 5)); // 检查一下数据
+
+    const top30 = data
+        .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
+        .slice(0, 30);
+
+    // 设置飞线
+    globe
+        .arcsData(top30)
+        .arcStartLat(d => +d.lat_export)
+        .arcStartLng(d => +d.lng_export)
+        .arcEndLat(d => +d.lat_import)
+        .arcEndLng(d => +d.lng_import);
+});
+    </script>
+</body>
+</html>
