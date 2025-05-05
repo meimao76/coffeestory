@@ -33,11 +33,11 @@ const ctx = canvas.getContext("2d");
 canvas.width = 1200;
 canvas.height = 1200;
 
-const center = {x: 580, y: 1020};// 球心位置
+const center = {x: 600, y: 1020};// 球心位置
 const particles = [];
 
 function createRing() {
-  const count = 100; // 粒子数量
+  const count = 200; // 粒子数量
   for (let i = 0; i < count; i++) {
     const angle = (2 * Math.PI * i) / count;
     particles.push({
@@ -79,3 +79,4 @@ function animate() {
   requestAnimationFrame(animate);
 }
 animate();
+//20250505新增离子扩散特效
