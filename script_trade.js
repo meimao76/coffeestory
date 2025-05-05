@@ -37,4 +37,20 @@ svg.selectAll(".exporter")
     .attr("r", 3)
     .attr("fill", "red");
 
+svg.selectAll(".importer")
+    .data(raw_flow)
+    .enter()
+    .append("circle")
+    .attr("class", "exporter")
+    .attr("cx", d => {
+        const coords = projection([+d.lng_import,+d.lat_import]);
+        return coords[0];
+    })
+    .attr("cy", d => {
+        const coords = projection([+d.lng_import,+d.lat_import]);
+        return coords[1];
+    })
+    .attr("r", 0)
+    .attr("fill", "blue");
+
 });
