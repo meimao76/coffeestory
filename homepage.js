@@ -5,7 +5,7 @@ function createCoffeeBean() {
   img.src = "image/coffebeans.png"; 
   img.className = "coffee-bean";
 
-  const size = 20 + Math.random() * 40;
+  const size = 20 + Math.random() * 30;
   img.style.width = `${size}px`;
   img.style.left = `${Math.random() * 100}%`;
   img.style.animationDuration = `${6 + Math.random() * 6}s`;
@@ -27,13 +27,18 @@ setInterval(() => {
 }, 1000);
 //20250504新增咖啡雨特效
 
+const earthContainer = document.querySelector(".earth-container");
 const canvas = document.getElementById("coffee-halo");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 1200;
-canvas.height = 1200;
+canvas.width = earthContainer.offsetWidth;
+canvas.height = earthContainer.offsetHeight;
 
-const center = {x: 600, y: 1020};// 球心位置
+const center = {
+  x: canvas.width / 2,
+  y: canvas.height
+}; //球心位置
+
 const particles = [];
 
 function createRing() {
@@ -42,10 +47,10 @@ function createRing() {
     const angle = (2 * Math.PI * i) / count;
     particles.push({
       angle,
-      radius: 350 + Math.random() * 5, // 起始半径
-      speed: 0.5 + Math.random() * 0.5,
+      radius: 300 + Math.random() * 5, // 起始半径
+      speed: 0.1 + Math.random() * 0.5,
       alpha: 1,
-      size: 0.5 + Math.random() * 1,
+      size: 0.5 + Math.random() * 2,
     });
   }
 }
@@ -67,9 +72,14 @@ function animate() {
     const y = center.y + p.radius * Math.sin(p.angle);
 
     ctx.beginPath();
+    ctx.shadowColor = "rgba(255, 255, 200, 0.7)";  // 浅黄色发光
+    ctx.shadowBlur = 12;
+    ctx.shadowOffsetX = 0;
+    ctx.shadowOffsetY = 0;
     ctx.arc(x, y, p.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(235, 223, 192, ${p.alpha})`; // 白色
+    ctx.fillStyle = `rgba(235, 223, 192, ${Math.max(0, Math.min(1, p.alpha))})`;
     ctx.fill();
+    ctx.shadowBlur = p.glow;
 
     if (p.alpha <= 0) {
       particles.splice(i, 1);
@@ -80,3 +90,34 @@ function animate() {
 }
 animate();
 //20250505新增离子扩散特效
+
+const homepageText = document.querySelector('.homepage-text');
+const earth = document.querySelector('.earth-container');
+const section1 = document.querySelector('#section1 .section-content');
+
+function handleScrollStages() {
+  const scrollY = window.scrollY;
+
+  if (scrollY > 80) {
+    homepageText.classList.add('fade-up-out');
+    earth.classList.add('scrolled');
+    section1.classList.add('visible');
+  } else {
+    homepageText.classList.remove('fade-up-out');
+    earth.classList.remove('scrolled');
+    section1.classList.remove('visible'); // 可选：是否让第二页也隐藏
+  }
+}
+
+function updateCanvasSize() {
+  canvas.width = earthContainer.offsetWidth;
+  canvas.height = earthContainer.offsetHeight;
+  center.x = canvas.width / 2;
+  center.y = canvas.height / 2;
+}
+
+window.addEventListener("resize", updateCanvasSize);
+updateCanvasSize(); // 初始调用一次
+
+window.addEventListener('scroll', handleScrollStages);
+window.addEventListener('load', handleScrollStages);
