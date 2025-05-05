@@ -134,4 +134,28 @@
       opacity: 0;
     }
   }
+
+  .earth-container {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1200px;
+    height: 600px;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 1;
+  }
+  
+  .earth {
+    width: 1200px;
+    height: auto;
+    animation: spinEarth 30s linear infinite;
+  }
+  
+  @keyframes spinEarth {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
   
