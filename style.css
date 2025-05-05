@@ -15,7 +15,7 @@
     position: fixed;
     top: 0;
     width: 100%;
-    background-color: #ffffffcc;
+    background-color: rgba(255,255,255,0.5);
     backdrop-filter: blur(8px);
     z-index: 1000;
     display: flex;
@@ -80,8 +80,8 @@
   
 /* 首页样式 */ 
   #homepage {
-    background: linear-gradient(180deg, #fff3e4, #eed6c4);
-    color: #443421;
+    background: radial-gradient(circle at center, #3B2C22 0%, #1A120D 100%);
+    color: #ebdfc0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -94,12 +94,14 @@
   }
 
   #homepage h1 {
-    font-size: 3.5rem;
+    font-size: 5rem;
+    font-family: 'Playfair Display', 'Georgia', serif;
     margin-bottom: 1rem;
   }
  
   #homepage p {
     font-size: 1.5rem;
+    font-family: 'Noto Sans SC', 'Helvetica Neue', sans-serif;
     max-width: 600px;
   }
 
@@ -142,7 +144,7 @@
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 1500px;
+    width: 1200px;
     height: 600px;
     overflow: hidden;
     pointer-events: none;
@@ -150,8 +152,7 @@
   }
   
   .earth {
-    width: 1500px;
-    height: auto;
+    width: 1200px;
     animation: spinEarth 30s linear infinite;
   }
   
