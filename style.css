@@ -1,0 +1,137 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  html, body {
+    scroll-behavior: smooth;
+    font-family: "Segoe UI", sans-serif;
+    background-color: #fdfcf8;
+  }
+  
+  .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #ffffffcc;
+    backdrop-filter: blur(8px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }
+  
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+  }
+  
+  .navbar a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+  
+  .navbar a:hover {
+    color: #d2691e;
+  }
+  
+  .page-section {
+    height: 100vh;
+    padding-top: 80px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .page-section:nth-child(even) {
+    background-color: #f7f2ed;
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    max-width: 500px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+  
+  .btn {
+    background-color: #8b4513;
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+  }
+  
+  .btn:hover {
+    background-color: #5c2e0c;
+  }
+/* 首页样式 */ 
+  #homepage {
+    background: linear-gradient(180deg, #fff3e4, #eed6c4);
+    color: #443421;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    padding: 2rem;
+    justify-content: flex-start; /* 让内容靠上 */
+    padding-top: 15vh;
+  }
+
+  #homepage h1 {
+    font-size: 3.5rem;
+    margin-bottom: 1rem;
+  }
+  
+  #homepage p {
+    font-size: 1.5rem;
+    max-width: 600px;
+  }
+
+  .coffee-floating {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  
+  /* 咖啡豆样式 */
+  .coffee-bean {
+    position: absolute;
+    width: 40px;
+    opacity: 0.6;
+    animation: floatBean linear infinite;
+  }
+  
+  @keyframes floatBean {
+    0% {
+      transform: translateY(-10vh) rotate(360deg);
+      opacity: 0;
+    }
+    30% {
+      opacity: 1;
+    }
+    100% {
+      transform: translateY(100vh) rotate(0deg);
+      opacity: 0;
+    }
+  }
+  
