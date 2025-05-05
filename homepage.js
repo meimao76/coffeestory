@@ -2,7 +2,7 @@ const container = document.querySelector(".coffee-floating");
 
 function createCoffeeBean() {
   const img = document.createElement("img");
-  img.src = "image/coffebeans.png"; // 可换成你自己的图
+  img.src = "image/coffebeans.png"; 
   img.className = "coffee-bean";
 
   const size = 20 + Math.random() * 40;
@@ -20,7 +20,7 @@ function createCoffeeBean() {
 }
 
 setInterval(() => {
-  const count = Math.floor(Math.random() * 2) + 1;
+  const count = Math.floor(Math.random() * 4) + 1;
   for (let i = 0; i < count; i++) {
     createCoffeeBean();
   }
@@ -30,22 +30,22 @@ setInterval(() => {
 const canvas = document.getElementById("coffee-halo");
 const ctx = canvas.getContext("2d");
 
-canvas.width = 1500;
-canvas.height = 600;
+canvas.width = 1200;
+canvas.height = 1200;
 
-const center = {x: 725, y: 550};// 球心位置
+const center = {x: 600, y: 1020};// 球心位置
 const particles = [];
 
 function createRing() {
-  const count = 100; // 粒子数量
+  const count = 200; // 粒子数量
   for (let i = 0; i < count; i++) {
     const angle = (2 * Math.PI * i) / count;
     particles.push({
       angle,
-      radius: 450 + Math.random() * 40, // 起始半径
+      radius: 350 + Math.random() * 5, // 起始半径
       speed: 0.5 + Math.random() * 0.5,
       alpha: 1,
-      size: 2 + Math.random() * 2,
+      size: 0.5 + Math.random() * 1,
     });
   }
 }
@@ -68,7 +68,7 @@ function animate() {
 
     ctx.beginPath();
     ctx.arc(x, y, p.size, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`; // 白色
+    ctx.fillStyle = `rgba(235, 223, 192, ${p.alpha})`; // 白色
     ctx.fill();
 
     if (p.alpha <= 0) {
@@ -79,3 +79,4 @@ function animate() {
   requestAnimationFrame(animate);
 }
 animate();
+//20250505新增离子扩散特效
