@@ -2,7 +2,7 @@ const container = document.querySelector(".coffee-floating");
 
 function createCoffeeBean() {
   const img = document.createElement("img");
-  img.src = "coffebeans.png"; // 可换成你自己的图
+  img.src = "image/coffebeans.png"; // 可换成你自己的图
   img.className = "coffee-bean";
 
   const size = 20 + Math.random() * 40;
@@ -25,3 +25,57 @@ setInterval(() => {
     createCoffeeBean();
   }
 }, 1000);
+//20250504新增咖啡雨特效
+
+const canvas = document.getElementById("coffee-halo");
+const ctx = canvas.getContext("2d");
+
+canvas.width = 1500;
+canvas.height = 600;
+
+const center = {x: 725, y: 550};// 球心位置
+const particles = [];
+
+function createRing() {
+  const count = 100; // 粒子数量
+  for (let i = 0; i < count; i++) {
+    const angle = (2 * Math.PI * i) / count;
+    particles.push({
+      angle,
+      radius: 450 + Math.random() * 40, // 起始半径
+      speed: 0.5 + Math.random() * 0.5,
+      alpha: 1,
+      size: 2 + Math.random() * 2,
+    });
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  // 每隔一段时间创建新光圈
+  if (Math.random() < 0.02) {
+    createRing();
+  }
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.radius += p.speed;
+    p.alpha -= 0.005;
+
+    const x = center.x + p.radius * Math.cos(p.angle);
+    const y = center.y + p.radius * Math.sin(p.angle);
+
+    ctx.beginPath();
+    ctx.arc(x, y, p.size, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255, 255, 255, ${p.alpha})`; // 白色
+    ctx.fill();
+
+    if (p.alpha <= 0) {
+      particles.splice(i, 1);
+    }
+  }
+
+  requestAnimationFrame(animate);
+}
+animate();

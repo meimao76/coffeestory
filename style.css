@@ -77,6 +77,7 @@
   .btn:hover {
     background-color: #5c2e0c;
   }
+  
 /* 首页样式 */ 
   #homepage {
     background: linear-gradient(180deg, #fff3e4, #eed6c4);
@@ -96,12 +97,13 @@
     font-size: 3.5rem;
     margin-bottom: 1rem;
   }
-  
+ 
   #homepage p {
     font-size: 1.5rem;
     max-width: 600px;
   }
 
+/* 咖啡豆下雨样式 */ 
   .coffee-floating {
     position: absolute;
     top: 0;
@@ -113,7 +115,6 @@
     overflow: hidden;
   }
   
-  /* 咖啡豆样式 */
   .coffee-bean {
     position: absolute;
     width: 40px;
@@ -135,12 +136,13 @@
     }
   }
 
+/* 转转地球样式 */
   .earth-container {
     position: absolute;
     bottom: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 1200px;
+    width: 1500px;
     height: 600px;
     overflow: hidden;
     pointer-events: none;
@@ -148,14 +150,23 @@
   }
   
   .earth {
-    width: 1200px;
+    width: 1500px;
     height: auto;
     animation: spinEarth 30s linear infinite;
   }
   
   @keyframes spinEarth {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% { transform: rotate(360deg); }
+    100% { transform: rotate(0deg); }
   }
-  
+
+/* 粒子发散样式 */  
+  #coffee-halo {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 0;
+  }
   
