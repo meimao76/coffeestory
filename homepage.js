@@ -108,6 +108,7 @@ function handleScrollStages() {
 
   const earth2D = document.querySelector(".earth");
   const earth3D = document.querySelector(".earth-fake3d");
+  const flatEarth = document.querySelector('.earth-flat-container');
 
   // 位置状态控制
   earth.classList.remove("scrolled-1", "scrolled-2", "scrolled-3", "scrolled-4");
@@ -121,17 +122,37 @@ function handleScrollStages() {
   } else if (Math.abs(section1Top) < window.innerHeight / 2) {
     earth.classList.add("scrolled-1");
   }
-
-  // 图像切换逻辑：仅 section3 显示假 3D 图
   if (Math.abs(section3Top) < window.innerHeight / 2) {
     earth2D.classList.add("hidden");
     earth3D.classList.add("visible");
+    flatEarth.classList.remove("visible");
+  } else if (Math.abs(section4Top) < window.innerHeight / 2) {
+    earth2D.classList.add("hidden");          // 👈 不显示2D地球
+    earth3D.classList.remove("visible");      // 👈 不显示3D地球
+    flatEarth.classList.add("visible");       // ✅ 显示展开图
   } else {
     earth2D.classList.remove("hidden");
     earth3D.classList.remove("visible");
+    flatEarth.classList.remove("visible");
   }
+  if (Math.abs(section3Top) < window.innerHeight / 2) {
+    earth2D.classList.add("hidden");
+    earth3D.classList.add("visible");
+    flatEarth.classList.remove("visible");
+    canvas.classList.remove("hidden"); // ✅ 粒子可见
+  } else if (Math.abs(section4Top) < window.innerHeight / 2) {
+    earth2D.classList.add("hidden");
+    earth3D.classList.remove("visible");
+    flatEarth.classList.add("visible");
+    canvas.classList.add("hidden");    // ✅ 粒子隐藏
+  } else {
+    earth2D.classList.remove("hidden");
+    earth3D.classList.remove("visible");
+    flatEarth.classList.remove("visible");
+    canvas.classList.remove("hidden"); // ✅ 其他页面可见
+  }
+  // 20250506新增粒子扩散的控制
 }
-
 //20250506修改滑动逻辑
 
 function updateCanvasSize() {
