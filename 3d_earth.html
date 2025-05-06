@@ -9,41 +9,35 @@
     </style>
 </head>
 <body>
+
+    <div id="controls">
+        <label for="commoditySelector">Select Commodity:</label>
+        <select id="commoditySelector">
+            <option value="all">All</option>
+            <option value="raw bean">Raw Bean</option>
+            <option value="roasted bean">Roasted Bean</option>
+        </select>
+    </div>
+
+    
     <div id="globeViz"></div>
+
+    <div id="infoBox" style="
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    padding: 10px 15px;
+    background: rgba(0,0,0,0.7);
+    color: #fff;
+    border-radius: 5px;
+    max-width: 300px;
+    font-family: sans-serif;
+    display: none;  /* 初始隐藏 */
+"></div>
 
     <!-- 引入 d3 和 Globe.gl -->
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://unpkg.com/globe.gl"></script>
-
-    <script>
-        // 初始化地球
-        const globe = Globe()
-            .globeImageUrl('//unpkg.com/three-globe/example/img/earth-dark.jpg')
-            .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
-            .arcDashLength(0.5)
-            .arcDashGap(1)
-            .arcDashAnimateTime(3000)
-            .arcColor(() => ['#ff6b6b', '#87ceeb'])
-            .arcStroke(0.8);
-
-        globe(document.getElementById('globeViz'));
-
-        // 加载 CSV 数据
-        d3.csv("data/raw_cleaned.csv").then(data => {
-            console.log('数据预览', data.slice(0, 5)); // 检查一下数据
-
-    const top30 = data
-        .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
-        .slice(0, 30);
-
-    // 设置飞线
-    globe
-        .arcsData(top30)
-        .arcStartLat(d => +d.lat_export)
-        .arcStartLng(d => +d.lng_export)
-        .arcEndLat(d => +d.lat_import)
-        .arcEndLng(d => +d.lng_import);
-});
-    </script>
+    <script src="3d_script.js"></script>
 </body>
 </html>
