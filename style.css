@@ -223,7 +223,7 @@
 
 /* sec2 */
 #section2 {
-  background: linear-gradient(to bottom, #4A362B 0%, #7f6747 25%, #d7b78e 65%, #ebdfc0 100%);
+  background: linear-gradient(to bottom, #4A362B 0%, #614f36 25%, #d7b78e 65%, #ebdfc0 100%);
   color: #ebdfc0;
   height: 100vh;
   display: flex;
@@ -285,4 +285,20 @@
   }
 }
 
-  
+/* sec3 */
+#section3 {
+  background: linear-gradient(to bottom, #ebdfc0 0%, #a5bdcd 100%);
+  color: #000000;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 关键：文字在上，图在下 */
+  align-items: center;
+  padding: 4vh 2rem;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#section3 .section-content {
+  max-width: 600px;
+}
