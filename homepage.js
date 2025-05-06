@@ -48,9 +48,9 @@ function createRing() {
     particles.push({
       angle,
       radius: 300 + Math.random() * 5, // 起始半径
-      speed: 0.1 + Math.random() * 0.5,
+      speed: 0.1 + Math.random() * 0.3,
       alpha: 1,
-      size: 0.5 + Math.random() * 2,
+      size: 0.5 + Math.random() * 1,
     });
   }
 }
@@ -91,21 +91,15 @@ function animate() {
 animate();
 //20250505新增离子扩散特效
 
-const homepageText = document.querySelector('.homepage-text');
 const earth = document.querySelector('.earth-container');
-const section1 = document.querySelector('#section1 .section-content');
 
 function handleScrollStages() {
   const scrollY = window.scrollY;
 
   if (scrollY > 80) {
-    homepageText.classList.add('fade-up-out');
     earth.classList.add('scrolled');
-    section1.classList.add('visible');
   } else {
-    homepageText.classList.remove('fade-up-out');
     earth.classList.remove('scrolled');
-    section1.classList.remove('visible'); // 可选：是否让第二页也隐藏
   }
 }
 
@@ -121,3 +115,35 @@ updateCanvasSize(); // 初始调用一次
 
 window.addEventListener('scroll', handleScrollStages);
 window.addEventListener('load', handleScrollStages);
+//20250505新增地区滚动的逻辑
+
+const boxes1 = document.querySelectorAll('.image-box-1');
+const desc1 = document.getElementById('culture-description-1');
+
+boxes1.forEach(box => {
+    box.addEventListener('mouseenter', () => {
+      desc1.textContent = box.dataset.text;
+    });
+
+    box.addEventListener('mouseleave', () => {
+      desc1.textContent = "鼠标移到下方图片上，会显示对应文化文字。";
+    });
+});
+//20250505新增sec1
+
+const scrollContainer = document.getElementById('scroll-content');
+const boxes2 = document.querySelectorAll('.image-box-2');
+const desc2 = document.getElementById('culture-description-2');
+
+boxes2.forEach(box => {
+  box.addEventListener('mouseenter', () => {
+    scrollContainer.style.animationPlayState = 'paused';
+    desc2.textContent = box.dataset.text;
+  });
+
+  box.addEventListener('mouseleave', () => {
+    scrollContainer.style.animationPlayState = 'running';
+    desc2.textContent = "鼠标移到下方图片上，会显示对应文化文字。";
+  });
+});
+//20250505新增sec2
