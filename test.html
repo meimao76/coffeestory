@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Model Test</title>
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #f0f0f0;
+    }
+    model-viewer {
+      width: 400px;
+      height: 400px;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <model-viewer
+  src="model/dead_earth_glassy_seas.glb"
+  auto-rotate
+  camera-controls
+  camera-orbit="0deg 90deg 15m"
+  field-of-view="30deg"
+  min-camera-orbit="auto auto 5m"
+  max-camera-orbit="auto auto 5m"
+  disable-zoom
+  environment-image="neutral"
+  exposure="1"
+  style="width: 400px; height: 400px;"
+>
+</model-viewer>
+
+</body>
+</html>

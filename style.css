@@ -135,28 +135,71 @@
 /* 转转地球样式 */
 .earth-container {
   position: fixed;
-  bottom: -30%;
+  width: 300px;
+  height: 300px;
+  bottom: 10%;
   left: 50%;
-  transform: translate(-50%, 0) scale(1);
-  overflow: hidden;
+  transform: translateX(-50%) scale(1);
+  transition: all 1s ease;
+  z-index: 2;
   pointer-events: none;
-  z-index: 1;
-  transition: all 2s ease;
 }
 
+/* 滚动位置状态控制 */
 .earth-container.scrolled-1 {
-  left: 5%;
-  transform: translate(-50%, -30%) scale(0.7);
+  bottom: 10%;
+  left: 10%;
+  transform: translate(0, 0) scale(1);
 }
 
 .earth-container.scrolled-2 {
-  left: 30%;
-  transform: translate(60%, -10%) scale(1);
+  bottom: 15%;
+  left: 70%;
+  transform: translate(0, 0) scale(1);
 }
 
+.earth-container.scrolled-3 {
+  bottom: 50%;
+  left: 50%;
+  transform: translate(0, 0) scale(1);
+}
+
+.earth-container.scrolled-4 {
+  bottom: 15%;
+  left: 25%;
+  transform: translate(0, 0) scale(1);
+}
+
+/* 2D 地球图像样式 */
 .earth {
-    width: 100%;
-    animation: spinEarth 30s linear infinite;
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  animation: spinEarth 30s linear infinite;
+  transition: opacity 1s ease;
+  z-index: 1;
+  opacity: 1;
+}
+
+/* 假 3D 地球图像样式 */
+.earth-fake3d {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: opacity 1s ease;
+  z-index: 2;
+  opacity: 0;
+}
+
+/* 切换显示状态（通过 class 控制） */
+.earth.hidden {
+  opacity: 0;
+}
+.earth-fake3d.visible {
+  opacity: 1;
 }
   
 @keyframes spinEarth {
@@ -173,20 +216,7 @@
     left: 50%;
     transform: translateX(-50%);
     pointer-events: none;
-    z-index: 0;
-}
-
-.earth-container.earth-3d-active img.earth {
-  display: none;
-}
-
-/* 3d地球 */
-#earth-3d {
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  pointer-events: none;
-  z-index: 2;
+    z-index: 3;
 }
 
 

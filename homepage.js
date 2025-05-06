@@ -47,7 +47,7 @@ function createRing() {
     const angle = (2 * Math.PI * i) / count;
     particles.push({
       angle,
-      radius: 300 + Math.random() * 5, // 起始半径
+      radius: 10 + Math.random() * 5, // 起始半径
       speed: 0.1 + Math.random() * 0.3,
       alpha: 1,
       size: 0.5 + Math.random() * 1,
@@ -97,33 +97,41 @@ function handleScrollStages() {
   const homepage = document.getElementById("homepage");
   const section1 = document.getElementById("section1");
   const section2 = document.getElementById("section2");
+  const section3 = document.getElementById("section3");
+  const section4 = document.getElementById("section4");
 
   const homepageTop = homepage.getBoundingClientRect().top;
   const section1Top = section1.getBoundingClientRect().top;
   const section2Top = section2.getBoundingClientRect().top;
-
-  earth.classList.remove("scrolled-1", "scrolled-2");
-
-  if (Math.abs(section2Top) < window.innerHeight / 2) {
-    // 当前处于 section2
-    earth.classList.add("scrolled-2");
-  } else if (Math.abs(section1Top) < window.innerHeight / 2) {
-    // 当前处于 section1
-    earth.classList.add("scrolled-1");
-  }// 否则处于 homepage，保持原位
-  const section3 = document.getElementById("section3");
+  const section3Top = section3.getBoundingClientRect().top;
   const section4Top = section4.getBoundingClientRect().top;
 
-  if (Math.abs(section4Top) < window.innerHeight / 2) {
-    earth.classList.add("earth-3d-active");
-    document.getElementById("earth-3d").style.display = "block";
-    if (!earth3DRenderer) init3DEarth();
-  } else {
-    earth.classList.remove("earth-3d-active");
-    document.getElementById("earth-3d").style.display = "none";
+  const earth2D = document.querySelector(".earth");
+  const earth3D = document.querySelector(".earth-fake3d");
+
+  // 位置状态控制
+  earth.classList.remove("scrolled-1", "scrolled-2", "scrolled-3", "scrolled-4");
+
+  if (Math.abs(section3Top) < window.innerHeight / 2) {
+    earth.classList.add("scrolled-3");
+  } else if (Math.abs(section4Top) < window.innerHeight / 2) {
+    earth.classList.add("scrolled-4");
+  } else if (Math.abs(section2Top) < window.innerHeight / 2) {
+    earth.classList.add("scrolled-2");
+  } else if (Math.abs(section1Top) < window.innerHeight / 2) {
+    earth.classList.add("scrolled-1");
   }
 
+  // 图像切换逻辑：仅 section3 显示假 3D 图
+  if (Math.abs(section3Top) < window.innerHeight / 2) {
+    earth2D.classList.add("hidden");
+    earth3D.classList.add("visible");
+  } else {
+    earth2D.classList.remove("hidden");
+    earth3D.classList.remove("visible");
+  }
 }
+
 //20250506修改滑动逻辑
 
 function updateCanvasSize() {
@@ -170,37 +178,3 @@ boxes2.forEach(box => {
   });
 });
 //20250505新增sec2
-
-let earth3DRenderer, earth3DScene, earth3DCamera, earth3DModel;
-
-function init3DEarth() {
-  const container = document.getElementById('earth-3d');
-  earth3DRenderer = new THREE.WebGLRenderer({ alpha: true });
-  earth3DRenderer.setSize(300, 300);
-  container.appendChild(earth3DRenderer.domElement);
-
-  earth3DScene = new THREE.Scene();
-  earth3DCamera = new THREE.PerspectiveCamera(45, 1, 0.1, 1000);
-  earth3DCamera.position.z = 3;
-
-  const light = new THREE.DirectionalLight(0xffffff, 1);
-  light.position.set(2, 2, 2).normalize();
-  earth3DScene.add(light);
-
-  const loader = new THREE.GLTFLoader();
-  loader.load('model/earth_globe.glb', function (gltf) {
-    earth3DModel = gltf.scene;
-    earth3DModel.scale.set(1, 1, 1);
-    earth3DScene.add(earth3DModel);
-    animate3DEarth();
-  });
-}
-
-function animate3DEarth() {
-  requestAnimationFrame(animate3DEarth);
-  if (earth3DModel) {
-    earth3DModel.rotation.y += 0.005;
-  }
-  earth3DRenderer.render(earth3DScene, earth3DCamera);
-}
-// 20250506新增3d地球
