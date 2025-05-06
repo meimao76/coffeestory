@@ -20,7 +20,7 @@ function createCoffeeBean() {
 }
 
 setInterval(() => {
-  const count = Math.floor(Math.random() * 4) + 1;
+  const count = Math.floor(Math.random() * 5) + 1;
   for (let i = 0; i < count; i++) {
     createCoffeeBean();
   }
@@ -47,7 +47,7 @@ function createRing() {
     const angle = (2 * Math.PI * i) / count;
     particles.push({
       angle,
-      radius: 10 + Math.random() * 5, // 起始半径
+      radius: 370 + Math.random() * 5, // 起始半径
       speed: 0.1 + Math.random() * 0.3,
       alpha: 1,
       size: 0.5 + Math.random() * 1,

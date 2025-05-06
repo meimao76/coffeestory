@@ -60,7 +60,7 @@
   }
   
   .btn {
-    background-color: #8b4513;
+    background-color: #b08861;
     color: white;
     padding: 0.6rem 1.2rem;
     border-radius: 5px;
@@ -69,7 +69,7 @@
   }
   
   .btn:hover {
-    background-color: #5c2e0c;
+    background-color: #69523b;
   }
   
 /* 首页样式 */ 
@@ -135,38 +135,38 @@
 /* 转转地球样式 */
 .earth-container {
   position: fixed;
-  width: 300px;
-  height: 300px;
-  bottom: 10%;
+  width: 850px;
+  height: 850px;
+  bottom: -50%;
   left: 50%;
   transform: translateX(-50%) scale(1);
-  transition: all 1s ease;
+  transition: all 1.2s ease;
   z-index: 2;
   pointer-events: none;
 }
 
 /* 滚动位置状态控制 */
 .earth-container.scrolled-1 {
-  bottom: 10%;
+  bottom: 30%;
   left: 10%;
-  transform: translate(0, 0) scale(1);
+  transform: translate(-50%, -25%) scale(1.2);
 }
 
 .earth-container.scrolled-2 {
-  bottom: 15%;
+  bottom: -10%;
   left: 70%;
-  transform: translate(0, 0) scale(1);
+  transform: translate(0, 0) scale(0.9);
 }
 
 .earth-container.scrolled-3 {
-  bottom: 50%;
-  left: 50%;
-  transform: translate(0, 0) scale(1);
+  bottom: -20%;
+  left: 20%;
+  transform: translate(0, 30%) scale(1.2);
 }
 
 .earth-container.scrolled-4 {
-  bottom: 15%;
-  left: 25%;
+  bottom: 0;
+  left: 0;
   transform: translate(0, 0) scale(1);
 }
 
@@ -192,6 +192,9 @@
   transition: opacity 1s ease;
   z-index: 2;
   opacity: 0;
+  animation: spinEarth 30s linear infinite;
+  /* 加个蒙版 */
+  filter: grayscale(60%) brightness(0.85) contrast(1.1); 
 }
 
 /* 切换显示状态（通过 class 控制） */
@@ -216,7 +219,7 @@
     left: 50%;
     transform: translateX(-50%);
     pointer-events: none;
-    z-index: 3;
+    z-index: 5;
 }
 
 
@@ -229,7 +232,8 @@
   flex-direction: column;
   justify-content: space-between; /* 关键：文字在上，图在下 */
   align-items: center;
-  padding: 4vh 2rem;
+  padding: 2rem;
+  padding-top: 10vh;
   box-sizing: border-box;
   text-align: center;
 }
@@ -272,14 +276,15 @@
 
 /* sec2 */
 #section2 {
-  background: linear-gradient(to bottom, #4A362B 0%, #614f36 25%, #d7b78e 65%, #ebdfc0 100%);
+  background: linear-gradient(to bottom, #4A362B 0%, #000000 100%);
   color: #ebdfc0;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* 关键：文字在上，图在下 */
   align-items: center;
-  padding: 4vh 2rem;
+  padding: 1vh 2rem;
+  padding-top: 10vh;
   box-sizing: border-box;
   text-align: center;
 }
@@ -336,18 +341,29 @@
 
 /* sec3 */
 #section3 {
-  background: linear-gradient(to bottom, #ebdfc0 0%, #a5bdcd 100%);
-  color: #000000;
+  background: linear-gradient(to bottom, #000000 0%, #05223c 100%);
+  color: #ebdfc0;
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between; /* 关键：文字在上，图在下 */
   align-items: center;
   padding: 4vh 2rem;
+  padding-top: 10vh;
   box-sizing: border-box;
   text-align: center;
 }
 
 #section3 .section-content {
   max-width: 600px;
+  z-index: 3
+}
+
+.section {
+  animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
