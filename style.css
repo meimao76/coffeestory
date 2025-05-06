@@ -144,9 +144,14 @@
   transition: all 2s ease;
 }
 
-.earth-container.scrolled {
+.earth-container.scrolled-1 {
   left: 5%;
   transform: translate(-50%, -30%) scale(0.7);
+}
+
+.earth-container.scrolled-2 {
+  left: 30%;
+  transform: translate(60%, -10%) scale(1);
 }
 
 .earth {
@@ -170,6 +175,20 @@
     pointer-events: none;
     z-index: 0;
 }
+
+.earth-container.earth-3d-active img.earth {
+  display: none;
+}
+
+/* 3d地球 */
+#earth-3d {
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  pointer-events: none;
+  z-index: 2;
+}
+
 
 /* sec1 */
 #section1 {

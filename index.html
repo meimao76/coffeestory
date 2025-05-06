@@ -4,8 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Coffee's Story</title>
+    <!-- css -->
     <link rel="stylesheet" href="style.css" />
+    <!-- 网页图标 -->
     <link rel="icon" href="image/coffeecup.png" type="image/x-icon">
+    <!-- 3d模型 -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/loaders/GLTFLoader.js"></script>
+
 </head>
 
 <body>
@@ -30,6 +36,7 @@
     <div class="earth-container">
         <img src="image/globe5.png" alt="Earth" class="earth" />
         <canvas id="coffee-halo"></canvas>
+        <div id="earth-3d" style="display:none;"></div>
     </div>
     <!-- 首页 -->
     <section id="homepage" class="page-section">
