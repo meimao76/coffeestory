@@ -364,27 +364,61 @@
 }
 
 /* sec4的背景 */
+#section4 {
+  background: linear-gradient(to bottom, #05223c 0%, #053c38 100%);
+  color: #ebdfc0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 关键：文字在上，图在下 */
+  align-items: center;
+  padding: 4vh 2rem;
+  padding-top: 10vh;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#section4 .section-content {
+  max-width: 600px;
+  z-index: 3;
+}
+
 .earth-flat-container {
   position: fixed;
   bottom: 0;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 1;
+  z-index: 0;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 1.2s ease;
+  transition: opacity 1s ease 0.5s; /* 延迟 0.5 秒 */
 }
 
 .earth-flat {
-  width: 90vw;
-  max-width: 1000px;
+  width: 110vw;
+  max-width: 1600px;
   height: auto;
   object-fit: contain;
-  filter: brightness(0.9) contrast(1.05);
+  filter: grayscale(60%) brightness(0.85) contrast(0.9);
 }
 
 /* 滚动到 section4 时显示 */
 .earth-flat-container.visible {
-  opacity: 1;
+  opacity: 0.7;
 }
 
+@keyframes globeExpandFade {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+.earth-fake3d.expand-fade-out {
+  animation: globeExpandFade 1s ease forwards;
+  z-index: 3;
+}
