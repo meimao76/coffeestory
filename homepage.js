@@ -99,24 +99,27 @@ function handleScrollStages() {
   const section2 = document.getElementById("section2");
   const section3 = document.getElementById("section3");
   const section4 = document.getElementById("section4");
+  const section5 = document.getElementById("section5");
 
   const homepageTop = homepage.getBoundingClientRect().top;
   const section1Top = section1.getBoundingClientRect().top;
   const section2Top = section2.getBoundingClientRect().top;
   const section3Top = section3.getBoundingClientRect().top;
   const section4Top = section4.getBoundingClientRect().top;
+  const section5Top = section5.getBoundingClientRect().top;
 
   const earthContainer = document.querySelector(".earth-container");
   const earth2D = document.querySelector(".earth");
   const earth3D = document.querySelector(".earth-fake3d");
-  const flatEarth = document.querySelector(".earth-flat-container");
   const canvas = document.getElementById("coffee-halo");
 
   // 清除所有位置信息
-  earthContainer.classList.remove("scrolled-1", "scrolled-2", "scrolled-3", "scrolled-4");
+  earthContainer.classList.remove("scrolled-1", "scrolled-2", "scrolled-3", "scrolled-4", "scrolled-5");
 
   // 根据当前位置设置滚动状态（位置）
-  if (Math.abs(section4Top) < window.innerHeight / 2) {
+  if (Math.abs(section5Top) < window.innerHeight / 2) {
+    earthContainer.classList.add("scrolled-5");
+  } else if (Math.abs(section4Top) < window.innerHeight / 2) {
     earthContainer.classList.add("scrolled-4");
   } else if (Math.abs(section3Top) < window.innerHeight / 2) {
     earthContainer.classList.add("scrolled-3");
@@ -126,32 +129,30 @@ function handleScrollStages() {
     earthContainer.classList.add("scrolled-1");
   }
 
+
   // 图像 + 粒子显示控制
   if (Math.abs(section4Top) < window.innerHeight / 2) {
-    // ⬇️ 进入 Section4：展开图显现，其他隐藏
+    // 进入 Section4：展开图显现，其他隐藏
     earth2D.classList.add("hidden");
     earth3D.classList.remove("visible");
-    flatEarth.classList.add("visible");
     canvas.classList.add("hidden");
 
     // 🌍 触发地球放大淡出动画
     earth3D.classList.add("expand-fade-out");
 
   } else if (Math.abs(section3Top) < window.innerHeight / 2) {
-    // ⬇️ Section3：显示 3D 地球和粒子
+    // Section3：显示 3D 地球和粒子
     earth2D.classList.add("hidden");
     earth3D.classList.add("visible");
-    flatEarth.classList.remove("visible");
     canvas.classList.remove("hidden");
 
     // 移除任何旧动画
     earth3D.classList.remove("expand-fade-out");
 
   } else {
-    // ⬇️ 其他页：显示 2D 地球，隐藏 3D 和展开图
+    // 其他页：显示 2D 地球，隐藏 3D 和展开图
     earth2D.classList.remove("hidden");
     earth3D.classList.remove("visible");
-    flatEarth.classList.remove("visible");
     canvas.classList.remove("hidden");
 
     // 清除动画 class

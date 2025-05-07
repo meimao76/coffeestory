@@ -40,7 +40,6 @@
   }
   
   .page-section {
-    height: 100vh;
     padding-top: 80px;
     display: flex;
     flex-direction: column;
@@ -165,10 +164,17 @@
 }
 
 .earth-container.scrolled-4 {
-  bottom: 0;
-  left: 0;
-  transform: translate(0, 0) scale(1);
+  bottom: -20%;
+  left: 20%;
+  transform: translate(0, 30%) scale(1);
 }
+
+.earth-container.scrolled-5 {
+  bottom: -20%;
+  left: 20%;
+  transform: translate(0, 30%) scale(0.5);
+}
+
 
 /* 2D 地球图像样式 */
 .earth {
@@ -365,7 +371,7 @@
 
 /* sec4的背景 */
 #section4 {
-  background: linear-gradient(to bottom, #05223c 0%, #053c38 100%);
+  background: linear-gradient(to bottom, #05223c 0%, #2c3004 100%);
   color: #ebdfc0;
   height: 100vh;
   display: flex;
@@ -376,45 +382,30 @@
   padding-top: 10vh;
   box-sizing: border-box;
   text-align: center;
+  position: relative;
 }
 
 #section4 .section-content {
   max-width: 600px;
-  z-index: 3;
+  z-index: 1;
 }
 
 .earth-flat-container {
-  position: fixed;
-  bottom: 0;
+  position: absolute;
+  bottom: -1%;
   left: 50%;
   transform: translateX(-50%);
-  z-index: 0;
+  z-index: -1;
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 1s ease 0.2s; /* 延迟 0.2 秒 */
+  opacity: 1;
 }
 
 .earth-flat {
-  width: 110vw;
-  max-width: 1600px;
+  width: 100vw;
+  max-width: 1500px;
   height: auto;
   object-fit: contain;
-  filter: grayscale(60%) brightness(0.85) contrast(0.9);
-}
-
-.earth-flat {
-  width: 110vw;
-  max-width: 1600px;
-  height: auto;
-  object-fit: contain;
-  filter: brightness(0.9) contrast(1.05);
-  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
-}
-
-
-/* 滚动到 section4 时显示 */
-.earth-flat-container.visible {
-  opacity: 0.7;
+  filter: grayscale(60%) brightness(0.6) contrast(0.9);
 }
 
 @keyframes globeExpandFade {
@@ -439,7 +430,7 @@
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(255, 255, 255, 0.3);
   box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
   cursor: pointer;
   pointer-events: auto;
@@ -473,3 +464,26 @@
   opacity: 1;
 }
 
+
+/* sec5 */
+#section5 {
+  background: 
+    url("image/bg1.png"),
+    linear-gradient(to bottom, #2c3004 0%, #b29576 100%);
+  background-repeat: no-repeat;
+  background-position: top center;
+  background-size: 100% auto;
+
+  color: #ebdfc0;
+  height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 2rem;
+  padding-top: 10vh;
+  box-sizing: border-box;
+  text-align: center;
+}
