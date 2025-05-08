@@ -1,4 +1,7 @@
-let fullData = [];  // 保存全部数据
+let fullData = []; 
+let rawData = [];   
+let roastData = []; 
+ // 保存全部数据
 
 // 初始化地球
 const globe = Globe()
@@ -34,12 +37,26 @@ const globe = Globe()
     .onArcClick(d =>{
         const infoBox = document.getElementById('infoBox');
         infoBox.innerHTML = `
-            <strong> Route:</strong> ${d.Exporter} → ${d.Importer}<br>
-            <strong> Weight:</strong> ${d['Weight (1000kg)']} metric ton<br>
-            <strong> Value:</strong> ${d['Value (1000USD)']}k USD<br>
-            <strong> Commondity:</strong> ${d['commodity']}
-        `;
-        infoBox.style.display = 'block';
+        <div class="info-line">
+            <span class="info-label">Route:</span>
+            <span class="info-value">${d.Exporter} → ${d.Importer}</span>
+        </div>
+        <div class="info-line">
+            <span class="info-label">Weight:</span>
+            <span class="info-value">${d['Weight (1000kg)']} metric ton</span>
+        </div>
+        <div class="info-line">
+            <span class="info-label">Value:</span>
+            <span class="info-value">${d['Value (1000USD)']}k USD</span>
+        </div>
+        <div class="info-line">
+            <span class="info-label">Commodity:</span>
+            <span class="info-value">${d['commodity']}</span>
+        </div>
+        
+    `;
+    console.log(d);
+    infoBox.style.display = 'block';
     });
 
     document.addEventListener('click', (e) => {
@@ -55,18 +72,24 @@ globe(document.getElementById('globeViz'));
 // 加载数据：国界线 + 贸易流
 Promise.all([
     d3.json("data/sim_bond.geojson"),
-    d3.csv("data/combined_tradeflow.csv")
-]).then(function([boundaryData, raw_flow]) {
+    d3.csv("data/combined_tradeflow.csv"),
+    d3.csv("data/raw_tradeflow_merged.csv"),
+    d3.csv("data/roasted_tradeflow_merged.csv")
+]).then(function([boundaryData, merged_flow, raw, roast]) {
 
-    console.log("加载的数据：", raw_flow.slice(0, 5));
+    console.log("加载的数据：", merged_flow.slice(0, 5));
     globe
         .polygonsData(boundaryData.features);
     
 
-    fullData = raw_flow;  // 保存所有数据
+    fullData = merged_flow;  // 保存所有数据
+    rawData = raw;   
+    roastData = roast; 
 
-    // 初始化显示（比如默认显示全部）
+    // 初始化显示
     updateGlobeArcs('all');
+    renderBarChart(rawData, 'barChartraw');
+    renderBarChart(roastData, 'barChartroast');
 });
 
  
@@ -80,9 +103,10 @@ function updateGlobeArcs(commodityType) {
     }
 
     // 这里比如取前 1%
+    intercept = 0.008
     const topData = filteredData
         .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
-        .slice(0, Math.max(1, Math.floor(filteredData.length * 0.008)));
+        .slice(0, Math.max(1, Math.floor(filteredData.length * intercept)));
 
     console.log(`更新为 ${commodityType}，数据量:`, topData.length);
 
@@ -106,4 +130,88 @@ function updateGlobeArcs(commodityType) {
 document.getElementById('commoditySelector').addEventListener('change', (e) => {
     const selectedCommodity = e.target.value;
     updateGlobeArcs(selectedCommodity);
+
+
+
+
 });
+
+//条形图
+function renderBarChart(data, containerId) {
+
+    // 只取前 5 名，按重量降序
+    data = data
+    .filter(d => !isNaN(+d['Weight (1000kg)']))
+    .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
+    .slice(0, 5);
+
+    console.log("加载的数据：", data.slice(0, 100));
+    const barHeight = 10;
+    const marginTop = 30;
+    const marginRight = 0;
+    const marginBottom = 10;
+    const marginLeft = 100;  // 左边适当加大，避免名字显示不下
+    const width = 600;
+    const height = Math.ceil((data.length + 0.1) * barHeight) + marginTop + marginBottom;
+
+    const x = d3.scaleLinear()
+        .domain([0, d3.max(data, d => +d['Weight (1000kg)'])])
+        .range([marginLeft, width - marginRight]);
+
+    const y = d3.scaleBand()
+        .domain(data.map(d => d['Exporter']))
+        .rangeRound([marginTop, height - marginBottom])
+        .padding(0.1);
+
+    const format = d3.format(",.0f");  // 格式化为整数
+
+    const svg = d3.create("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", [0, 0, width, height])
+        .attr("style", "max-width: 100%; height: auto; font: 10px sans-serif;");
+
+    svg.append("g")
+        .attr("fill", "steelblue")
+      .selectAll()
+      .data(data)
+      .join("rect")
+        .attr("x", x(0))
+        .attr("y", d => y(d['Exporter']))
+        .attr("width", d => x(+d['Weight (1000kg)']) - x(0))
+        .attr("height", y.bandwidth());
+
+    svg.append("g")
+        .attr("fill", "white")
+        .attr("text-anchor", "end")
+      .selectAll()
+      .data(data)
+      .join("text")
+        .attr("x", d => x(+d['Weight (1000kg)']))
+        .attr("y", d => y(d['Exporter']) + y.bandwidth() / 2)
+        .attr("dy", "0.35em")
+        .attr("dx", -4)
+        .text(d => format(d['Weight (1000kg)']))
+      .call(text => text.filter(d => x(+d['Weight (1000kg)']) - x(0) < 40)
+        .attr("dx", +4)
+        .attr("fill", "black")
+        .attr("text-anchor", "start"));
+
+    svg.append("g")
+        .attr("transform", `translate(0,${marginTop})`)
+        .call(d3.axisTop(x).ticks(width / 80))
+        .call(g => g.select(".domain").remove());
+
+    svg.append("g")
+        .attr("transform", `translate(${marginLeft},0)`)
+        .call(d3.axisLeft(y).tickSizeOuter(0));
+
+    // 画到指定容器，先清空再添加
+    const container = document.getElementById(containerId);
+    container.innerHTML = '';  // 清空
+    container.appendChild(svg.node());
+}
+
+
+
+
