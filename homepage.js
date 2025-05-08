@@ -184,7 +184,7 @@ boxes1.forEach(box => {
     });
 
     box.addEventListener('mouseleave', () => {
-      desc1.textContent = "鼠标移到下方图片上，会显示对应文化文字。";
+      desc1.textContent = "Move the mouse over the picture below.";
     });
 });
 //20250505新增sec1
@@ -201,7 +201,7 @@ boxes2.forEach(box => {
 
   box.addEventListener('mouseleave', () => {
     scrollContainer.style.animationPlayState = 'running';
-    desc2.textContent = "鼠标移到下方图片上，会显示对应文化文字。";
+    desc2.textContent = "Move the mouse over the picture below.";
   });
 });
 //20250505新增sec2
