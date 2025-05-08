@@ -8,9 +8,22 @@
   html, body {
     scroll-behavior: smooth;
     font-family: "Segoe UI", sans-serif;
-    background: 
-    linear-gradient(to bottom, #1A120D 0%, #281c11 20%, #57453b 40%, #2d2326 60%, #1A120D 80%, #000000 100%);
+    background: linear-gradient(to bottom, 
+    #1A120D 0%, #281c11 20%, #57453b 40%, #2d2326 60%, #1A120D 80%, #000000 100%); 
   }
+
+  /* 加纹理 */
+  /* body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: url('image/texture.png');
+    background-size: cover;
+    opacity: 0.1;
+    pointer-events: none;
+    z-index: 0;
+  }   */
   
   .navbar {
     position: fixed;
@@ -318,10 +331,9 @@
 .scroll-container {
   width: 100%;
   overflow: hidden;
-  height: 150px;
-  margin-top: auto;
-  margin-bottom: 40px;
+  height: 250px;
   position: relative;
+  top: -50px;
 }
 
 .scroll-content {
@@ -331,13 +343,18 @@
 }
 
 .image-box-2 {
-  width: 120px;
-  height: 120px;
-  margin: 0 10px;
+  width: 250px;
+  height: 250px;
   border-radius: 10px;
   filter: grayscale(100%);
   transition: 0.3s;
   flex-shrink: 0;
+  -webkit-mask-image: url('image/tear.png');
+  mask-image: url('image/tear.png');
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: cover;
+  mask-size: cover;
 }
 
 .image-box-2 img {
