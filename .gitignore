@@ -6,3 +6,7 @@ data/urban_culture/cache/
 
 # 忽略东京行政区 GeoJSON 文件
 data/urban_culture/jpn_adm_2019_shp/
+
+# 忽略Qgis文件
+data/urban_culture/quick_check.qgz
+
