@@ -8,6 +8,8 @@
   html, body {
     scroll-behavior: smooth;
     font-family: "Segoe UI", sans-serif;
+    background: 
+    linear-gradient(to bottom, #1A120D 0%, #281c11 20%, #57453b 40%, #2d2326 60%, #1A120D 80%, #000000 100%);
   }
   
   .navbar {
@@ -73,7 +75,6 @@
   
 /* 首页样式 */ 
   #homepage {
-    background: linear-gradient(to bottom, #4A362B 0%, #3B2C22 10%, #1A120D 100%);
     color: #ebdfc0;
     display: flex;
     flex-direction: column;
@@ -200,7 +201,7 @@
   opacity: 0;
   animation: spinEarth 30s linear infinite;
   /* 加个蒙版 */
-  filter: grayscale(60%) brightness(0.85) contrast(1.1); 
+  filter: grayscale(40%) brightness(0.8) contrast(1); 
 }
 
 /* 切换显示状态（通过 class 控制） */
@@ -235,7 +236,6 @@
 
 /* sec1 */
 #section1 {
-  background: linear-gradient(to top, #4A362B 0%, #3B2C22 25%, #1A120D 100%);
   color: #ebdfc0;
   height: 100vh;
   display: flex;
@@ -286,7 +286,19 @@
 
 /* sec2 */
 #section2 {
-  background: linear-gradient(to bottom, #4A362B 0%, #000000 100%);
+  color: #ebdfc0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 关键：文字在上，图在下 */
+  align-items: center;
+  padding: 1vh 2rem;
+  padding-top: 10vh;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+#section2_1 {
   color: #ebdfc0;
   height: 100vh;
   display: flex;
@@ -351,7 +363,6 @@
 
 /* sec3 */
 #section3 {
-  background: linear-gradient(to bottom, #000000 0%, #05223c 100%);
   color: #ebdfc0;
   height: 100vh;
   display: flex;
@@ -371,7 +382,6 @@
 
 /* sec4的背景 */
 #section4 {
-  background: linear-gradient(to bottom, #05223c 0%, #2c3004 100%);
   color: #ebdfc0;
   height: 100vh;
   display: flex;
@@ -392,7 +402,7 @@
 
 .earth-flat-container {
   position: absolute;
-  bottom: -1%;
+  bottom: -5%;
   left: 50%;
   transform: translateX(-50%);
   z-index: -1;
@@ -402,10 +412,11 @@
 
 .earth-flat {
   width: 100vw;
-  max-width: 1500px;
+  max-width: 1410px;
   height: auto;
   object-fit: contain;
-  filter: grayscale(60%) brightness(0.6) contrast(0.9);
+  opacity: 0.7;
+  filter: grayscale(65%) brightness(0.6) contrast(1);
 }
 
 @keyframes globeExpandFade {
@@ -427,15 +438,17 @@
 /* sec4的跳转点 */
 .earth-flat-hotspot {
   position: absolute;
-  width: 18px;
-  height: 18px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
   cursor: pointer;
   pointer-events: auto;
   z-index: 10;
-  transition: transform 0.2s ease;
+}
+
+.icon-marker {
+  width: 30px;
+  height: 30px;
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.8));
+  transition: transform 0.3s ease;
 }
 
 .earth-flat-hotspot:hover {
@@ -467,9 +480,6 @@
 
 /* sec5 */
 #section5 {
-  background: 
-    url("image/bg1.png"),
-    linear-gradient(to bottom, #2c3004 0%, #b29576 100%);
   background-repeat: no-repeat;
   background-position: top center;
   background-size: 100% auto;
