@@ -5,4 +5,4 @@
 data/urban_culture/cache/
 
 # 忽略东京行政区 GeoJSON 文件
-data/urban_culture/tokyo_admin.geojson
+data/urban_culture/jpn_adm_2019_shp/
