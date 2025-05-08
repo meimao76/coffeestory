@@ -1,0 +1,77 @@
+body { margin: 0; overflow: hidden; }
+    #container {
+        display: flex;
+        height: 100vh;
+    }
+
+    #globeViz {
+        flex: 1; /* 地球占满剩余空间 */
+    }
+
+    #controls {
+        position: fixed;         /* 固定位置 */
+        top: 20px;               /* 距离顶部 20px */
+        right: 20px;              /* 距离左边 20px */
+        width: 350px;  /* 默认300，可以调大 */
+        background: rgba(255, 255, 255, 0.7);  /* 半透明背景 */
+        padding: 10px;           /* 内边距 */
+        border-radius: 8px;      /* 圆角 */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* 阴影 */
+        z-index: 1000;           /* 确保浮在上面 */
+    }
+
+    #infoBox {
+        position: absolute;
+        top: 90px;
+        right: 20px;
+        width: 350px;  /* 默认300，可以调大 */
+        padding: 10px;
+        background: rgba(255,255,255,0.7);
+        color: #fff;
+        border-radius: 8px;
+        font-family: sans-serif;
+        display: none;
+        stroke: #fff;
+        stroke-width: 0.5;
+        
+    }
+    
+    .info-label {
+        font-weight: bold;
+        color: #ffffff;  /* 比如金色 */
+        display: inline-block;
+        width: 120px;     /* 标签宽度固定 */
+    }
+    
+    .info-value {
+        color: #ffffff;  /* 白色 */
+    }
+    
+
+    #barChartraw {
+        position: absolute;
+        top: 250px;
+        right: 20px;
+        width: 330px;
+        background: rgba(255, 255, 255, 0.6);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        z-index: 999;
+        stroke: #fff;
+        stroke-width: 0.5;
+    }
+    
+    #barChartroast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 330px;
+        background: rgba(255, 255, 255, 0.6);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        z-index: 999;
+        stroke: #fff;
+        stroke-width: 0.5;
+    }
