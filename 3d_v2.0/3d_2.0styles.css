@@ -34,23 +34,26 @@
   
   /* 固定导航 */
   #headerZone {
-    flex: 0 0 30px;
+    background-color: #58472C;
+
     display: flex;
     align-items: center;
     justify-content: center;
     margin-bottom: 20%;
-    margin-top: 5%;
-    z-index: 15;
+    height: 10%;
+
   }
   #navbar {
+    background-color: #58472C;
     display: flex;
-    gap: 40px;
+    gap: 45px;
+    z-index: 30;
   }
   .nav-item {
     color: #EBDFC0;
     text-decoration: none;
-    font-weight: 700;
-    font-size: 18px;
+    font-weight: bold;
+    font-size: 20px;
   }
   .nav-item.active,
   .nav-item:hover {
