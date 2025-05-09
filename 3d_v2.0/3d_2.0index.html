@@ -31,11 +31,7 @@
             滚滚长江东逝水，浪花淘尽英雄。是非成败转头空。青山依旧在，几度夕阳红。
             白发渔樵江渚上，惯看秋月春风。一壶浊酒喜相逢。古今多少事，都付笑谈中。
           </div>
-          <div id="graphZone1" class="graph-zone">
-            <div id="barChartExport"></div>
-            <div id="barChartImport"></div>
-            <div id="barChartTradeFlows"></div>
-          </div>
+
           <!-- 文本式切换：Trade Flows | Exporters | Importers -->
           <div id="chartSwitch1" class="chart-switch">
             <span data-view="flows" class="switch-btn active">Trade Flows</span>
@@ -44,6 +40,14 @@
             <span class="separator">|</span>
             <span data-view="importers" class="switch-btn">Importers</span>
           </div>
+
+          <!-- graph zone -->
+          <div id="graphZone1" class="graph-zone">
+            <div id="barChartTradeFlows"   class="chart-panel"></div>
+            <div id="barChartExporters"    class="chart-panel hidden"></div>
+            <div id="barChartImporters"    class="chart-panel hidden"></div>
+          </div>
+
           <!-- 统计类型切换：Value ● Weight -->
           <div id="measureSwitch1" class="measure-switch">
             <label><input type="radio" name="measure1" value="value" checked /> Value</label>
@@ -124,7 +128,6 @@
   <!-- 引入脚本 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/three/build/three.min.js"></script>
-  <script src="https://unpkg.com/three-globe"></script>
   <script src="https://unpkg.com/globe.gl"></script>
   <script src="3d_2.0script.js"></script>
 </body>
