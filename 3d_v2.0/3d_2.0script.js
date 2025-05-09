@@ -6,8 +6,8 @@ let roastData = [];
 // 初始化地球
 const globe = Globe()
   // 1. 地球表面贴图（暗面）
-  .globeImageUrl('https://raw.githubusercontent.com/meimao76/coffeestory/main/image/world.topo.bathy.200412.3x5400x2700.png')
-  .backgroundImageUrl('//unpkg.com/three-globe/example/img/night-sky.png')
+  .globeImageUrl('globesurface2.png')
+  .backgroundImageUrl('bg1.png')
   // 2. 地球高光／凹凸贴图（模拟山脉、海洋波纹）
   .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
   .showAtmosphere(true)
