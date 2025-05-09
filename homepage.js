@@ -100,6 +100,11 @@ function handleScrollStages() {
   const section3 = document.getElementById("section3");
   const section4 = document.getElementById("section4");
   const section5 = document.getElementById("section5");
+  const section6 = document.getElementById("section6");
+  const section7 = document.getElementById("section7");
+
+
+
 
   const homepageTop = homepage.getBoundingClientRect().top;
   const section1Top = section1.getBoundingClientRect().top;
@@ -107,6 +112,8 @@ function handleScrollStages() {
   const section3Top = section3.getBoundingClientRect().top;
   const section4Top = section4.getBoundingClientRect().top;
   const section5Top = section5.getBoundingClientRect().top;
+  const section6Top = section6.getBoundingClientRect().top;
+  const section7Top = section7.getBoundingClientRect().top; 
 
   const earthContainer = document.querySelector(".earth-container");
   const earth2D = document.querySelector(".earth");
@@ -157,6 +164,15 @@ function handleScrollStages() {
 
     // 清除动画 class
     earth3D.classList.remove("expand-fade-out");
+  }
+
+  if (
+    Math.abs(section6Top) < window.innerHeight / 2 ||
+    Math.abs(section7Top) < window.innerHeight / 2
+  ) {
+    earthContainer.classList.add("faded-out");
+  } else {
+    earthContainer.classList.remove("faded-out");
   }
 }
 //20250506修改滑动逻辑
