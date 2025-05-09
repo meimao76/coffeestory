@@ -245,48 +245,62 @@ updateGraphs();
 });
 
  
-// 更新飞线数据函数
-function updateGlobeArcs(commodityType) {
-    let filteredData = fullData
-        .filter(d => !isNaN(+d['Weight (1000kg)']))
-        .filter(d => !isNaN(+d.lat_export))
-        .filter(d => !isNaN(+d.lng_export))
-        .filter(d => !isNaN(+d.lat_import))
-        .filter(d => !isNaN(+d.lng_import));
+// 1. 先改造 updateGlobeArcs，接收两个参数
+function updateGlobeArcs(commodityType, year) {
+  // 从 fullData 里先把基本的经纬度、重量非 NA 的记录过滤掉
+  let filteredData = fullData
+    .filter(d => !isNaN(+d['Weight (1000kg)']))
+    .filter(d => !isNaN(+d.lat_export))
+    .filter(d => !isNaN(+d.lng_export))
+    .filter(d => !isNaN(+d.lat_import))
+    .filter(d => !isNaN(+d.lng_import));
 
-    if (commodityType !== 'all') {
-        filteredData = filteredData.filter(d => d['commodity'] === commodityType);
-    }
+  // 根据 commodity 过滤
+  if (commodityType !== 'all') {
+    filteredData = filteredData.filter(d => d.commodity === commodityType);
+  }
 
-    // 这里比如取前 1%
-    intercept = 0.006
-    const topData = filteredData
-        .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
-        .slice(0, Math.max(1, Math.floor(filteredData.length * intercept)));
+  // 根据年份再过滤
+  if (year && year !== 'all') {
+    filteredData = filteredData.filter(d => +d.Year === +year);
+  }
 
-    console.log(`更新为 ${commodityType}，数据量:`, topData.length);
+  // 再取前 0.6%
+  const intercept = 0.006;
+  const topData = filteredData
+    .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
+    .slice(0, Math.max(1, Math.floor(filteredData.length * intercept)));
 
-    const weightExtent = d3.extent(topData, d => +d['Weight (1000kg)']);
-    console.log('权重范围:', weightExtent);
+  // 其余不变
+  const weightExtent = d3.extent(topData, d => +d['Weight (1000kg)']);
+  const strokeScale  = d3.scaleSqrt().domain(weightExtent).range([0.5, 2]);
 
-    const strokeScale = d3.scaleSqrt()
-        .domain(weightExtent)
-        .range([0.5, 2]);  // 调整范围看效果
-
-    globe
-        .arcsData(topData)
-        .arcStartLat(d => +d.lat_export)
-        .arcStartLng(d => +d.lng_export)
-        .arcEndLat(d => +d.lat_import)
-        .arcEndLng(d => +d.lng_import)
-        .arcStroke(d => strokeScale(+d['Weight (1000kg)']));;
+  globe
+    .arcsData(topData)
+    .arcStartLat(d => +d.lat_export)
+    .arcStartLng(d => +d.lng_export)
+    .arcEndLat(d => +d.lat_import)
+    .arcEndLng(d => +d.lng_import)
+    .arcStroke(d => strokeScale(+d['Weight (1000kg)']));
 }
 
-// 监听下拉框
-document.getElementById('commoditySelector').addEventListener('change', (e) => {
-    const selectedCommodity = e.target.value;
-    updateGlobeArcs(selectedCommodity);
-});
+// 2. 把两个下拉都选出来
+const commoditySel = document.getElementById('commoditySelector');
+const yearSel      = document.getElementById('yearSelector');
+
+// 3. 写一个统一的回调，去读两个值再更新
+function onFilterChange() {
+  const commodity = commoditySel.value;
+  const year      = yearSel.value;
+  updateGlobeArcs(commodity, year);
+}
+
+// 4. 挂监听
+commoditySel.addEventListener('change', onFilterChange);
+yearSel     .addEventListener('change', onFilterChange);
+
+// 5. 页面加载完成时先渲染一次
+onFilterChange();
 
 
 
