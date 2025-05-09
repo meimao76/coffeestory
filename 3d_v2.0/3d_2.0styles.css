@@ -64,6 +64,7 @@
     flex: 1;
     overflow-y: auto;
     padding: 20px 15px;
+    margin-bottom: 30%;
   }
   .scroll-group {
     margin-bottom: 60px;
@@ -168,9 +169,16 @@
     z-index: 20;
   }
 
-  #info-label{
+  .info-line {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;   /* 垂直居中 */
+  }
+
+  .info-label {
     font-weight: bold;
   }
+
    /* 固定商品选择 */
   #commoditySelectorWrapper {
     position: absolute;
@@ -182,6 +190,7 @@
     border-radius: 8px;
     display: flex;
     flex-direction: column;
+    font-weight: bold;
     row-gap: 8px;    /* 控制上下间距，可按需改 */
     align-items: flex-start;
     z-index: 40;

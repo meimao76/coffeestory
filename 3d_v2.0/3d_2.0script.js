@@ -96,7 +96,7 @@ Promise.all([
     data = data.filter(d => !isNaN(+d[valueField]));
         const barHeight   = 20;
         const marginTop   = 30;
-        const marginLeft  = 160;
+        const marginLeft  = 100;
         const width       = 500;
         const height      = (data.length + 0.1) * barHeight + marginTop + 10;
 
