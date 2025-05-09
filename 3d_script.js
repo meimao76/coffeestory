@@ -96,14 +96,18 @@ Promise.all([
 // 更新飞线数据函数
 function updateGlobeArcs(commodityType) {
     let filteredData = fullData
-        .filter(d => !isNaN(+d['Weight (1000kg)']));
+        .filter(d => !isNaN(+d['Weight (1000kg)']))
+        .filter(d => !isNaN(+d.lat_export))
+        .filter(d => !isNaN(+d.lng_export))
+        .filter(d => !isNaN(+d.lat_import))
+        .filter(d => !isNaN(+d.lng_import));
 
     if (commodityType !== 'all') {
         filteredData = filteredData.filter(d => d['commodity'] === commodityType);
     }
 
     // 这里比如取前 1%
-    intercept = 0.008
+    intercept = 0.006
     const topData = filteredData
         .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
         .slice(0, Math.max(1, Math.floor(filteredData.length * intercept)));
@@ -143,7 +147,7 @@ function renderBarChart(data, containerId) {
     data = data
     .filter(d => !isNaN(+d['Weight (1000kg)']))
     .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
-    .slice(0, 5);
+    .slice(0, Math.max(1, Math.floor(data.length * 0.001)));
 
     console.log("加载的数据：", data.slice(0, 100));
     const barHeight = 10;

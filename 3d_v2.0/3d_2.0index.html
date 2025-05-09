@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trade Flows Globe</title>
+  <link rel="stylesheet" href="3d_2.0styles.css" />
+</head>
+<body>
+  <div id="appContainer">
+    <!-- 侧边栏，内容可滚动，导航与筛选器固定在顶部 -->
+    <aside id="sidebar">
+      <!-- 固定导航栏区域 -->
+      <div id="headerZone">
+        <nav id="navbar">
+          <a href="#homepage" class="nav-item active">Home</a>
+          <a href="#section1" class="nav-item">Introduction</a>
+          <a href="#section2" class="nav-item">History</a>
+          <a href="#section4" class="nav-item">Culture</a>
+        </nav>
+      </div>
+      
+
+      <!-- 可滚动内容区 -->
+      <div id="sidebarContent">
+        <!-- 第一部分：贸易流部分 -->
+        <div id="scrollContent1" class="scroll-group">
+          <div id="titleZone1" class="title-zone">Who Grows, and Who Drinks?</div>
+          <div id="textZone1" class="text-zone">
+            <!-- 文本描述 -->
+            滚滚长江东逝水，浪花淘尽英雄。是非成败转头空。青山依旧在，几度夕阳红。
+            白发渔樵江渚上，惯看秋月春风。一壶浊酒喜相逢。古今多少事，都付笑谈中。
+          </div>
+          <div id="graphZone1" class="graph-zone">
+            <div id="barChartExport"></div>
+            <div id="barChartImport"></div>
+            <div id="barChartTradeFlows"></div>
+          </div>
+          <!-- 文本式切换：Trade Flows | Exporters | Importers -->
+          <div id="chartSwitch1" class="chart-switch">
+            <span data-view="flows" class="switch-btn active">Trade Flows</span>
+            <span class="separator">|</span>
+            <span data-view="exporters" class="switch-btn">Exporters</span>
+            <span class="separator">|</span>
+            <span data-view="importers" class="switch-btn">Importers</span>
+          </div>
+          <!-- 统计类型切换：Value ● Weight -->
+          <div id="measureSwitch1" class="measure-switch">
+            <label><input type="radio" name="measure1" value="value" checked /> Value</label>
+            <label><input type="radio" name="measure1" value="weight" /> Weight</label>
+          </div>
+        </div>
+
+        <!-- 第二部分：烘焙豆统计 -->
+        <div id="scrollContent2" class="scroll-group">
+          <div id="titleZone2" class="title-zone">Who Makes the Money?</div>
+          <div id="textZone2" class="text-zone">
+            <!-- 文本描述 -->
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+          </div>
+          <div id="graphZone2" class="graph-zone">
+            <div id="barChartExportRoast"></div>
+            <div id="barChartImportRoast"></div>
+          </div>
+          <div id="chartSwitch2" class="chart-switch">
+            <span data-view="flows" class="switch-btn active">Trade Flows</span>
+            <span class="separator">|</span>
+            <span data-view="exporters" class="switch-btn">Exporters</span>
+            <span class="separator">|</span>
+            <span data-view="importers" class="switch-btn">Importers</span>
+          </div>
+          <div id="measureSwitch2" class="measure-switch">
+            <label><input type="radio" name="measure2" value="value" checked /> Value</label>
+            <label><input type="radio" name="measure2" value="weight" /> Weight</label>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- 主内容区：3D 地球 + 信息弹窗 -->
+    <main id="mainContent">
+      <div id="globeViz"></div>
+
+      <div id="infoBox" class="info-box">
+        <div class="info-line">
+        <span class="info-label">Route:</span>
+        <span id="infoRoute" class="info-value"></span>
+      </div>
+      <div class="info-line">
+        <span class="info-label">Weight:</span>
+        <span id="infoWeight" class="info-value"></span>
+      </div>
+      <div class="info-line">
+        <span class="info-label">Value:</span>
+        <span id="infoValue" class="info-value"></span>
+      </div>
+      <div class="info-line">
+        <span class="info-label">Commodity:</span>
+        <span id="infoCommodity" class="info-value"></span>
+      </div>
+
+      </div>
+      <div id="commoditySelectorWrapper">
+        <label for="commoditySelector" id="commodityLabel">Commodity Type</label>
+        <select id="commoditySelector">
+          <option value="all">All</option>
+          <option value="raw bean">Raw Bean</option>
+          <option value="roasted bean">Roasted Bean</option>
+        </select>
+        <label for="Year" id="yearLabel">Year</label>
+        <select id="yearSelector">
+          <option value="2022">2022</option>
+          <option value="2021">2021</option>
+          <option value="2020">2020</option>
+          <option value="2019">2019</option>
+          <option value="2018">2018</option>
+        </select>
+      </div>
+    </main>
+
+    
+  </div>
+
+  <!-- 引入脚本 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/three/build/three.min.js"></script>
+  <script src="https://unpkg.com/three-globe"></script>
+  <script src="https://unpkg.com/globe.gl"></script>
+  <script src="3d_2.0script.js"></script>
+</body>
+</html>
