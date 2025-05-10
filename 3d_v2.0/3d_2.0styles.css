@@ -17,6 +17,7 @@
   #appContainer {
     display: flex;
     height: 100%;
+    width: 100%;
   }
   
   /* 侧边栏 */
@@ -24,27 +25,25 @@
     position: fixed;
     top: 0px; /* 下方留给导航 */
     right: 0;
-    width: 30%;
-    height: 100%;
+    width: 38%;
+    height: 115%;
     display: flex; flex-direction: column;
-    background: #012340;
+    background: rgba(227, 223, 215, 0.5);
     z-index: 20;
   }
   
   
   /* 固定导航 */
   #headerZone {
-    background-color: #58472C;
-
+    background-color: rgba(178, 158, 142, 0.5);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20%;
+    margin-bottom: 10%;
     height: 10%;
 
   }
   #navbar {
-    background-color: #58472C;
     display: flex;
     gap: 45px;
     z-index: 30;
@@ -57,10 +56,8 @@
   }
   .nav-item.active,
   .nav-item:hover {
-    color: #EBDFC0;
+    color: #ac8b72;
   }
-  
- 
   
   /* 滚动内容区 */
   #sidebarContent {
@@ -143,26 +140,28 @@
   
   /* 主内容区 */
   #mainContent {
+    background: url(bg1.png);
     width: 100%;
     position: relative;
     flex: 1;
+    overflow: hidden;
   }
   
   #globeViz {
-    width: 100%;
-    height: 100%;
-    position: relative;
-    right: 15%;
-    z-index: 1;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  left: -15%;
   }
-  
+
   .info-box {
     position: absolute;
     top: 20%;
     left: 3%;
     width: 13%;
-    background: #012340;
-    color: #FFF;
+    background:rgba(227, 223, 215, 0.5);
+    color: #2d2326;
     padding: 12px;
     border-radius: 8px;
     display: none;
@@ -184,9 +183,10 @@
   #commoditySelectorWrapper {
     position: absolute;
     top: 2%; /* 距离 mainContent 顶部 */
-    left: 3%;
-    width: 13%;
-    background: #012340;
+    left: 2%;
+    width: 17%;
+    color: rgba(45, 35, 38);
+    background: rgba(227, 223, 215, 0.5);;
     padding: 12px 12px;
     border-radius: 8px;
     display: flex;
@@ -197,15 +197,17 @@
     z-index: 40;
   }
  
-  #commoditySelectorWrapper select {
-    width: 220px;
-    height: 28px;
-    background: #012340;
-    background-color: #012340;
-    border: 1px solid rgba(255,255,255,0.7);
-    color: rgba(255, 255, 255, 0.9);
-    z-index: 40;
-  }
+#commoditySelectorWrapper select {
+  width: 220px;
+  height: 28px;
+  background-color: rgba(227, 223, 215, 0.5);
+  border: 1px solid rgba(45, 35, 38, 0.7);
+  color: rgba(45, 35, 38);
+  border-radius: 4px;
+  padding-left: 8px;
+  z-index: 40;
+}
+
   /* 自定义滚动条: 只显示中间灰色滑块 */
   #sidebarContent {
     /* Firefox */
