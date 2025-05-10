@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Culture - Tokyo</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <link rel="stylesheet" href="urban_tokyo.css" />
+</head>
+<body>
+  <!-- 顶部导航栏 -->
+  <nav class="navbar">
+    <ul class="navbar-menu">
+      <li><a href="#">Home</a></li>
+      <li><a href="#">Introduction</a></li>
+      <li><a href="#">Trade</a></li>
+      <li><a class="active" href="#">Culture</a></li>
+      <li><a href="#">Conclusion</a></li>
+      <li><a href="#">About</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主体容器 -->
+  <div id="urban-container">
+    
+    <!-- 左侧地图区域 -->
+    <div id="map-area">
+      <div id="map"></div>
+
+      <!-- 图表（左下角） -->
+      <div id="chart-top-left">
+        <canvas id="coffee-stats-chart"></canvas>
+      </div>
+
+      <!-- 图层控制 + 图例（右下角） -->
+      <div id="layer-legend-group">
+        <div id="layer-controls">
+          <h4>Layers</h4>
+          <label><input type="checkbox" id="layer-poi" /> Coffee POIs</label><br />
+          <label><input type="checkbox" id="layer-heatmap" /> Heatmap</label>
+        </div>
+        <div id="legend-box">
+          <h4>Legend</h4>
+          <div class="legend-item"><span class="legend-color poi"></span> POI Type</div>
+          <div class="legend-item"><span class="legend-color heat"></span> Heat Intensity</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 引导性说明文字 -->
+    <div id="info-container">
+      <div id="info-text">
+        Toggle layers to reveal how Tokyo's urban coffee culture clusters across districts.
+        Statistics and densities will appear here.
+      </div>
+    </div>
+
+    <!-- 右侧面板 -->
+    <div id="right-panel">
+      <div id="city-panel">
+        <div id="city-text">
+          <p>
+            Explore how coffee culture manifests in Tokyo's urban fabric, from dense central wards to artistic enclaves like Aoyama.
+          </p>
+          <div id="zoom-buttons">
+            <button id="btn-tokyo">Tokyo</button>
+            <button id="btn-aoyama">Aoyama</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- JS -->
+  <script src="urban_tokyo_map.js"></script>
+</body>
+</html>

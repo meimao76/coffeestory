@@ -1,0 +1,177 @@
+/* ===== General Layout ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  height: 100%;
+  background-color: #efeae3;
+  overflow: hidden;
+}
+
+/* ===== Navigation Bar ===== */
+.navbar {
+  background-color: #2d2326;
+  padding: 12px 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li a {
+  color: #ebdfc0;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+.navbar-menu li a:hover,
+.navbar-menu li a.active {
+  color: #ac8b72;
+}
+
+/* ===== Main Container Layout ===== */
+#urban-container {
+  display: grid;
+  grid-template-columns: 1fr 580px;
+  grid-template-rows: 1fr auto;
+  height: 100vh;
+  margin-top: 60px;
+}
+
+/* ===== Map + Overlays ===== */
+#map-area {
+  position: relative;
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  width: 100%;
+  height: 100%;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== Info Text (他妈的，盖上去算求) ===== */
+#info-text {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  right: 600px; 
+  background-color: rgba(208, 203, 195, 0.95);
+  padding: 14px 20px;
+  font-size: 15px;
+  line-height: 1.5;
+  border-radius: 8px;
+  border-top: 1px solid #bbb;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  z-index: 15;
+  height: 60px; /* 或你想要的高度，比如 80px */
+  overflow: hidden; /* 可选：防止内容溢出 */
+  display: flex;
+  align-items: center; /* 垂直居中 */
+}
+
+
+
+/* ===== Right Panel ===== */
+#right-panel {
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+  background-color: #f4f1eb;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  z-index: 2;
+}
+
+#city-panel {
+  display: block;
+}
+
+#zoom-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+#zoom-buttons button {
+  flex: 1;
+  background: #57453b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#zoom-buttons button:hover {
+  background-color: #3d3129;
+}
+
+/* ===== Floating Elements ===== */
+#chart-top-left {
+  position: absolute;
+  bottom: 180px;
+  left: 20px;
+  width: 240px;
+  height: 180px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  z-index: 10;
+}
+
+#layer-legend-group {
+  position: absolute;
+  bottom: 180px;
+  right: 20px;
+  width: 240px;
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  z-index: 10;
+}
+
+#layer-controls,
+#legend-box {
+  margin-bottom: 10px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+
+.legend-color.poi {
+  background-color: #7ea386;
+}
+
+.legend-color.heat {
+  background-color: #b08861;
+}
