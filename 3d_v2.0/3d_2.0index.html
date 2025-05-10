@@ -25,7 +25,7 @@
       <div id="sidebarContent">
         <!-- 第一部分：贸易流部分 -->
         <div id="scrollContent1" class="scroll-group">
-          <div id="titleZone1" class="title-zone">Who Grows,<br> Who Drinks?</div>
+          <div id="titleZone1" class="title-zone">Who Grows, Who Drinks?</div>
           <div id="textZone1" class="text-zone">
             <!-- 文本描述 -->
             Coffee is grown in the XXX and consumed in the XXX. 
@@ -59,7 +59,7 @@
           </div>
         </div>
 
-        <!-- 第二部分：烘焙豆统计 -->
+        <!-- 第二部分：价值链 -->
         <div id="scrollContent2" class="scroll-group">
           <div id="titleZone2" class="title-zone">Who Makes the Money?</div>
           <div id="textZone2" class="text-zone">
@@ -73,9 +73,8 @@
             In this chain, power isn't just economic.  It's symbolic.Roasters and brands don't just add value — 
             they package meaning: authenticity, aspiration, and taste.
           </div>
-          <div id="graphZone2" class="graph-zone">
-            <div id="barChartExportRoast"></div>
-            <div id="barChartImportRoast"></div>
+          <div class="graph-zone">
+            <svg id="sankey" class= "sankey" width="300" height="160"></svg>
           </div>
           <div id="chartSwitch2" class="chart-switch">
             <span data-view="flows" class="switch-btn active">Trade Flows</span>
@@ -144,6 +143,7 @@
 
   <!-- 引入脚本 -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
   <script src="https://unpkg.com/three/build/three.min.js"></script>
   <script src="https://unpkg.com/globe.gl"></script>
   <script src="3d_2.0script.js"></script>

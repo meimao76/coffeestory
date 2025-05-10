@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Sankey Diagram</title>
+  <style>
+    body {
+      font-family: sans-serif;
+    }
+    .node rect {
+      fill: steelblue;
+      stroke: #000;
+    }
+    .link {
+      fill: none;
+      stroke: #000;
+      stroke-opacity: 0.2;
+    }
+    .link:hover {
+      stroke-opacity: 0.5;
+    }
+    text {
+      font-size: 10px;
+      pointer-events: none;
+    }
+  </style>
+  <!-- D3 核心 + Sankey 插件 -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+</head>
+<body>
+  <svg id="sankey" width="700" height="400"></svg>
+  <script src="Sankey.js"></script>
+</body>
+</html>
