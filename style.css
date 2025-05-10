@@ -210,7 +210,7 @@
   opacity: 0;
   animation: spinEarth 30s linear infinite;
   /* 加个蒙版 */
-  filter: grayscale(0%) brightness(0.9) contrast(1); 
+  filter: grayscale(0%) brightness(1) contrast(1); 
 }
 
 /* 切换显示状态（通过 class 控制） */
@@ -570,6 +570,10 @@
   text-align: center;
 }
 
+#section5 .section-content{
+  width: 50%;
+}
+
 /* sec6 */
 #section6 {
   color: #2d2326;
@@ -641,4 +645,13 @@
 .card-back a {
   color: #fff;
   text-decoration: underline;
+}
+
+.footer-bar {
+  background-color: #2e2e2e;     /* 深灰底色 */
+  color: #f0f0f0;                /* 淡白字体 */
+  text-align: center;
+  padding: 10px 0;
+  font-size: 12px;
+  font-family: 'Segoe UI', sans-serif;
 }
