@@ -9,7 +9,7 @@
     scroll-behavior: smooth;
     font-family: "Segoe UI", sans-serif;
     background: linear-gradient(to bottom, 
-    #1A120D 0%, #281c11 20%, #57453b 40%, #2d2326 60%, #1A120D 80%, #000000 100%); 
+    #1A120D 0%, #281c11 20%, #57453b 30%, #837064 40%,#b9a99c 50%, #e3dfd7 60%, #d5d2c9 70%, #ebebe3 80%, #b29e8e 100%); 
   }
 
   /* 加纹理 */
@@ -210,7 +210,7 @@
   opacity: 0;
   animation: spinEarth 30s linear infinite;
   /* 加个蒙版 */
-  filter: grayscale(40%) brightness(0.8) contrast(1); 
+  filter: grayscale(0%) brightness(0.85) contrast(1); 
 }
 
 /* 切换显示状态（通过 class 控制） */
@@ -395,26 +395,7 @@
 
 /* sec3 */
 #section3 {
-  color: #ebdfc0;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between; /* 关键：文字在上，图在下 */
-  align-items: center;
-  padding: 4vh 2rem;
-  padding-top: 10vh;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-#section3 .section-content {
-  max-width: 600px;
-  z-index: 3
-}
-
-/* sec4的背景 */
-#section4 {
-  color: #ebdfc0;
+  color: #2d2326;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -425,6 +406,60 @@
   box-sizing: border-box;
   text-align: center;
   position: relative;
+}
+
+/* sec4背景纹理 */
+#section3::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('image/tradebg.jpg') center/cover no-repeat;
+  opacity: 0.2;  /* 控制整体透明度 */
+  z-index: 0;   /* 放在内容后面 */
+  /* 加个边缘渐变 */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 40%, black 60%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 40%, black 60%, transparent 100%); 
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+#section3 .section-content {
+  max-width: 600px;
+  z-index: 3
+}
+
+/* sec4的背景 */
+#section4 {
+  color: #2d2326;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 关键：文字在上，图在下 */
+  align-items: center;
+  padding: 4vh 2rem;
+  padding-top: 10vh;
+  box-sizing: border-box;
+  text-align: center;
+  position: relative;
+}
+
+/* sec4背景纹理 */
+#section4::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('image/flatbg.jpg') center/cover no-repeat;
+  opacity: 0.4;  /* 控制整体透明度 */
+  z-index: 0;   /* 放在内容后面 */
+  /* 加个边缘渐变 */
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%);
+  mask-image: linear-gradient(to bottom, transparent 0%, black 20%, black 80%, transparent 100%); 
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
 }
 
 #section4 .section-content {
@@ -448,7 +483,7 @@
   height: auto;
   object-fit: contain;
   opacity: 0.7;
-  filter: grayscale(65%) brightness(0.6) contrast(1);
+  filter: grayscale(0%) brightness(0.8) contrast(1);
 }
 
 @keyframes globeExpandFade {
@@ -481,7 +516,7 @@
 .icon-marker {
   width: 30px;
   height: 30px;
-  filter: drop-shadow(0 0 4px rgba(212, 212, 212, 0.753));
+  filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.753));
   transition: transform 0.3s ease;
 }
 
@@ -489,22 +524,25 @@
   animation-play-state: paused;
 }
 
-/* 🔽 Hover 提示文字 */
-.earth-flat-hotspot::after {
-  content: attr(data-label);
+.hotspot-tooltip {
   position: absolute;
   top: -30px;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: #ebdfc0;
+  background: rgba(255,255,255,0.8);
+  color: #2d2326;
   padding: 4px 8px;
-  border-radius: 4px;
   font-size: 1rem;
+  border-radius: 4px;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
+  z-index: 99;
+}
+
+.earth-flat-hotspot:hover .hotspot-tooltip {
+  opacity: 1;
 }
 
 @keyframes pulse {
@@ -520,7 +558,7 @@
 
 /* sec5 */
 #section5 {
-  color: #ebdfc0;
+  color: #2d2326;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -534,7 +572,7 @@
 
 /* sec6 */
 #section6 {
-  color: #ebdfc0;
+  color: #2d2326;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
