@@ -7,8 +7,10 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
   <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="urban_tokyo.css" />
 </head>
+
 <body>
   <!-- 顶部导航 -->
   <nav class="navbar">
@@ -16,7 +18,15 @@
       <li><a href="#">Home</a></li>
       <li><a href="#">Introduction</a></li>
       <li><a href="#">Trade</a></li>
-      <li><a class="active" href="#">Culture</a></li>
+      <li class="dropdown">
+        <a class="active" href="#">Culture ▾</a>
+        <ul class="dropdown-menu">
+          <li><a href="#" onclick="selectCity('Guangzhou')">Guangzhou</a></li>
+          <li><a href="#" onclick="selectCity('Melbourne')">Melbourne</a></li>
+          <li><a href="#" onclick="selectCity('Rome')">Rome</a></li>
+          <li><a href="#" onclick="selectCity('Tokyo')">Tokyo</a></li>
+        </ul>
+      </li>
       <li><a href="#">Conclusion</a></li>
       <li><a href="#">About</a></li>
     </ul>
@@ -29,29 +39,46 @@
     <div id="map-area">
       <div id="map"></div>
 
+      <!-- 左侧三个可折叠卡片 -->
       <div id="map-left-panel">
-        <!-- 1. 统计图表 -->
-        <div id="chart-panel">
-          <h4>Statistics</h4>
-          <canvas id="coffee-stats-chart"></canvas>
+
+        <!-- 统计图 -->
+        <div class="collapsible-card">
+          <div class="card-header">
+            <span class="card-title">Statistics</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="card-body" id="chart-panel">
+            <canvas id="coffee-stats-chart"></canvas>
+          </div>
         </div>
 
-        <!-- 2. 图层开关 -->
-        <div id="layer-toggle-panel">
-          <h4>Layers</h4>
-          <label><input type="checkbox" id="layer-poi" /> Coffee POIs</label><br />
-          <label><input type="checkbox" id="layer-heatmap" /> Heatmap</label>
+        <!-- 图层开关 -->
+        <div class="collapsible-card">
+          <div class="card-header">
+            <span class="card-title">Layers</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="card-body" id="layer-toggle-panel">
+            <label><input type="checkbox" id="layer-poi" checked /> Coffee POIs</label><br />
+            <label><input type="checkbox" id="layer-heatmap" /> Heatmap</label>
+          </div>
         </div>
 
-        <!-- 3. 图例 -->
-        <div id="legend-panel">
-          <h4>Legend</h4>
-          <div class="legend-item"><span class="legend-color poi"></span> POI Type</div>
-          <div class="legend-item"><span class="legend-color heat"></span> Heat Intensity</div>
+        <!-- 图例 -->
+        <div class="collapsible-card">
+          <div class="card-header">
+            <span class="card-title">Legend</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="card-body" id="legend-panel">
+            <div class="legend-item"><span class="legend-color poi"></span> POI Type</div>
+            <div class="legend-item"><span class="legend-color heat"></span> Heat Intensity</div>
+          </div>
         </div>
       </div>
 
-      <!-- ✅ info text 浮在底部 -->
+      <!-- 底部信息文字 -->
       <div id="info-text">
         Toggle layers to reveal how Tokyo's urban coffee culture clusters across districts.
         Statistics and densities will appear here.
@@ -74,6 +101,7 @@
     </div>
   </div>
 
+  <!-- 主脚本入口 -->
   <script src="urban_tokyo_map.js"></script>
 </body>
 </html>

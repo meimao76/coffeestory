@@ -38,13 +38,53 @@ html, body {
   color: #ac8b72;
 }
 
+/* ===== Dropdown for Culture ===== */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2d2326;
+  padding: 8px 0;
+  display: none;
+  flex-direction: column;
+  min-width: 120px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  z-index: 1001;
+}
+
+.dropdown-menu li {
+  padding: 0;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 8px 16px;
+  color: #ebdfc0;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #3e2f31;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
 /* ===== Main Container ===== */
 #urban-container {
   display: grid;
   grid-template-columns: 1fr 400px; /* 可调整右侧宽度 */
   grid-template-rows: 1fr;
-  height: calc(100vh - 60px);
-  margin-top: 60px;
+  height: calc(100vh - 40px);
+  margin-top: 40px;
 }
 
 /* ===== Map Area ===== */
@@ -60,11 +100,11 @@ html, body {
   height: 100%;
 }
 
-/* ===== Left Panel (Three Floating Cards) ===== */
+/* ===== Left Panel (Floating Collapsible Cards) ===== */
 #map-left-panel {
   position: absolute;
   top: 20px;
-  bottom: 100px; /* ✅ 预留 info-text 空间 */
+  bottom: 100px;
   left: 20px;
   width: 260px;
   display: flex;
@@ -74,25 +114,53 @@ html, body {
   z-index: 10;
 }
 
-/* ===== Card Styles ===== */
-#chart-panel,
-#layer-toggle-panel,
-#legend-panel {
+/* ===== Card Structure ===== */
+.collapsible-card {
   background: #fff;
   border-radius: 8px;
-  padding: 12px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 10px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  background-color: #f9f9f9;
   display: flex;
-  flex-direction: column;
-  gap: 8px;
+  justify-content: space-between;
+  align-items: center;
 }
 
-/* Remove extra margin from headings */
-#map-left-panel h4 {
-  margin: 0 0 8px 0;
+.card-header:hover {
+  background-color: #f1f1f1;
 }
 
-/* ===== Legend Color Boxes ===== */
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+/* ✅ 让箭头旋转 */
+.card-header.collapsed .arrow {
+  transform: rotate(-90deg);
+}
+
+.card-body {
+  padding: 12px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.card-body.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 12px;
+  overflow: hidden;
+}
+
+/* ===== Legend ===== */
 .legend-item {
   display: flex;
   align-items: center;
