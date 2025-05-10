@@ -210,7 +210,7 @@
   opacity: 0;
   animation: spinEarth 30s linear infinite;
   /* 加个蒙版 */
-  filter: grayscale(0%) brightness(0.9) contrast(1); 
+  filter: grayscale(0%) brightness(1) contrast(1); 
 }
 
 /* 切换显示状态（通过 class 控制） */
@@ -568,6 +568,25 @@
   padding-top: 10vh;
   box-sizing: border-box;
   text-align: center;
+  position: relative;
+}
+
+#section5 .section-content{
+  width: 50%;
+}
+
+#section5::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: url('image/bg5.jpg') center/cover no-repeat;
+  opacity: 0.1;  /* 控制整体透明度 */
+  z-index: 0;   /* 放在内容后面 */
+  /* 加个边缘渐变 */
+  mask-image: linear-gradient(to bottom, transparent 0%, black 80%, black 20%, transparent 100%);
+  mask-size: 100% 100%;
 }
 
 /* sec6 */
@@ -592,7 +611,7 @@
 
 .member-card {
   width: 200px;
-  height: 260px;
+  height: 200px;
   perspective: 1000px;
 }
 
@@ -623,8 +642,8 @@
 }
 
 .card-front img {
-  width: 80px;
-  height: 80px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 0.5rem;
@@ -636,9 +655,18 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.5rem;
+  align-items: center;
 }
 .card-back a {
   color: #fff;
   text-decoration: underline;
+}
+
+.footer-bar {
+  background-color: #2e2e2e;     /* 深灰底色 */
+  color: #f0f0f0;                /* 淡白字体 */
+  text-align: center;
+  padding: 10px 0;
+  font-size: 12px;
+  font-family: 'Segoe UI', sans-serif;
 }
