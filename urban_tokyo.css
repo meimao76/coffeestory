@@ -33,26 +33,24 @@ html, body {
   font-weight: bold;
   transition: color 0.3s;
 }
-
 .navbar-menu li a:hover,
 .navbar-menu li a.active {
   color: #ac8b72;
 }
 
-/* ===== Main Container Layout ===== */
+/* ===== Main Container ===== */
 #urban-container {
   display: grid;
-  grid-template-columns: 1fr 580px;
-  grid-template-rows: 1fr auto;
-  height: 100vh;
+  grid-template-columns: 1fr 400px; /* 可调整右侧宽度 */
+  grid-template-rows: 1fr;
+  height: calc(100vh - 60px);
   margin-top: 60px;
 }
 
-/* ===== Map + Overlays ===== */
+/* ===== Map Area ===== */
 #map-area {
   position: relative;
   grid-column: 1 / 2;
-  grid-row: 1 / 2;
   width: 100%;
   height: 100%;
 }
@@ -62,12 +60,65 @@ html, body {
   height: 100%;
 }
 
-/* ===== Info Text (他妈的，盖上去算求) ===== */
+/* ===== Left Panel (Three Floating Cards) ===== */
+#map-left-panel {
+  position: absolute;
+  top: 20px;
+  bottom: 100px; /* ✅ 预留 info-text 空间 */
+  left: 20px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+/* ===== Card Styles ===== */
+#chart-panel,
+#layer-toggle-panel,
+#legend-panel {
+  background: #fff;
+  border-radius: 8px;
+  padding: 12px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Remove extra margin from headings */
+#map-left-panel h4 {
+  margin: 0 0 8px 0;
+}
+
+/* ===== Legend Color Boxes ===== */
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.legend-color {
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+}
+.legend-color.poi {
+  background-color: #7ea386;
+}
+.legend-color.heat {
+  background-color: #b08861;
+}
+
+/* ===== Info Text (Bottom Floating他妈的直接给我盖上去) ===== */
 #info-text {
   position: absolute;
-  bottom: 20px;
-  left: 20px;
-  right: 600px; 
+  bottom: 10px;
+  left: 10px;
+  right:10px;
   background-color: rgba(208, 203, 195, 0.95);
   padding: 14px 20px;
   font-size: 15px;
@@ -76,18 +127,16 @@ html, body {
   border-top: 1px solid #bbb;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
   z-index: 15;
-  height: 60px; /* 或你想要的高度，比如 80px */
-  overflow: hidden; /* 可选：防止内容溢出 */
+  height: 60px;
   display: flex;
-  align-items: center; /* 垂直居中 */
+  align-items: center;
+  overflow: hidden;
 }
-
 
 
 /* ===== Right Panel ===== */
 #right-panel {
   grid-column: 2 / 3;
-  grid-row: 1 / 3;
   background-color: #f4f1eb;
   padding: 20px;
   overflow-y: auto;
@@ -100,13 +149,11 @@ html, body {
 #city-panel {
   display: block;
 }
-
 #zoom-buttons {
   display: flex;
   gap: 10px;
   margin-top: 10px;
 }
-
 #zoom-buttons button {
   flex: 1;
   background: #57453b;
@@ -117,49 +164,17 @@ html, body {
   font-weight: bold;
   cursor: pointer;
 }
-
 #zoom-buttons button:hover {
   background-color: #3d3129;
 }
 
-/* ===== Floating Elements ===== */
-#chart-top-left {
-  position: absolute;
-  bottom: 180px;
-  left: 20px;
-  width: 240px;
-  height: 180px;
-  background: #fff;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  z-index: 10;
-}
-
-#layer-legend-group {
-  position: absolute;
-  bottom: 180px;
-  right: 20px;
-  width: 240px;
-  background: #fff;
-  border-radius: 8px;
-  padding: 12px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  z-index: 10;
-}
-
-#layer-controls,
-#legend-box {
-  margin-bottom: 10px;
-}
-
+/* ===== Legend Styles ===== */
 .legend-item {
   display: flex;
   align-items: center;
   font-size: 14px;
   margin-bottom: 5px;
 }
-
 .legend-color {
   width: 14px;
   height: 14px;
@@ -167,11 +182,5 @@ html, body {
   border-radius: 3px;
   border: 1px solid #ccc;
 }
-
-.legend-color.poi {
-  background-color: #7ea386;
-}
-
-.legend-color.heat {
-  background-color: #b08861;
-}
+.legend-color.poi { background-color: #7ea386; }
+.legend-color.heat { background-color: #b08861; }
