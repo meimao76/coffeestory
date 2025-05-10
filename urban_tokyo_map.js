@@ -58,8 +58,8 @@ map.on('load', () => {
         'match',
         ['get', 'cafe_cat_1'],
         'Chain', '#b1150c',
-        'Independent', '#5079b2',
-        'Community/Old-fashioned', '#c8691c',
+        'Independent', '#7E8EA5',
+        'Community/Old-fashioned', '#5E382F',
         '#888'
       ],
       'circle-opacity': 0.8,
