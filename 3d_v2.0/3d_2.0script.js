@@ -60,6 +60,25 @@ const globe = Globe()
     });
 
 globe(document.getElementById('globeViz'));
+// //章节监听器
+// const sidebar = document.getElementById('sidebarContent');
+// const section2 = document.getElementById('scrollContent2');
+// sidebar.addEventListener('scroll', () => {
+//   const inSection2 = (() => {
+//     const sb = sidebar.getBoundingClientRect();
+//     const s2 = section2.getBoundingClientRect();
+//     return s2.top < sb.bottom && s2.bottom > sb.top;
+//   })();
+  
+//   console.log('滚动检测，第二章显示：', inSection2);
+//   // flightLines 在下面 Promise.then 中由 globe.arcsData() 创建，这里直接遍历 scene
+//   globe.scene().traverse(obj => {
+//     if (obj.userData && obj.userData.arc) {
+//       obj.material.transparent = true;
+//       obj.material.opacity     = inSection2 ? 0 : 1;
+//     }
+//   });
+// });
 
 // 加载数据：国界线 + 贸易流
 Promise.all([
@@ -81,6 +100,59 @@ Promise.all([
         .filter(d => !isNaN(+d.lng_import));
 
     globe.polygonsData(boundaryData.features);
+    const countryMeshes = [];
+    // 三维场景中，所有多边形都是 Mesh，挂载了它的 feature 在 userData
+    globe.scene().traverse(obj => {
+    if (obj.type === 'Mesh' && obj.userData && obj.userData.properties) {
+        countryMeshes.push(obj);
+    }
+    });
+
+    // —— 定义高亮函数 ——  
+    function highlightCountry(isoA3) {
+    countryMeshes.forEach(mesh => {
+        const iso = mesh.userData.properties.ISO_A3 || mesh.userData.properties.iso_a3;
+        if (iso === isoA3) {
+        mesh.material.emissive.setHex(0xffcc00);
+        mesh.scale.set(1.05, 1.05, 1.05);
+        } else {
+        mesh.material.emissive.setHex(0x000000);
+        mesh.scale.set(1, 1, 1);
+        }
+    });
+    }
+    // 调用示例：
+    highlightCountry('FRA');
+    
+    // const raycaster = new window.THREE.Raycaster();
+    // const mouse     = new window.THREE.Vector2();
+    // const canvas    = globe.renderer().domElement;
+
+    // // 鼠标移动时射线检测
+    // canvas.addEventListener('mousemove', event => {
+    // const rect = canvas.getBoundingClientRect();
+    // mouse.x =  ((event.clientX - rect.left) / rect.width)  * 2 - 1;
+    // mouse.y = -((event.clientY - rect.top)  / rect.height) * 2 + 1;
+
+    // raycaster.setFromCamera(mouse, globe.camera());
+    // const hits = raycaster.intersectObjects(countryMeshes);
+    // if (hits.length) {
+    //     const props = hits[0].object.userData.properties;
+    //     showCountryInfo(props);
+    // } else {
+    //     hideCountryInfo();
+    // }
+    // });
+
+    // // —— 占位：在页面上显示 / 隐藏信息框 ——  
+    // function showCountryInfo(props) {
+    // // 这里留个接口：props 里可能有 ISO_A3, NAME, GDP……随你定义
+    // console.log('Hover country:', props);
+    // // 你可以在页面上插入 tooltip 或更新侧边栏某个 DOM 节点
+    // }
+    // function hideCountryInfo() {
+    // // 隐藏 tooltip / 清空 info 区
+    // }
 
     // 初始化显示
     updateGlobeArcs('all');
@@ -242,7 +314,38 @@ Promise.all([
 // 页面初始化完毕之后，第一次渲染
 updateGraphs();
 
-});
+}
+    
+);
+// —— 在 Promise.then(...) 的最后，飞线和多边形都已设置好后 ——  
+function toggleArcsOpacity() {
+  // 计算是否滚到第二章
+  const sb = sidebarContent.getBoundingClientRect();
+  const s2 = section2.getBoundingClientRect();
+  const inSection2 = s2.top < sb.bottom && s2.bottom > sb.top;
+  
+  let count = 0;
+  globe.scene().traverse(obj => {
+    // 只处理带 arc 标记的飞线
+    if (obj.userData && obj.userData.arc) {
+      obj.material.transparent  = true;
+      obj.material.opacity      = inSection2 ? 0 : 1;
+      obj.material.needsUpdate  = true;
+      count++;
+    }
+  });
+  // 调试：看看改了多少条线
+  console.log(`toggleArcsOpacity: matched ${count} arcs, inSection2=${inSection2}`);
+  
+  // 手动触发渲染
+  globe.renderer().render(globe.scene(), globe.camera());
+}
+
+// 注册滚动监听
+sidebarContent.addEventListener('scroll', toggleArcsOpacity);
+
+// 页面初始也执行一次，保证加载后状态正确
+toggleArcsOpacity();
 
  
 // 1. 先改造 updateGlobeArcs，接收两个参数
