@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="urban_tokyo.css" />
 </head>
 <body>
-  <!-- 顶部导航栏 -->
+  <!-- 顶部导航 -->
   <nav class="navbar">
     <ul class="navbar-menu">
       <li><a href="#">Home</a></li>
@@ -22,35 +22,36 @@
     </ul>
   </nav>
 
-  <!-- 主体容器 -->
+  <!-- 主容器 -->
   <div id="urban-container">
     
-    <!-- 左侧地图区域 -->
+    <!-- 地图区域 -->
     <div id="map-area">
       <div id="map"></div>
 
-      <!-- 图表（左下角） -->
-      <div id="chart-top-left">
-        <canvas id="coffee-stats-chart"></canvas>
-      </div>
+      <div id="map-left-panel">
+        <!-- 1. 统计图表 -->
+        <div id="chart-panel">
+          <h4>Statistics</h4>
+          <canvas id="coffee-stats-chart"></canvas>
+        </div>
 
-      <!-- 图层控制 + 图例（右下角） -->
-      <div id="layer-legend-group">
-        <div id="layer-controls">
+        <!-- 2. 图层开关 -->
+        <div id="layer-toggle-panel">
           <h4>Layers</h4>
           <label><input type="checkbox" id="layer-poi" /> Coffee POIs</label><br />
           <label><input type="checkbox" id="layer-heatmap" /> Heatmap</label>
         </div>
-        <div id="legend-box">
+
+        <!-- 3. 图例 -->
+        <div id="legend-panel">
           <h4>Legend</h4>
           <div class="legend-item"><span class="legend-color poi"></span> POI Type</div>
           <div class="legend-item"><span class="legend-color heat"></span> Heat Intensity</div>
         </div>
       </div>
-    </div>
 
-    <!-- 引导性说明文字 -->
-    <div id="info-container">
+      <!-- ✅ info text 浮在底部 -->
       <div id="info-text">
         Toggle layers to reveal how Tokyo's urban coffee culture clusters across districts.
         Statistics and densities will appear here.
@@ -73,7 +74,6 @@
     </div>
   </div>
 
-  <!-- JS -->
   <script src="urban_tokyo_map.js"></script>
 </body>
 </html>
