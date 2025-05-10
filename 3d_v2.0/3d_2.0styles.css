@@ -29,14 +29,14 @@
     height: 120%;
     display: flex; flex-direction: column;
     color: #2d2326;
-    background: rgba(227, 223, 215, 0.5);
+    background: rgba(185, 169, 156, 0.4);
     z-index: 20;
   }
   
   
   /* 固定导航 */
   #headerZone {
-    background-color: rgba(178, 158, 142, 0.7);
+    background-color: rgba(84, 54, 26, 0.8);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -60,7 +60,7 @@
   }
 
   .nav-item:hover {
-    color: #54361a;
+    color: #ffffff;
   }
   
   /* 滚动内容区 */
@@ -154,7 +154,7 @@
   
   /* 主内容区 */
   #mainContent {
-    background: url(bg1.png);
+    background: url(bg2.png);
     width: 100%;
     position: relative;
     flex: 1;
@@ -200,7 +200,7 @@
     left: 2%;
     width: 17%;
     color: rgba(45, 35, 38);
-    background: rgba(227, 223, 215, 0.5);;
+    background: rgba(185, 169, 156, 0.4);
     padding: 12px 12px;
     border-radius: 8px;
     display: flex;
@@ -214,7 +214,7 @@
 #commoditySelectorWrapper select {
   width: 220px;
   height: 28px;
-  background-color: rgba(227, 223, 215, 0.5);
+  background-color: rgba(255, 255, 255, 0.5);
   border: 1px solid rgba(45, 35, 38, 0.7);
   color: rgba(45, 35, 38);
   border-radius: 4px;

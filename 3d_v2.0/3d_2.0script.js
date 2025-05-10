@@ -7,7 +7,7 @@ let roastData = [];
 const globe = Globe()
   // 1. 地球表面贴图（暗面）
   .globeImageUrl('globesurface2.png')
-  .backgroundImageUrl('bg1.png')
+  .backgroundImageUrl('bg2.png')
   // 2. 地球高光／凹凸贴图（模拟山脉、海洋波纹）
   .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
   .showAtmosphere(true)
@@ -24,9 +24,9 @@ const globe = Globe()
     // 飞线颜色（起点颜色 + 终点颜色）
     .arcColor(d => {
         if (d.commodity === 'raw bean') {
-            return [`rgba(186, 191, 192, 1)`, `rgba(215, 207, 166, 0.6)`,`rgba(42, 38, 39, 0.8)`];
+            return [`rgb(255, 255, 255)`, `rgba(255, 248, 231, 0.5)`, `rgb(255, 209, 161)`];
         } else if (d.commodity === 'roasted bean') {
-            return [`rgba(42, 38, 39, 0.8)`, `rgba(212, 219, 85, 0.6)`,`rgba(225, 101, 7, 0.8)`];
+            return [`rgb(255, 232, 220)`, `rgba(252, 212, 200, 0.5)`,`rgb(247, 187, 165)`];
         } else {
             return ['#cccccc', '#cccccc'];
         }
@@ -273,7 +273,7 @@ function updateGlobeArcs(commodityType, year) {
 
   // 其余不变
   const weightExtent = d3.extent(topData, d => +d['Weight (1000kg)']);
-  const strokeScale  = d3.scaleSqrt().domain(weightExtent).range([0.5, 2]);
+  const strokeScale  = d3.scaleSqrt().domain(weightExtent).range([0.1, 3]);
 
   globe
     .arcsData(topData)
