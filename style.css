@@ -210,7 +210,7 @@
   opacity: 0;
   animation: spinEarth 30s linear infinite;
   /* 加个蒙版 */
-  filter: grayscale(0%) brightness(0.85) contrast(1); 
+  filter: grayscale(0%) brightness(0.9) contrast(1); 
 }
 
 /* 切换显示状态（通过 class 控制） */

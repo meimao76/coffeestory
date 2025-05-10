@@ -25,9 +25,10 @@
     position: fixed;
     top: 0px; /* 下方留给导航 */
     right: 0;
-    width: 38%;
-    height: 115%;
+    width: 35%;
+    height: 120%;
     display: flex; flex-direction: column;
+    color: #2d2326;
     background: rgba(227, 223, 215, 0.5);
     z-index: 20;
   }
@@ -35,12 +36,12 @@
   
   /* 固定导航 */
   #headerZone {
-    background-color: rgba(178, 158, 142, 0.5);
+    background-color: rgba(178, 158, 142, 0.7);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 10%;
-    height: 10%;
+    margin-bottom: 5%;
+    height: 5%;
 
   }
   #navbar {
@@ -54,9 +55,12 @@
     font-weight: bold;
     font-size: 20px;
   }
-  .nav-item.active,
+  .nav-item.active{
+    color: #EBDFC0;
+  }
+
   .nav-item:hover {
-    color: #ac8b72;
+    color: #54361a;
   }
   
   /* 滚动内容区 */
@@ -71,6 +75,7 @@
   }
   
   .title-zone {
+    color: #54361a;
     font-weight: 700;
     font-size: 36px;
     line-height: 48px;
@@ -82,7 +87,7 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 21px;
-    text-align: center;
+    text-align: left;
     margin-bottom: 40px;
   }
   
@@ -91,7 +96,7 @@
     height: 160px;
     background: rgba(255, 255, 255, 0);
     margin-bottom: 40px;
-    margin-left: 5px;
+    margin-left: -40px;
   }
 
   .chart-panel {     
@@ -110,16 +115,25 @@
     gap: 10px;
     margin-bottom: 20px;
   }
-  .switch-btn {
-    cursor: pointer;
-    color: #FFFFFF;
-  }
-  .switch-btn.active {
-    text-decoration: underline;
-  }
-  .separator {
-    color: #FFFFFF;
-  }
+.switch-btn {
+  cursor: pointer;
+  color: #FFFFFF;
+  transition: color 0.3s ease;  /* 平滑过渡 */
+}
+
+.switch-btn:hover {
+  color: #b29e8e;  /* 鼠标悬停时的颜色 */
+}
+
+.switch-btn.active {
+  text-decoration: underline;
+  color: #b29e8e;
+}
+
+.separator {
+  color: #FFFFFF;
+  transition: color 0.3s ease;
+}
   
   /* 统计类型切换 */
   .measure-switch {

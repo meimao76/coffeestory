@@ -118,7 +118,7 @@ Promise.all([
 
     // 条形
     svg.append("g")
-    .attr("fill", "steelblue")
+    .attr("fill", "#b29e8e")
     .selectAll("rect")
     .data(data)
     .join("rect")
