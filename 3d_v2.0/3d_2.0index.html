@@ -62,7 +62,7 @@
         <!-- 第二部分：价值链 -->
         <div id="scrollContent2" class="scroll-group">
           <div id="titleZone2" class="title-zone">Who Makes the Money?</div>
-          <div id="textZone2" class="text-zone">
+            <div id="textZone2" class="text-zone">
             <!-- 文本描述 -->
             A coffee bean changes hands many times — but not all hands are equal.
             <br><br>
@@ -72,26 +72,29 @@
             <br><br>
             In this chain, power isn't just economic.  It's symbolic.Roasters and brands don't just add value — 
             they package meaning: authenticity, aspiration, and taste.
-          </div>
-          <div class="graph-zone">
-            <svg id="sankey" class= "sankey" width="300" height="160"></svg>
-          </div>
-          <div id="chartSwitch2" class="chart-switch">
-            <span data-view="flows" class="switch-btn active">Trade Flows</span>
-            <span class="separator">|</span>
-            <span data-view="exporters" class="switch-btn">Exporters</span>
-            <span class="separator">|</span>
-            <span data-view="importers" class="switch-btn">Importers</span>
-          </div>
-          <div id="measureSwitch2" class="measure-switch">
-            <label><input type="radio" name="measure2" value="value" checked /> Value</label>
-            <label><input type="radio" name="measure2" value="weight" /> Weight</label>
+            </div>
+          <div id="sankeyzone"class="graph-zone">
+            <svg id="sankey" class="sankey" width="300" height="160"></svg>
           </div>
         </div>
 
         <!-- 第三部分 -->
         <div id="scrollContent3" class="scroll-group">
-          <div id="titleZone2" class="title-zone">Consumption is culture, too.</div>
+          <div id="titleZone3" class="title-zone">Consumption is culture, too.</div>
+          <div id="textZone3" class="text-zone">
+            <!-- 文本描述 -->
+            A coffee bean changes hands many times — but not all hands are equal.
+            <br><br>
+            For every cup sold at $4, the grower might earn just 10 to 20 cents.  
+            Most of the profit concentrates after the bean leaves the farm — 
+            in roasting, branding, distribution, and retail.
+            <br><br>
+            In this chain, power isn't just economic.  It's symbolic.Roasters and brands don't just add value — 
+            they package meaning: authenticity, aspiration, and taste.
+          <div id="sankeyzone"class="graph-zone">
+            <svg id="sankey" class="sankey" width="300" height="160"></svg>
+          </div>
+          </div>
 
         </div>
       </div>
@@ -100,7 +103,6 @@
     <!-- 主内容区：3D 地球 + 信息弹窗 -->
     <main id="mainContent">
       <div id="globeViz"></div>
-
       <div id="infoBox" class="info-box">
         <div class="info-line">
         <span class="info-label">Route:</span>
@@ -118,7 +120,7 @@
         <span class="info-label">Commodity:</span>
         <span id="infoCommodity" class="info-value"></span>
       </div>
-
+      
       </div>
       <div id="commoditySelectorWrapper">
         <label for="commoditySelector" id="commodityLabel">Commodity Type</label>

@@ -1,7 +1,62 @@
 let fullData = []; 
+let borders = []
 let rawData = [];   
 let roastData = []; 
+let topData = []; 
  // 保存全部数据
+
+// 1. 渲染函数：直接重设数据
+const infoBox     = document.getElementById('infoBox');
+const selectorBox = document.getElementById('commoditySelectorWrapper');
+
+function showBordersFlows() {
+  globe
+    .polygonsData(borders)   // 显示国界
+    .arcsData(topData);     // 显示所有飞线
+
+  selectorBox.style.display = 'block'; // 显示筛选器
+}
+
+function showBordersOnly() {
+  globe
+    .polygonsData(borders)   // 显示国界
+    .arcsData([]);           // 隐藏所有飞线
+
+  infoBox.style.display     = 'none';  // 隐藏
+  selectorBox.style.display = 'none'; // 
+}
+
+function showFlowsOnly() {
+  globe
+    .polygonsData([])        // 隐藏国界
+    .arcsData(topData);     // 显示所有飞线
+
+  infoBox.style.display     = 'none';  // 隐藏
+  selectorBox.style.display = 'none'; // 
+}
+
+// 2. 章节映射
+const sectionActions = {
+  scrollContent1: showBordersFlows,
+  scrollContent2: showBordersOnly,
+  scrollContent3: showFlowsOnly
+};
+
+// 3. Observer
+const sidebar = document.getElementById('sidebarContent');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting && sectionActions[entry.target.id]) {
+      sectionActions[entry.target.id]();
+    }
+  });
+}, { root: sidebar, threshold: 0.5 });
+
+['scrollContent1','scrollContent2','scrollContent3']
+  .forEach(id => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
 
 // 初始化地球
 const globe = Globe()
@@ -11,18 +66,17 @@ const globe = Globe()
   // 2. 地球高光／凹凸贴图（模拟山脉、海洋波纹）
   .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
   .showAtmosphere(true)
+  // 飞线样式
+  .arcDashLength(0.5)
+  .arcDashGap(0)
+  .arcDashAnimateTime(0)
+  .arcDashLength(0.7)  // 每条虚线长度
+  .arcDashGap(0.3)        // 虚线间隔
+  .arcDashInitialGap(() => Math.random())  // 初始偏移（让飞线动感更自然）
+  .arcDashAnimateTime(4000)  // 动画一圈的时间（毫秒）
 
-    .arcDashLength(0.5)
-    .arcDashGap(0)
-    .arcDashAnimateTime(0)
-
-    .arcDashLength(0.7)  // 每条虚线长度
-    .arcDashGap(0.3)        // 虚线间隔
-    .arcDashInitialGap(() => Math.random())  // 初始偏移（让飞线动感更自然）
-    .arcDashAnimateTime(4000)  // 动画一圈的时间（毫秒）
-
-    // 飞线颜色（起点颜色 + 终点颜色）
-    .arcColor(d => {
+  // 飞线颜色（起点颜色 + 终点颜色）
+  .arcColor(d => {
         if (d.commodity === 'raw bean') {
             return [`rgb(255, 255, 255)`, `rgba(255, 248, 231, 0.5)`, `rgb(255, 209, 161)`];
         } else if (d.commodity === 'roasted bean') {
@@ -30,26 +84,26 @@ const globe = Globe()
         } else {
             return ['#cccccc', '#cccccc'];
         }
-    })
+  })
 
-    // 飞线出现的动画时间（设为 0 表示立即出现）
-    .arcsTransitionDuration(0)
-    
-    .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // 国界内部透明
-    .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 无侧边
-    .polygonStrokeColor(() => '#cccccc') // 国界线颜色
-    .polygonAltitude(0.01) // 国界线稍微凸起一点
-    .onArcClick(d =>{
-        const infoBox = document.getElementById('infoBox');
+  .arcsTransitionDuration(200)
+  .polygonsTransitionDuration(0) 
+  .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // 国界内部透明
+  .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 无侧边
+  .polygonStrokeColor(() => '#cccccc') // 国界线颜色
+
+
+  // 飞线交互
+  .onArcClick(d =>{
+    const infoBox = document.getElementById('infoBox');
         
-        document.getElementById('infoRoute').textContent = `${d.Exporter} → ${d.Importer}`;
-        document.getElementById('infoWeight').textContent = `${d['Weight (1000kg)']} metric ton`;
-        document.getElementById('infoValue').textContent = `${d['Value (1000USD)']}k USD`;
-        document.getElementById('infoCommodity').textContent = d.commodity;
-        console.log(d);
-
-        infoBox.style.display = 'block';
-    });
+    document.getElementById('infoRoute').textContent = `${d.Exporter} → ${d.Importer}`;
+    document.getElementById('infoWeight').textContent = `${d['Weight (1000kg)']} metric ton`;
+    document.getElementById('infoValue').textContent = `${d['Value (1000USD)']}k USD`;
+    document.getElementById('infoCommodity').textContent = d.commodity;
+    console.log(d);
+    infoBox.style.display = 'block';
+  });
 
     document.addEventListener('click', (e) => {
         const infoBox = document.getElementById('infoBox');
@@ -58,27 +112,8 @@ const globe = Globe()
             infoBox.style.display = 'none';
         }
     });
-
+//渲染
 globe(document.getElementById('globeViz'));
-// //章节监听器
-// const sidebar = document.getElementById('sidebarContent');
-// const section2 = document.getElementById('scrollContent2');
-// sidebar.addEventListener('scroll', () => {
-//   const inSection2 = (() => {
-//     const sb = sidebar.getBoundingClientRect();
-//     const s2 = section2.getBoundingClientRect();
-//     return s2.top < sb.bottom && s2.bottom > sb.top;
-//   })();
-  
-//   console.log('滚动检测，第二章显示：', inSection2);
-//   // flightLines 在下面 Promise.then 中由 globe.arcsData() 创建，这里直接遍历 scene
-//   globe.scene().traverse(obj => {
-//     if (obj.userData && obj.userData.arc) {
-//       obj.material.transparent = true;
-//       obj.material.opacity     = inSection2 ? 0 : 1;
-//     }
-//   });
-// });
 
 // 加载数据：国界线 + 贸易流
 Promise.all([
@@ -98,8 +133,8 @@ Promise.all([
         .filter(d => !isNaN(+d.lng_export))
         .filter(d => !isNaN(+d.lat_import))
         .filter(d => !isNaN(+d.lng_import));
-
-    globe.polygonsData(boundaryData.features);
+    borders = boundaryData.features
+    globe.polygonsData(borders);
     const countryMeshes = [];
     // 三维场景中，所有多边形都是 Mesh，挂载了它的 feature 在 userData
     globe.scene().traverse(obj => {
@@ -107,52 +142,6 @@ Promise.all([
         countryMeshes.push(obj);
     }
     });
-
-    // —— 定义高亮函数 ——  
-    function highlightCountry(isoA3) {
-    countryMeshes.forEach(mesh => {
-        const iso = mesh.userData.properties.ISO_A3 || mesh.userData.properties.iso_a3;
-        if (iso === isoA3) {
-        mesh.material.emissive.setHex(0xffcc00);
-        mesh.scale.set(1.05, 1.05, 1.05);
-        } else {
-        mesh.material.emissive.setHex(0x000000);
-        mesh.scale.set(1, 1, 1);
-        }
-    });
-    }
-    // 调用示例：
-    highlightCountry('FRA');
-    
-    // const raycaster = new window.THREE.Raycaster();
-    // const mouse     = new window.THREE.Vector2();
-    // const canvas    = globe.renderer().domElement;
-
-    // // 鼠标移动时射线检测
-    // canvas.addEventListener('mousemove', event => {
-    // const rect = canvas.getBoundingClientRect();
-    // mouse.x =  ((event.clientX - rect.left) / rect.width)  * 2 - 1;
-    // mouse.y = -((event.clientY - rect.top)  / rect.height) * 2 + 1;
-
-    // raycaster.setFromCamera(mouse, globe.camera());
-    // const hits = raycaster.intersectObjects(countryMeshes);
-    // if (hits.length) {
-    //     const props = hits[0].object.userData.properties;
-    //     showCountryInfo(props);
-    // } else {
-    //     hideCountryInfo();
-    // }
-    // });
-
-    // // —— 占位：在页面上显示 / 隐藏信息框 ——  
-    // function showCountryInfo(props) {
-    // // 这里留个接口：props 里可能有 ISO_A3, NAME, GDP……随你定义
-    // console.log('Hover country:', props);
-    // // 你可以在页面上插入 tooltip 或更新侧边栏某个 DOM 节点
-    // }
-    // function hideCountryInfo() {
-    // // 隐藏 tooltip / 清空 info 区
-    // }
 
     // 初始化显示
     updateGlobeArcs('all');
@@ -315,39 +304,9 @@ Promise.all([
 updateGraphs();
 
 }
-    
 );
-// —— 在 Promise.then(...) 的最后，飞线和多边形都已设置好后 ——  
-function toggleArcsOpacity() {
-  // 计算是否滚到第二章
-  const sb = sidebarContent.getBoundingClientRect();
-  const s2 = section2.getBoundingClientRect();
-  const inSection2 = s2.top < sb.bottom && s2.bottom > sb.top;
-  
-  let count = 0;
-  globe.scene().traverse(obj => {
-    // 只处理带 arc 标记的飞线
-    if (obj.userData && obj.userData.arc) {
-      obj.material.transparent  = true;
-      obj.material.opacity      = inSection2 ? 0 : 1;
-      obj.material.needsUpdate  = true;
-      count++;
-    }
-  });
-  // 调试：看看改了多少条线
-  console.log(`toggleArcsOpacity: matched ${count} arcs, inSection2=${inSection2}`);
-  
-  // 手动触发渲染
-  globe.renderer().render(globe.scene(), globe.camera());
-}
 
-// 注册滚动监听
-sidebarContent.addEventListener('scroll', toggleArcsOpacity);
-
-// 页面初始也执行一次，保证加载后状态正确
-toggleArcsOpacity();
-
- 
+//飞线制图
 // 1. 先改造 updateGlobeArcs，接收两个参数
 function updateGlobeArcs(commodityType, year) {
   // 从 fullData 里先把基本的经纬度、重量非 NA 的记录过滤掉
@@ -370,7 +329,7 @@ function updateGlobeArcs(commodityType, year) {
 
   // 再取前 0.6%
   const intercept = 0.006;
-  const topData = filteredData
+  topData = filteredData
     .sort((a, b) => +b['Weight (1000kg)'] - +a['Weight (1000kg)'])
     .slice(0, Math.max(1, Math.floor(filteredData.length * intercept)));
 
@@ -408,7 +367,7 @@ onFilterChange();
 
 //Sankey
 const width =500;
-const height = 200;
+const height = 160;
 
 // 选中 SVG 并设定画布大小
 const svg = d3.select("#sankey")
