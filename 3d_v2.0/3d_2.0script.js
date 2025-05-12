@@ -3,18 +3,18 @@ let borders = []
 let rawData = [];   
 let roastData = []; 
 let topData = []; 
+let coffeeByCountry = new Map();
+let info = [];
  // 保存全部数据
 
-// 1. 渲染函数：直接重设数据
+// 1.定义设置交互对话框可见性的函数
 const infoBox     = document.getElementById('infoBox');
 const selectorBox = document.getElementById('commoditySelectorWrapper');
 
 function showBordersFlows() {
   globe
-    .polygonsData(borders)   // 显示国界
-    .arcsData(topData);     // 显示所有飞线
-
-  selectorBox.style.display = 'block'; // 显示筛选器
+    .arcsData(topData);     
+  selectorBox.style.display = 'block'; 
 }
 
 function showBordersOnly() {
@@ -58,14 +58,17 @@ const observer = new IntersectionObserver(entries => {
     if (el) observer.observe(el);
   });
 
-// 初始化地球
+
+//3 初始化地球
 const globe = Globe()
+
   // 1. 地球表面贴图（暗面）
-  .globeImageUrl('globesurface2.png')
-  .backgroundImageUrl('bg2.png')
+  .globeImageUrl('bg3.png')
+  .backgroundColor('rgba(0, 0, 0, 0)')
   // 2. 地球高光／凹凸贴图（模拟山脉、海洋波纹）
   .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
   .showAtmosphere(true)
+
   // 飞线样式
   .arcDashLength(0.5)
   .arcDashGap(0)
@@ -74,7 +77,6 @@ const globe = Globe()
   .arcDashGap(0.3)        // 虚线间隔
   .arcDashInitialGap(() => Math.random())  // 初始偏移（让飞线动感更自然）
   .arcDashAnimateTime(4000)  // 动画一圈的时间（毫秒）
-
   // 飞线颜色（起点颜色 + 终点颜色）
   .arcColor(d => {
         if (d.commodity === 'raw bean') {
@@ -84,44 +86,58 @@ const globe = Globe()
         } else {
             return ['#cccccc', '#cccccc'];
         }
-  })
-
+        })
   .arcsTransitionDuration(200)
+  // 多边形样式
   .polygonsTransitionDuration(0) 
-  .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // 国界内部透明
-  .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 无侧边
-  .polygonStrokeColor(() => '#cccccc') // 国界线颜色
-
-
-  // 飞线交互
-  .onArcClick(d =>{
-    const infoBox = document.getElementById('infoBox');
-        
-    document.getElementById('infoRoute').textContent = `${d.Exporter} → ${d.Importer}`;
-    document.getElementById('infoWeight').textContent = `${d['Weight (1000kg)']} metric ton`;
-    document.getElementById('infoValue').textContent = `${d['Value (1000USD)']}k USD`;
-    document.getElementById('infoCommodity').textContent = d.commodity;
-    console.log(d);
-    infoBox.style.display = 'block';
+  .polygonCapColor(feat => 'rgba(7, 166, 223, 0)') // 国界内部
+  .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 侧边
+  .polygonStrokeColor(() => '#54361a') // 国界线颜色
+  .polygonAltitude(0.01)
+  .polygonLabel(({ properties }) => {
+    const iso = properties.ISO_A3;                // 或者你 GeoJSON 中实际的字段名
+    const brands = coffeeByCountry.get(iso) || [];
+    const listItems = brands.length
+      ? brands.map(d => `<li>${d.Name} (${d['Number of locations']})</li>`).join('')
+      : '<li>No brands found</li>';
+    return `
+      <div style="pointer-events:none; max-width:200px;">
+        <b style="font-size:1.1em;">${properties.NAME}</b><br/>
+        <small>${brands.length} brand${brands.length>1?'s':''}</small>
+        <ul style="margin:4px 0 0 8px; padding:0; list-style:disc;">
+          ${listItems}
+        </ul>
+      </div>
+    `;
+  })
+  .onPolygonClick(({ properties }) => {
+    const iso = properties.ISO_A3;          // 或者 ADM0_A3_US，看你的字段
+    const brands = coffeeByCountry.get(iso) || [];
+    showCoffeeList(brands, properties.NAME);
   });
+  
 
-    document.addEventListener('click', (e) => {
-        const infoBox = document.getElementById('infoBox');
-        // 如果点的不是飞线（这里简单判断）
-        if (!e.target.closest('canvas')) {
-            infoBox.style.display = 'none';
-        }
-    });
+//飞线监听器
+document.addEventListener('click', (e) => {
+    const infoBox = document.getElementById('infoBox');
+    // 如果点的不是飞线（这里简单判断）
+    if (!e.target.closest('canvas')) {
+        infoBox.style.display = 'none';
+    }
+})
+
+//旋转地球
+
+
 //渲染
 globe(document.getElementById('globeViz'));
 
 // 加载数据：国界线 + 贸易流
 Promise.all([
-    d3.json("sim_bond.geojson"),
+    d3.json("selected_bond.geojson"),
     d3.csv("combined_tradeflow.csv"),
-    d3.csv("raw_tradeflow_merged.csv"),
-    d3.csv("roasted_tradeflow_merged.csv")
-]).then(function([boundaryData, merged_flow, raw, roast]) {
+    d3.csv("List_of_coffeehouse_chains_3.csv"),
+]).then(function([boundaryData, merged_flow, brands]) {
 
     console.log("加载的数据：", merged_flow.slice(0, 5));
 
@@ -134,15 +150,12 @@ Promise.all([
         .filter(d => !isNaN(+d.lat_import))
         .filter(d => !isNaN(+d.lng_import));
     borders = boundaryData.features
-    globe.polygonsData(borders);
-    const countryMeshes = [];
-    // 三维场景中，所有多边形都是 Mesh，挂载了它的 feature 在 userData
-    globe.scene().traverse(obj => {
-    if (obj.type === 'Mesh' && obj.userData && obj.userData.properties) {
-        countryMeshes.push(obj);
-    }
-    });
+    globe
+    .arcsData(topData);
 
+    // 建立 ISO3 -> 品牌列表 的映射
+    coffeeByCountry = d3.group(brands, d => d.ISO3);
+  
     // 初始化显示
     updateGlobeArcs('all');
     const defaultYear    = document.getElementById('yearSelector').value;
