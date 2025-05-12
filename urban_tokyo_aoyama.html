@@ -3,39 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Urban Culture - Tokyo</title>
+  <title>Urban Culture - Aoyama</title>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-  <link rel="stylesheet" href="urban_tokyo.css" />
+  <link rel="stylesheet" href="urban_tokyo_aoyama.css" />
 </head>
 
 <body>
   <!-- 顶部导航 -->
   <nav class="navbar">
     <ul class="navbar-menu">
-      <li><a href="#">Home</a></li>
-      <li><a href="#">Introduction</a></li>
-      <li><a href="#">Trade</a></li>
-      <li class="dropdown">
-        <a class="active" href="#">Culture ▾</a>
-        <ul class="dropdown-menu">
-          <li><a href="#" onclick="selectCity('Guangzhou')">Guangzhou</a></li>
-          <li><a href="#" onclick="selectCity('Melbourne')">Melbourne</a></li>
-          <li><a href="#" onclick="selectCity('Rome')">Rome</a></li>
-          <li><a href="#" onclick="selectCity('Tokyo')">Tokyo</a></li>
-        </ul>
-      </li>
-      <li><a href="#">Conclusion</a></li>
-      <li><a href="#">About</a></li>
+      <li><a href="urban_tokyo.html">Tokyo Overview</a></li>
+      <li><a href="#" class="active">Aoyama</a></li>
     </ul>
   </nav>
 
   <!-- 主容器 -->
   <div id="urban-container">
-    
+
     <!-- 地图区域 -->
     <div id="map-area">
       <div id="map"></div>
@@ -61,9 +49,9 @@
             <span class="arrow">▼</span>
           </div>
           <div class="card-body" id="layer-toggle-panel">
-           <label><input type="checkbox" class="layer-toggle" data-type="Chain" checked /> Chain</label><br />
-           <label><input type="checkbox" class="layer-toggle" data-type="Independent" checked /> Independent</label><br />
-           <label><input type="checkbox" class="layer-toggle" data-type="Community/Old-fashioned" checked /> Community/Old-fashioned</label><br />
+            <label><input type="checkbox" class="layer-toggle" data-type="Chain" checked /> Chain</label><br />
+            <label><input type="checkbox" class="layer-toggle" data-type="Independent" checked /> Independent</label><br />
+            <label><input type="checkbox" class="layer-toggle" data-type="Community/Old-fashioned" checked /> Community/Old-fashioned</label><br />
           </div>
         </div>
 
@@ -78,7 +66,7 @@
             <div class="legend-item"><span class="legend-color" style="background-color: #7E8EA5;"></span> Independent</div>
             <div class="legend-item"><span class="legend-color" style="background-color: #5E382F;"></span> Community/Old-fashioned</div>
 
-            <!-- heatmap 图例：不再套在 legend-item 内 -->
+            <!-- heatmap 图例 -->
             <div class="heat-legend">
               <div class="legend-label">Heat Intensity</div>
               <div class="heat-gradient-bar"></div>
@@ -93,48 +81,38 @@
 
       <!-- 视图重启 -->
       <button id="reset-view-btn">
-      ⟲ Reset View
+        ⟲ Reset View
       </button>
 
       <!-- 底部信息文字 -->
       <div id="info-text">
         <!-- JS will dynamically inject content here -->
       </div>
-
-      <!-- 行政区 Hover 显示 -->
-      <div id="hover-label"></div>
     </div>
 
-<!-- 右侧面板 -->
-<div id="right-panel">
-  <div id="city-panel">
+    <!-- 右侧拼贴图部分 -->
+    <div id="right-panel">
+      <div id="city-panel">
 
-    <!-- Top 拼贴图 + 所有文字浮层 -->
-    <div class="city-collage-wrapper top-wrapper">
-      <img src="image/TOYKO/toyko_top.png" alt="Tokyo Collage Top" class="city-collage-img">
+        <div class="city-collage-wrapper top-wrapper">
+          <img src="image/TOYKO/toyko_aoyama_top.png" alt="Aoyama Collage Top" class="city-collage-img">
+          <div id="city-text-overlay">
+            <p class="city-section-title">Aoyama - Delicate Details</p>
+            <p>Aoyama's café scene is composed, stylish, and often tucked into serene side streets.</p>
+            <p>Independent cafés dominate, offering minimal interiors and curated pour-overs.</p>
+            <p>Chain cafés are fewer, mostly around Omotesando station.</p>
+            <p>Community-style cafés are rare, but those that exist serve as intimate anchors for local creatives.</p>
+            <p>Aoyama is less about density, more about finesse — a quiet resonance in Tokyo’s cultural pulse.</p>
+          </div>
+        </div>
 
-      <div id="city-text-overlay">
-        <p class="city-section-title">Tokyo - Precision and Pause</p>
-        <p>In Tokyo, coffee does not shout — it is measured. From corporate corridors in Shinjuku to narrow alleys in Setagaya, cafés serve as structured intermissions in a city of flow.</p>
-        <p>Chain cafés gather near transit hubs and shopping belts — Shibuya, Ikebukuro, Ueno — where speed meets routine.</p>
-        <p>Independent cafés prefer breathing space: creative districts, student zones, and residential neighborhoods.</p>
-        <p>Community-style cafés linger further out — Arakawa, Katsushika — where slow rhythms, local memory, and older architecture invite longer pauses.</p>
-        <p>Tokyo's coffee culture is plural yet precise — a map of rituals stitched into the city's layered pace.</p>
-        <p><strong><em>Click Button 'Aoyama' to explore specific area ⬇</em></strong></p>
-        <div id="zoom-buttons">
-          <button id="btn-aoyama">Aoyama</button>
+        <div class="city-collage-wrapper bottom-wrapper">
+          <img src="image/TOYKO/toyko_aoyama_bottom.png" alt="Aoyama Collage Bottom" class="city-collage-img">
         </div>
       </div>
     </div>
-
-    <!-- Bottom 拼贴图 -->
-    <div class="city-collage-wrapper bottom-wrapper">
-      <img src="image/TOYKO/toyko_bottom.png" alt="Tokyo Collage Bottom" class="city-collage-img">
-    </div>
   </div>
-</div>
 
-  <!-- 主脚本入口 -->
-  <script src="urban_tokyo_map.js"></script>
+  <script src="urban_tokyo_aoyama_map.js"></script>
 </body>
 </html>

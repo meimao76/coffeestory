@@ -383,9 +383,9 @@ html, body {
 /* 正文段落 */
 #city-text-overlay p:not(.city-section-title) {
   font-size: 14px;
-  line-height: 1.2;
+  line-height: 1;
   color: #444;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
 /* 按钮组 */

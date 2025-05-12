@@ -641,6 +641,9 @@ map.on('mouseleave', 'boundary-fill', () => {
   hoverLabel.style.display = 'none';
 });
 
-
+// 跳转aoyama
+document.getElementById('btn-aoyama').addEventListener('click', () => {
+  window.open('urban_tokyo_aoyama.html', '_blank'); // 新窗口打开
+});
 
 });
