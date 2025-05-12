@@ -322,47 +322,82 @@ html, body {
 }
 
 /* ===== Right Panel ===== */
+/* 面板通用布局 */
 #right-panel {
-  grid-column: 2 / 3;
-  background-color: #f4f1eb;
-  padding: 20px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  z-index: 2;
+  width: 100%;
+  padding: 0;
 }
 
 #city-panel {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-/* ===== city text 样式 ===== */
-#city-text {
+.top-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+}
+
+.city-collage-img {
+  width: 100%;
+  display: block;
+}
+/* 让 bottom 图像固定到底部 */
+.bottom-wrapper {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+/* 所有文字浮层 */
+#city-text-overlay {
+  position: absolute;
+  top: 70px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  background: rgba(255, 255, 255, 0);
+  padding: 5px;
+  border-radius: 10px;
   text-align: center;
+  z-index: 2;
+  box-sizing: border-box;
 }
-#city-text p:not(.city-section-title) {
-  font-size: 14px;
-  line-height: 1.7;
-  color: #444;
-  margin-bottom: 12px;
-}
+
+/* 标题 */
 .city-section-title {
   font-size: 17px;
   font-weight: 600;
-  margin-bottom: 12px;
+  margin-bottom: 10px;
   color: #222;
-  line-height: 1.4;
+  line-height: 1.2;
   letter-spacing: 0.2px;
 }
 
+/* 正文段落 */
+#city-text-overlay p:not(.city-section-title) {
+  font-size: 14px;
+  line-height: 1.2;
+  color: #444;
+  margin-bottom: 12px;
+}
+
+/* 按钮组 */
 #zoom-buttons {
   display: flex;
   gap: 10px;
   margin-top: 10px;
+  justify-content: center;
 }
+
 #zoom-buttons button {
   flex: 1;
+  max-width: 100px;
   background: #57453b;
   color: white;
   border: none;
@@ -371,6 +406,7 @@ html, body {
   font-weight: bold;
   cursor: pointer;
 }
+
 #zoom-buttons button:hover {
   background-color: #3d3129;
 }

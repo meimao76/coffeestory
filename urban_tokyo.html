@@ -105,22 +105,34 @@
       <div id="hover-label"></div>
     </div>
 
-    <!-- 右侧面板 -->
-    <div id="right-panel">
-      <div id="city-panel">
-        <div id="city-text">
-          <p class="city-section-title">Tokyo - Precision and Pause</p>
-          <p>In Tokyo, coffee does not shout — it is measured. From corporate corridors in Shinjuku to narrow alleys in Setagaya, cafés serve as structured intermissions in a city of flow.</p>
-          <p>Chain cafés gather near transit hubs and shopping belts — Shibuya, Ikebukuro, Ueno — where speed meets routine. Independent cafés prefer breathing space: creative districts, student zones, and residential neighborhoods.</p>
-          <p>Community-style cafés linger further out — Arakawa, Katsushika — where slow rhythms, local memory, and older architecture invite longer pauses.</p>
-          <p>Tokyo's coffee culture is plural yet precise — a map of rituals stitched into the city's layered pace.</p>
-          <div id="zoom-buttons">
-            <button id="btn-tokyo">Tokyo</button>
-            <button id="btn-aoyama">Aoyama</button>
-          </div>
+<!-- 右侧面板 -->
+<div id="right-panel">
+  <div id="city-panel">
+
+    <!-- Top 拼贴图 + 所有文字浮层 -->
+    <div class="city-collage-wrapper top-wrapper">
+      <img src="image/TOYKO/toyko_top.png" alt="Tokyo Collage Top" class="city-collage-img">
+
+      <div id="city-text-overlay">
+        <p class="city-section-title">Tokyo - Precision and Pause</p>
+        <p>In Tokyo, coffee does not shout — it is measured. From corporate corridors in Shinjuku to narrow alleys in Setagaya, cafés serve as structured intermissions in a city of flow.</p>
+        <p>Chain cafés gather near transit hubs and shopping belts — Shibuya, Ikebukuro, Ueno — where speed meets routine.</p>
+        <p>Independent cafés prefer breathing space: creative districts, student zones, and residential neighborhoods.</p>
+        <p>Community-style cafés linger further out — Arakawa, Katsushika — where slow rhythms, local memory, and older architecture invite longer pauses.</p>
+        <p>Tokyo's coffee culture is plural yet precise — a map of rituals stitched into the city's layered pace.</p>
+        <div id="zoom-buttons">
+          <button id="btn-tokyo">Tokyo</button>
+          <button id="btn-aoyama">Aoyama</button>
         </div>
+      </div>
+    </div>
+
+    <!-- Bottom 拼贴图 -->
+    <div class="city-collage-wrapper bottom-wrapper">
+      <img src="image/TOYKO/toyko_bottom.png" alt="Tokyo Collage Bottom" class="city-collage-img">
     </div>
   </div>
+</div>
 
   <!-- 主脚本入口 -->
   <script src="urban_tokyo_map.js"></script>
