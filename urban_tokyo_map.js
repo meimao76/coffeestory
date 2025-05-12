@@ -268,6 +268,14 @@ map.on('load', () => {
       options: {
         responsive: true,
         indexAxis: 'y',
+        layout: {
+          padding: {
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0
+          }
+        },
         plugins: {
           legend: { display: false },
           title: {
@@ -278,22 +286,44 @@ map.on('load', () => {
               weight: 'bold'
             },
             padding: {
-              top: 8,
-              bottom: 12
+              top: 0,
+              bottom: 0
             }
           }
         },
         scales: {
           x: {
             beginAtZero: true,
+            title: {
+              display: true,
+              text: 'Number',
+              font: {
+                size: 12,
+                weight: 'bold'
+              },
+              padding: {
+                top: 0
+              }
+            },
             ticks: {
-              display: false // 不显示数字
+              display: false
             },
             grid: {
-              display: false // 不显示网格线
+              display: false
             }
           },
           y: {
+            title: {
+              display: true,
+              text: 'Type',
+              font: {
+                size: 13,
+                weight: 'bold'
+              },
+              padding: {
+                bottom: 0
+              }
+            },
             ticks: {
               display: false
             },
@@ -305,7 +335,7 @@ map.on('load', () => {
       }
     });
   }
-}
+  }
 
 // POIhover 显示名称类别
   // 创建全局 popup 对象，避免重复创建
