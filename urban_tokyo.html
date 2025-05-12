@@ -45,12 +45,12 @@
 
         <!-- 统计图 -->
         <div class="collapsible-card">
-          <div class="card-header">
+          <div class="card-header no-collapse">
             <span class="card-title">Statistics</span>
-            <span class="arrow">▼</span>
           </div>
           <div class="card-body" id="chart-panel">
             <canvas id="coffee-stats-chart"></canvas>
+            <div id="chart-caption">Hover over bars to see exact café counts</div>
           </div>
         </div>
 
@@ -98,28 +98,31 @@
 
       <!-- 底部信息文字 -->
       <div id="info-text">
-        Toggle layers to reveal how Tokyo's urban coffee culture clusters across districts.
-        Statistics and densities will appear here.
+        <!-- JS will dynamically inject content here -->
       </div>
+
+      <!-- 行政区 Hover 显示 -->
+      <div id="hover-label"></div>
     </div>
 
     <!-- 右侧面板 -->
     <div id="right-panel">
       <div id="city-panel">
         <div id="city-text">
-          <p>
-            Explore how coffee culture manifests in Tokyo's urban fabric, from dense central wards to artistic enclaves like Aoyama.
-          </p>
+          <p class="city-section-title">Tokyo - Precision and Pause</p>
+          <p>In Tokyo, coffee does not shout — it is measured. From corporate corridors in Shinjuku to narrow alleys in Setagaya, cafés serve as structured intermissions in a city of flow.</p>
+          <p>Chain cafés gather near transit hubs and shopping belts — Shibuya, Ikebukuro, Ueno — where speed meets routine. Independent cafés prefer breathing space: creative districts, student zones, and residential neighborhoods.</p>
+          <p>Community-style cafés linger further out — Arakawa, Katsushika — where slow rhythms, local memory, and older architecture invite longer pauses.</p>
+          <p>Tokyo's coffee culture is plural yet precise — a map of rituals stitched into the city's layered pace.</p>
           <div id="zoom-buttons">
             <button id="btn-tokyo">Tokyo</button>
             <button id="btn-aoyama">Aoyama</button>
           </div>
         </div>
-      </div>
     </div>
   </div>
 
   <!-- 主脚本入口 -->
-  <script src="urban_tokyo_map_fixed_final.js"></script>
+  <script src="urban_tokyo_map.js"></script>
 </body>
 </html>

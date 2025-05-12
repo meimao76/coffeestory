@@ -11,7 +11,11 @@ map.on('load', () => {
 
   //用于记录当前行政区的 polygon filter
   let currentPolygonFilter = null;
-  
+
+  //用于统计图card
+  let coffeeStatsChart = null;
+  let chartInitialized = false;
+
   //监听事件
   const regionPopup = new mapboxgl.Popup({
   closeButton: true,
@@ -187,20 +191,123 @@ map.on('load', () => {
           map.setLayoutProperty('poi-heatmap', 'visibility', 'none');
         }
       }
+
+      // infotext控制
+      if (!currentPolygonFilter) {
+        updateInfoGlobal(activeTypes);
+      }
+
     });
   });
 
 
   // 卡片折叠功能
   document.querySelectorAll('.card-header').forEach(header => {
+    if (header.classList.contains('no-collapse')) return; // 不对统计图卡片绑定点击事件
+
     header.addEventListener('click', () => {
       const body = header.nextElementSibling;
+      const wasCollapsed = body.classList.contains('collapsed');
+
       body.classList.toggle('collapsed');
       header.classList.toggle('collapsed');
+
     });
   });
 
-  // POIhover 显示名称类别
+// 左上方统计图表
+  // 东京全域
+  function updateDistrictChartGlobal() {
+    const features = map.queryRenderedFeatures({ 
+      layers: ['poi-chain', 'poi-independent', 'poi-communityoldfashioned']
+    });
+
+    const cafeCounts = {
+      'Chain': 0,
+      'Independent': 0,
+      'Community/Old-fashioned': 0
+    };
+
+    features.forEach(f => {
+      const cat = f.properties.cafe_cat_1;
+      if (cafeCounts[cat] !== undefined) cafeCounts[cat]++;
+    });
+
+    updateDistrictChart(cafeCounts, 'Cafés in Tokyo');
+  }
+
+
+  // 各行政区
+  function updateDistrictChart(cafeCounts, title = 'Cafés in Tokyo') {
+  const data = [
+    cafeCounts['Chain'],
+    cafeCounts['Independent'],
+    cafeCounts['Community/Old-fashioned']
+  ];
+
+  const labels = ['Chain', 'Independent', 'Community'];
+  const colors = ['#b1150c', '#7E8EA5', '#5E382F'];
+
+  const ctx = document.getElementById('coffee-stats-chart').getContext('2d');
+
+  if (coffeeStatsChart) {
+    coffeeStatsChart.data.datasets[0].data = data;
+    coffeeStatsChart.options.plugins.title.text = title;
+    coffeeStatsChart.update();
+  } else {
+    coffeeStatsChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: '', // 不显示 legend label
+          data: data,
+          backgroundColor: colors
+        }]
+      },
+      options: {
+        responsive: true,
+        indexAxis: 'y',
+        plugins: {
+          legend: { display: false },
+          title: {
+            display: true,
+            text: title,
+            font: {
+              size: 16,
+              weight: 'bold'
+            },
+            padding: {
+              top: 8,
+              bottom: 12
+            }
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            ticks: {
+              display: false // 不显示数字
+            },
+            grid: {
+              display: false // 不显示网格线
+            }
+          },
+          y: {
+            ticks: {
+              display: false
+            },
+            grid: {
+              display: false
+            }
+          }
+        }
+      }
+    });
+  }
+}
+
+// POIhover 显示名称类别
   // 创建全局 popup 对象，避免重复创建
   const poiPopup = new mapboxgl.Popup({
     closeButton: false,
@@ -236,11 +343,11 @@ map.on('load', () => {
     });
   });
 
-  // 行政区高亮
+// 行政区事件
   let hoveredRegionId = null;
   let selectedRegionName = null;
 
-  // 1️hover 效果：描边 + 阴影
+  // 1️.hover 效果：描边 + 阴影 + 显示名字
   map.on('mousemove', 'boundary-fill', e => {
     map.getCanvas().style.cursor = 'pointer';
 
@@ -271,7 +378,7 @@ map.on('load', () => {
     hoveredRegionId = null;
   });
 
-  // 2点击行政区：边界高亮 + 弹出 popup
+  // 2.点击行政区：边界高亮 + 弹出 popup
   map.on('click', 'boundary-fill', e => {
     const feature = e.features[0];
     const regionNameJa = feature.properties.name || '---';
@@ -331,61 +438,179 @@ map.on('load', () => {
     const heatmapFilter = ['all', withinFilter, ['in', ['get', 'cafe_cat_1'], ['literal', activeTypes]]];
     map.setFilter('poi-heatmap', heatmapFilter);
 
+    // 统计该行政区内的咖啡店类型数量
+    const featuresInPolygon = map.queryRenderedFeatures({ 
+      layers: ['poi-chain', 'poi-independent', 'poi-communityoldfashioned'] 
+    });
+
+    const cafeCounts = {
+      'Chain': 0,
+      'Independent': 0,
+      'Community/Old-fashioned': 0
+    };
+
+    featuresInPolygon.forEach(f => {
+      const cat = f.properties.cafe_cat_1;
+      if (cafeCounts[cat] !== undefined) cafeCounts[cat]++;
+    });
 
     // 弹出 popup 显示中英文和类型
     regionPopup
       .setLngLat(center)
       .setHTML(`<strong>${regionNameJa}</strong> (${regionNameEn})<br><em>${regionType}</em>`)
       .addTo(map);
+
+    // 更新底部信息栏 info text
+    updateInfoForRegion(regionNameJa, regionNameEn, cafeCounts);
+
+    // 更新图表
+    updateDistrictChart(cafeCounts, `Cafés in ${regionNameEn} (${regionNameJa})`);
+
   });
 
 
-// Rest - View按钮
+// Rest View按钮
   let defaultBounds = null;
 
-// 1. 获取默认地图边界
-map.once('idle', () => {
-  const features = map.querySourceFeatures('boundary', {
-    sourceLayer: 'tokyo_boundary-ag2grl'
+  // 1. 获取默认地图边界
+  map.once('idle', () => {
+    const features = map.querySourceFeatures('boundary', {
+      sourceLayer: 'tokyo_boundary-ag2grl'
+    });
+
+    const geojson = {
+      type: 'FeatureCollection',
+      features: features.map(f => ({
+        type: 'Feature',
+        geometry: f.geometry,
+        properties: f.properties
+      }))
+    };
+
+    defaultBounds = turf.bbox(geojson);
+
+    // 加载global 图表
+    updateDistrictChartGlobal();
+    chartInitialized = true;
+
+    setTimeout(() => {
+      if (coffeeStatsChart) coffeeStatsChart.resize();
+    }, 400); // 等待容器撑开后 resize
   });
 
-  const geojson = {
-    type: 'FeatureCollection',
-    features: features.map(f => ({
-      type: 'Feature',
-      geometry: f.geometry,
-      properties: f.properties
-    }))
-  };
-
-  defaultBounds = turf.bbox(geojson);
-});
-
-// 2. 定义清除 POI 过滤的函数（在 load 内部，全局可调用）
-function resetPOIFilters() {
-  map.setFilter('poi-chain', ['==', ['get', 'cafe_cat_1'], 'Chain']);
-  map.setFilter('poi-independent', ['==', ['get', 'cafe_cat_1'], 'Independent']);
-  map.setFilter('poi-communityoldfashioned', ['==', ['get', 'cafe_cat_1'], 'Community/Old-fashioned']);
-  map.setFilter('poi-heatmap', null); // 热力图恢复全局范围
-}
-
-// 3. 绑定按钮点击事件
-const resetButton = document.getElementById('reset-view-btn');
-resetButton.addEventListener('click', () => {
-  if (!defaultBounds) {
-    console.warn('Default bounds not ready yet.');
-    return;
+  // 2. 定义清除 POI 过滤的函数（在 load 内部，全局可调用）
+  function resetPOIFilters() {
+    map.setFilter('poi-chain', ['==', ['get', 'cafe_cat_1'], 'Chain']);
+    map.setFilter('poi-independent', ['==', ['get', 'cafe_cat_1'], 'Independent']);
+    map.setFilter('poi-communityoldfashioned', ['==', ['get', 'cafe_cat_1'], 'Community/Old-fashioned']);
+    map.setFilter('poi-heatmap', null); // 热力图恢复全局范围
   }
 
-  currentPolygonFilter = null;
-  
-  map.fitBounds(defaultBounds, { padding: 40 });
-  map.setPaintProperty('boundary-fill', 'fill-opacity', 0.3);
-  map.setPaintProperty('boundary-line', 'line-opacity', 0.6);
+  // 3. 绑定按钮点击事件
+  const resetButton = document.getElementById('reset-view-btn');
+  resetButton.addEventListener('click', () => {
+    if (!defaultBounds) {
+      console.warn('Default bounds not ready yet.');
+      return;
+    }
 
-  if (regionPopup) regionPopup.remove();
+    currentPolygonFilter = null;
+    
+    map.fitBounds(defaultBounds, { padding: 40 });
+    map.setPaintProperty('boundary-fill', 'fill-opacity', 0.3);
+    map.setPaintProperty('boundary-line', 'line-opacity', 0.6);
 
-  resetPOIFilters(); // 清除 POI 筛选
+    if (regionPopup) regionPopup.remove();
+
+    resetPOIFilters(); // 清除 POI 筛选
+
+    // 获取当前勾选的 layer 类型
+    const activeTypes = Array.from(document.querySelectorAll('.layer-toggle'))
+      .filter(i => i.checked)
+      .map(i => i.dataset.type);
+
+    // 恢复 info text
+    updateInfoGlobal(activeTypes);
+
+    // 恢复统计图表
+    updateDistrictChartGlobal();
+
+    //热力图重新设置
+    if (map.getLayer('poi-heatmap')) {
+      if (activeTypes.length > 0) {
+        map.setLayoutProperty('poi-heatmap', 'visibility', 'visible');
+        map.setFilter('poi-heatmap', ['in', ['get', 'cafe_cat_1'], ['literal', activeTypes]]);
+      } else {
+        map.setLayoutProperty('poi-heatmap', 'visibility', 'none');
+      }
+    }
+  });
+
+// Info-text
+  const infoText = document.getElementById('info-text');
+
+  // 用于全图模式的 infoText 更新
+  function updateInfoGlobal(activeTypes) {
+    const baseText = `
+      <p>
+      <strong>Chain cafés</strong> are strongly clustered around central commercial zones such as 
+      <strong>Shinjuku</strong>, <strong>Ikebukuro</strong>, and <strong>Minato</strong>, 
+      closely following Tokyo’s retail and transportation corridors.<br>
+      <strong>Independent cafés</strong> form scattered yet dense clusters in creative and residential districts like 
+      <strong>Setagaya</strong>, <strong>Bunkyo</strong>, and <strong>Suginami</strong>, 
+      often appearing near university and cultural hubs.<br>
+      <strong>Community/Old-fashioned cafés</strong> tend to be located in traditional, older neighborhoods such as 
+      <strong>Katsushika</strong>, <strong>Arakawa</strong>, and <strong>Sumida</strong>, 
+      reflecting a more localized and slower-paced coffee culture.
+    </p>
+    `
+      ;
+
+    const activeStr = `<p><em>Currently displaying:</em> <strong>${activeTypes.join(', ')}</strong></p>`;
+
+    infoText.innerHTML = baseText + activeStr;
+  }
+
+  // 用于点击行政区后的 infoText 更新
+  function updateInfoForRegion(regionNameJa, regionNameEn, cafeCounts) {
+    const regionLabel = `<strong>${regionNameEn}</strong>${regionNameJa ? ` (${regionNameJa})` : ''}`;
+
+    const total = cafeCounts['Chain'] + cafeCounts['Independent'] + cafeCounts['Community/Old-fashioned'];
+
+    const countText = `
+      <strong>Chain: </strong> ${cafeCounts['Chain']} | 
+      <strong>Independent: </strong> ${cafeCounts['Independent']} | 
+      <strong>Community/Old-fashioned: </strong> ${cafeCounts['Community/Old-fashioned']}<br>
+      <strong>Total:</strong> ${total} cafés
+    `;
+
+    infoText.innerHTML = `<p>${regionLabel}</p><p>${countText}</p>`;
+  }
+
+
+//初始 infoText 设置（全图状态）
+const initialActiveTypes = Array.from(document.querySelectorAll('.layer-toggle'))
+  .filter(i => i.checked)
+  .map(i => i.dataset.type);
+
+updateInfoGlobal(initialActiveTypes);
+
+// 行政区hover box
+const hoverLabel = document.getElementById('hover-label');
+
+map.on('mousemove', 'boundary-fill', e => {
+  const feature = e.features[0];
+  const regionNameJa = feature.properties.name || '';
+  const regionNameEn = feature.properties.name_en || '';
+
+  hoverLabel.innerText = `${regionNameEn}${regionNameJa ? ` (${regionNameJa})` : ''}`;
+  hoverLabel.style.display = 'block';
 });
+
+map.on('mouseleave', 'boundary-fill', () => {
+  hoverLabel.style.display = 'none';
+});
+
+
 
 });

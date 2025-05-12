@@ -103,13 +103,13 @@ html, body {
 /* ===== Left Panel (Floating Collapsible Cards) ===== */
 #map-left-panel {
   position: absolute;
-  top: 20px;
-  bottom: 100px;
-  left: 20px;
+  top: 10px;
+  bottom: 120px;
+  left: 10px;
   width: 260px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 5px;
   overflow-y: auto;
   z-index: 10;
 }
@@ -158,6 +158,15 @@ html, body {
   opacity: 0;
   padding: 0 12px;
   overflow: hidden;
+}
+/* ===== chart 换行 ===== */
+#chart-caption {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  margin-top: 6px;
+  font-style: italic;
+  line-height: 1.4;
 }
 
 /* ===== Layer 控制器整体样式 ===== */
@@ -238,7 +247,7 @@ html, body {
 /* ===== 重启视图  ===== */
 #reset-view-btn {
   position: absolute;
-  bottom: 110px;
+  bottom: 120px;
   right: 10px;
   z-index: 10;
   background-color: #4c3a2f;
@@ -271,6 +280,28 @@ html, body {
   border-top-color: #fffaf3; /* 箭头颜色 */
 }
 
+/* ===== 行政区hover box ===== */
+#info-text p {
+  margin: 0 0 6px;
+  display: block;
+}
+#hover-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  z-index: 20;
+  pointer-events: none;
+  max-width: 240px;
+  display: none;  /* 默认隐藏 */
+}
+
 /* ===== Info Text (Bottom Floating他妈的直接给我盖上去) ===== */
 #info-text {
   position: absolute;
@@ -278,19 +309,17 @@ html, body {
   left: 10px;
   right:10px;
   background-color: rgba(208, 203, 195, 0.95);
-  padding: 14px 20px;
+  padding: 12px 15px;
   font-size: 15px;
   line-height: 1.5;
   border-radius: 8px;
   border-top: 1px solid #bbb;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-  z-index: 15;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  overflow: hidden;
+  max-height: 80px;         /* 自动适配几行内容 */
+  overflow-y: auto;          /* 超出时可滚动 */
+  display: block;            /* 替代 flex，允许段落换行 */
+  white-space: normal;       /* 确保不强制一行 */
 }
-
 
 /* ===== Right Panel ===== */
 #right-panel {
@@ -307,6 +336,26 @@ html, body {
 #city-panel {
   display: block;
 }
+
+/* ===== city text 样式 ===== */
+#city-text {
+  text-align: center;
+}
+#city-text p:not(.city-section-title) {
+  font-size: 14px;
+  line-height: 1.7;
+  color: #444;
+  margin-bottom: 12px;
+}
+.city-section-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 12px;
+  color: #222;
+  line-height: 1.4;
+  letter-spacing: 0.2px;
+}
+
 #zoom-buttons {
   display: flex;
   gap: 10px;
