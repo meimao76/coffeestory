@@ -8,6 +8,7 @@
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
   <link rel="stylesheet" href="urban_tokyo.css" />
 </head>
 
@@ -60,8 +61,9 @@
             <span class="arrow">▼</span>
           </div>
           <div class="card-body" id="layer-toggle-panel">
-            <label><input type="checkbox" id="layer-poi" checked /> Coffee POIs</label><br />
-            <label><input type="checkbox" id="layer-heatmap" /> Heatmap</label>
+           <label><input type="checkbox" class="layer-toggle" data-type="Chain" checked /> Chain</label><br />
+           <label><input type="checkbox" class="layer-toggle" data-type="Independent" checked /> Independent</label><br />
+           <label><input type="checkbox" class="layer-toggle" data-type="Community/Old-fashioned" checked /> Community/Old-fashioned</label><br />
           </div>
         </div>
 
@@ -72,8 +74,19 @@
             <span class="arrow">▼</span>
           </div>
           <div class="card-body" id="legend-panel">
-            <div class="legend-item"><span class="legend-color poi"></span> POI Type</div>
-            <div class="legend-item"><span class="legend-color heat"></span> Heat Intensity</div>
+            <div class="legend-item"><span class="legend-color" style="background-color: #b1150c;"></span> Chain</div>
+            <div class="legend-item"><span class="legend-color" style="background-color: #7E8EA5;"></span> Independent</div>
+            <div class="legend-item"><span class="legend-color" style="background-color: #5E382F;"></span> Community/Old-fashioned</div>
+
+            <!-- heatmap 图例：不再套在 legend-item 内 -->
+            <div class="heat-legend">
+              <div class="legend-label">Heat Intensity</div>
+              <div class="heat-gradient-bar"></div>
+              <div class="heat-labels">
+                <span>Low</span>
+                <span>High</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -84,6 +97,9 @@
         Statistics and densities will appear here.
       </div>
     </div>
+
+    <!-- 行政区缩放按钮
+    <button id="reset-view">Reset View</button> -->
 
     <!-- 右侧面板 -->
     <div id="right-panel">
