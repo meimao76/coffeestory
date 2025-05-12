@@ -336,6 +336,7 @@ html, body {
 
 .top-wrapper {
   position: relative;
+  top: 5px;
   width: 100%;
   max-width: 400px;
   margin: 0 auto 20px auto;
@@ -357,7 +358,7 @@ html, body {
 /* 所有文字浮层 */
 #city-text-overlay {
   position: absolute;
-  top: 70px;
+  top: 60px;
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
