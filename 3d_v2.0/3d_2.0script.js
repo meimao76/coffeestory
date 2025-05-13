@@ -377,92 +377,114 @@ yearSel     .addEventListener('change', onFilterChange);
 // 5. 页面加载完成时先渲染一次
 onFilterChange();
 
+// Sankey
+function Sankey() {
+  const width = 450;
+  const height = 200;
 
-//Sankey
-function Sankey(){
-const width =500;
-const height = 160;
-
-// 选中 SVG 并设定画布大小
-const svg = d3.select("#sankey")
+  const svg = d3.select("#sankey")
     .attr("width", width)
     .attr("height", height);
 
-// 从 d3-sankey 插件拿到布局函数
-const { sankey, sankeyLinkHorizontal } = d3;
+  const { sankey, sankeyLinkHorizontal } = d3;
 
-// 读取 CSV 数据
-d3.csv("coffee_value_distribution_unweighted.csv", d3.autoType).then(raw => {
-  // data 是一个数组，形如 [{source: "...", target: "...", value: 1.23}, ...]
-   const data = raw.map(d => ({
-    source: d["Country"],                      // 用 Country 作为源
-    target: d["Type of cost"],            // 用 Value chain stage 作为中间节点
-    value: d["Value"],                       // 用 Value (€) 作为流量大小
-    middle: d["Value chain stage"]
-  }));
-  // 1) 构造节点列表（唯一去重）
-  const nodeNames = Array.from(
-    new Set(data.flatMap(d => [d.source, d.target, d.middle]))
-  );
+  d3.csv("coffee_value_distribution_unweighted.csv", d3.autoType).then(raw => {
+    const data = raw.map(d => ({
+      source: d["Country"],
+      middle: d["Value chain stage"],
+      target: d["Type of cost"],
+      value: d["Value"]
+    }));
 
-  const nodes = nodeNames.map(name => ({ name }));
-  const nodeIndex = new Map(nodes.map((d,i) => [d.name, i]));
+    const nodeNames = Array.from(new Set(data.flatMap(d => [d.source, d.middle, d.target])));
+    const nodes = nodeNames.map(name => ({ name }));
+    const nodeIndex = new Map(nodes.map((d, i) => [d.name, i]));
+    const indexToName = new Map(nodes.map((d, i) => [i, d.name]));
 
-  // 2) 构造 links 数组，注意 source/target 用索引
-  const links = data.map(d => ({
-    source: nodeIndex.get(d.source),
-    target: nodeIndex.get(d.middle),
-    value: d.value
-  }));
+    const links = data.map(d => ({
+      source: nodeIndex.get(d.source),
+      target: nodeIndex.get(d.middle),
+      value: d.value
+    }));
 
     const links2 = data.map(d => ({
-    source: nodeIndex.get(d.middle),
-    target: nodeIndex.get(d.target),
-    value: d.value
-  }));
+      source: nodeIndex.get(d.middle),
+      target: nodeIndex.get(d.target),
+      value: d.value
+    }));
 
-  const allLinks = [...links, ...links2];
+    const allLinks = [...links, ...links2];
 
-  // 3) 计算 sankey 布局
-  const sankeyGen = sankey()
-    .nodeWidth(20)
-    .nodePadding(10)
-    .extent([[1, 1], [width - 1, height - 6]]);
+    const sankeyGen = sankey()
+      .nodeWidth(20)
+      .nodePadding(10)
+      .extent([[1, 1], [width - 1, height - 6]]);
 
-  const graph = sankeyGen({
-    nodes: nodes.map(d => Object.assign({}, d)),
-    links: allLinks
-  });
+    const graph = sankeyGen({
+      nodes: nodes.map(d => Object.assign({}, d)),
+      links: allLinks
+    });
 
-svg.append("g")
+
+const color = d3.scaleOrdinal()
+  .domain([nodeNames])
+  .range([
+    "#b29e8e", // Brazil
+    "#b29e8e", // Colombia
+    "#fff8e7", // VAT
+    "#a9917b", // Taxes
+    "#ffe8dc", // Retail
+    "#a9917b", // Net profit margin
+    "#a9917b", // cost
+    "#ffd1a1", // German Coffee Tax
+    "#fcd4c8", // Roasting & Finished product manufacturing
+    "#ffffff", // europ
+    "#f7d0a5", // colection
+    "#f7dda5", // agri
+    "#a9917b"  // net coffee farm
+  ]);
+
+    // --- 节点 ---
+    svg.append("g")
+      .selectAll("rect")
+      .data(graph.nodes)
+      .join("rect")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => color(d.name))
+        .append("title")
+        .text(d => `${d.name}`);
+
+    // --- 连线 ---
+    svg.append("g")
   .selectAll("path")
   .data(graph.links)
   .join("path")
-    .attr("class", "link")
     .attr("d", sankeyLinkHorizontal())
-    .attr("stroke-width", d => Math.max(1, d.width));
+    .attr("stroke-width", d => Math.max(1, d.width))
+    .attr("stroke", d => color(d.source.name) || "#ccc")
+    .attr("fill", "none")
+    .attr("opacity", 0.5);
 
-svg.append("g")
-  .selectAll("rect")
-  .data(graph.nodes)
-  .join("rect")
-    .attr("x",      d => d.x0)
-    .attr("y",      d => d.y0)
-    .attr("width",  d => d.x1 - d.x0)
-    .attr("height", d => d.y1 - d.y0);
 
-  // 6) 加上节点标签
-  svg.append("g")
-    .selectAll("text")
-    .data(graph.nodes)
-    .join("text")
-      .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
-      .attr("y", d => (d.y0 + d.y1) / 2)
-      .attr("dy", "0.35em")
-      .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
-      .text(d => d.name);
-});}
-Sankey()
+    // --- 文本标签 ---
+    svg.append("g")
+      .selectAll("text")
+      .data(graph.nodes)
+      .join("text")
+        .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+        .attr("y", d => (d.y0 + d.y1) / 2)
+        .attr("dy", "0.35em")
+        .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
+        .text(d => d.name)
+        .style("font-size", "11px")
+        .style("fill", "#ffffff");
+  });
+}
+Sankey();
+
 
 // —— 1. 基本配置 —— 
 // —— 1. 基本配置 —— 
