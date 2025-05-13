@@ -53,6 +53,70 @@
   .navbar a:hover {
     color: #ac8b72;
   }
+
+  /* ===== Dropdown for Culture ===== */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2d2326;
+  padding: 8px 0;
+  display: none;
+  flex-direction: column;
+  min-width: 120px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  z-index: 1001;
+}
+
+.dropdown-menu li {
+  padding: 0;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-wrapper .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color:  rgba(0, 0, 0, 0.5);
+  flex-direction: column;
+  padding: 8px 0;
+  min-width: 120px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  z-index: 1001;
+}
+
+.dropdown-wrapper:hover .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 8px 16px;
+  color: #ebdfc0;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.dropdown-menu li a:hover {
+  color: #ac8b72;
+}
+
   
   h1 {
     font-size: 2.5rem;
@@ -62,7 +126,14 @@
   p {
     margin-bottom: 1.5rem;
   }
-  
+
+  p.caption {
+  font-size: 0.01rem;
+  font-style: italic;
+  color: #555;
+  text-align: center;
+}
+
   .btn {
     background-color: #b08861;
     color: white;
@@ -509,8 +580,7 @@
   cursor: pointer;
   pointer-events: auto;
   z-index: 10;
-  animation: pulse 2.5s ease-in-out infinite;
-  animation-play-state: running;
+  
 }
 
 .icon-marker {
@@ -518,28 +588,56 @@
   height: 30px;
   filter: drop-shadow(0 0 4px rgba(255, 255, 255, 0.753));
   transition: transform 0.3s ease;
+  animation: pulse 2.5s ease-in-out infinite;
+  animation-play-state: running;
 }
 
-.earth-flat-hotspot:hover {
+.icon-marker:hover {
   animation-play-state: paused;
 }
 
 .hotspot-tooltip {
   position: absolute;
-  top: -30px;
-  left: 50%;
+  top: -150px;
+  left: 450%;
   transform: translateX(-50%);
   background: rgba(255,255,255,0.8);
   color: #2d2326;
   padding: 4px 8px;
   font-size: 1rem;
   border-radius: 4px;
-  white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.2s ease;
   z-index: 99;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
+
+.hotspot-tooltip {
+  width: 200px;
+  text-align: left;
+}
+
+.hotspot-tooltip h4 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: bold;
+}
+
+.hotspot-tooltip p {
+  font-size: 0.8rem;
+  margin: 4px 0 6px;
+}
+
+.hotspot-tooltip img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
 
 .earth-flat-hotspot:hover .hotspot-tooltip {
   opacity: 1;
