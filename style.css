@@ -128,7 +128,7 @@
   }
 
   p.caption {
-  font-size: 0.01rem;
+  font-size: 0.8rem;
   font-style: italic;
   color: #555;
   text-align: center;
@@ -767,4 +767,38 @@
   padding: 10px 0;
   font-size: 12px;
   font-family: 'Segoe UI', sans-serif;
+}
+
+.data-table {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  font-size: 0.8rem;
+  background-color: rgba(224, 200, 176, 0.1);
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.table-title {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #2d2326;
+}
+
+.data-table th,
+.data-table td {
+  border: 1px solid #ddd;
+  padding: 12px 16px;
+  text-align: center;
+}
+
+.data-table th {
+  background-color: rgba(178, 149, 118, 0.5);
+  color: white;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.data-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.3);
 }

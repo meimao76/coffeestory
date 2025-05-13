@@ -112,8 +112,8 @@ function handleScrollStages() {
   const section3Top = section3.getBoundingClientRect().top;
   const section4Top = section4.getBoundingClientRect().top;
   const section5Top = section5.getBoundingClientRect().top;
-  const section6Top = section6.getBoundingClientRect().top;
-  const section7Top = section7.getBoundingClientRect().top; 
+  const section6InView = section6.getBoundingClientRect().top < window.innerHeight;
+  const section7InView = section7.getBoundingClientRect().top < window.innerHeight;
 
   const earthContainer = document.querySelector(".earth-container");
   const earth2D = document.querySelector(".earth");
@@ -166,10 +166,7 @@ function handleScrollStages() {
     earth3D.classList.remove("expand-fade-out");
   }
 
-  if (
-    Math.abs(section6Top) < window.innerHeight / 2 ||
-    Math.abs(section7Top) < window.innerHeight / 2
-  ) {
+  if (section6InView || section7InView) {
     earthContainer.classList.add("faded-out");
   } else {
     earthContainer.classList.remove("faded-out");
