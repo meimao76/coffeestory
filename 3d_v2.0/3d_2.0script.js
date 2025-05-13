@@ -404,13 +404,17 @@ function Sankey() {
       const links1 = data.map(d => ({
         source: nodeIndex.get(d.source),
         target: nodeIndex.get(d.middle),
-        value: d.value
+        value: d.value,
+        raw: d
       }));
+
       const links2 = data.map(d => ({
         source: nodeIndex.get(d.middle),
         target: nodeIndex.get(d.target),
-        value: d.value
+        value: d.value,
+        raw: d
       }));
+
       const allLinks = [...links1, ...links2];
 
       const graph = sankey()
