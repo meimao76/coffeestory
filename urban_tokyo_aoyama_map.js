@@ -3,7 +3,7 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaXh4aWlyaXMiLCJhIjoiY202aTB2bTI1MDNpNTJqc2h0N
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/ixxiiris/cm8lrey81005d01s9byfx4474',
-  center: [139.714, 35.669], // Aoyama center
+  center: [139.710, 35.666], // Aoyama center
   zoom: 15
 });
 
@@ -470,7 +470,7 @@ map.on('load', () => {
               forming a vibrant corridor that connects culture and commerce.
             </p>
             <p style="margin: 4px 0;">
-              📍 <strong>Planning Vision:</strong> Create an elegant and stylish space
+              <strong>Planning Vision:</strong> Create an elegant and stylish space
             </p>
             <p style="margin-top: 8px;">
               🔗 <a href="https://whenin.tokyo/Omotesando-Aoyama-Area-Guide/1000" target="_blank" rel="noopener">
@@ -728,4 +728,8 @@ map.on('load', () => {
       });
     });
 
+  // 跳转tokyo
+  document.getElementById('btn-tokyo').addEventListener('click', () => {
+    window.open('urban_tokyo.html', '_blank'); // 新窗口打开
+  });
 });
