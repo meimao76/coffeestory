@@ -327,38 +327,55 @@
 
 /* 选择器的排版 */
 #P3Selector{
+  display: flex;
   flex-direction: column;
-  align-items: baseline;
+  gap: 10px;
   margin-left: 30px;
+  font-size: 14px; /* ✅ 控制整体字号 */
+  font-family: 'Segoe UI', sans-serif;
 }
 /* 选择器的文本 */
- #P3Selector .SortSelector {
-    display: inline-block;
-    margin-right: 20px;
-    font-family: sans-serif;
+ #SortSelector {
+  display: flex;
+  flex-direction: column;
+  gap: 6px; /* ✅ 控制每个复选项的上下间距 */
   }
-  /* 选择器的文本 */
-  #P3Selector #sortby {
-    margin-right: 10px;
-    font-weight: 400;
-    font-size: 16px;
-  }
+
+  /* Catalogue 标题样式 */
+#P3Selector #sortby {
+  font-size: 18px;
+  font-weight: 600;         /* ✅ 改成 semi-bold，低于 bold */
+  color: #54361a;
+  margin-bottom: 8px;
+}
+
+/* 每个复选项文字的样式 */
+#SortSelector label {
+  font-size: 15px;
+  font-weight: 400;         /* ✅ 去掉 bold，改为 normal */
+  color: #2d2326;
+  font-family: 'Segoe UI', sans-serif;
+}
+
 
 #barChartzone {
   overflow: visible; /* 允许 tooltip 溢出 */
+  margin-top: -250px;
 }
 /* 放在你的 styles.css 里 */
 .tooltip {
-  position: absolute;  /* 关键！脱离文档流 */
-  z-index: 1000;       /* 确保在最上层 */
-  background: white;
-  border: 1px solid #ccc;
-  padding: 8px;
-  border-radius: 4px;
-  pointer-events: none; /* 防止遮挡鼠标事件 */
-  opacity: 0;           /* 初始透明 */
-  transition: opacity 0.3s;
-  color: black;
+  position: absolute;
+  z-index: 1000;
+  background: rgba(255, 253, 250, 0.95);  /* ✅ 更柔和的浅米色背景 */
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 12px;   /* ✅ 改字号 */
+  font-family: sans-serif; /* ✅ 改字体 */
+  color: #2d2326;                 /* ✅ 更柔和的深棕色文字 */
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* ✅ 增加阴影 */
 }
 
   /* 自定义滚动条: 只显示中间灰色滑块 */
@@ -390,4 +407,5 @@
   font-size: 12px;
   opacity: 0;
   transition: opacity 0.2s ease-in-out;
+  z-index: 111;
 }

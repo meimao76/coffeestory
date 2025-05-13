@@ -7,6 +7,12 @@ let coffeeByCountry = new Map();
 let info = [];
  // 保存全部数据
 
+let tooltip = d3.select("body")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
+
+// 声明为全局变量，以便在多个函数中访问
 // 1.定义设置交互对话框可见性的函数
 const infoBox     = document.getElementById('infoBox');
 const selectorBox = document.getElementById('commoditySelectorWrapper');
@@ -64,7 +70,7 @@ const globe = Globe()
 
   // 1. 地球表面贴图（暗面）
   .globeImageUrl('globesurface3.png')
-  .backgroundImageUrl('bg2.png')
+  .backgroundColor('rgba(0,0,0,0)')
   // 2. 地球高光／凹凸贴图（模拟山脉、海洋波纹）
   .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
   .showAtmosphere(true)
@@ -197,15 +203,42 @@ Promise.all([
       .style("font", "10px sans-serif");
 
     // 条形
-    svg.append("g")
+    const bars = svg.append("g")
+  .selectAll("rect")
+  .data(data)
+  .join("rect")
+    .attr("x", x(0))
+    .attr("y", d => y(d[keyField]))
+    .attr("width", 0)  // 初始为 0，动画展开
+    .attr("height", y.bandwidth())
     .attr("fill", "#b29e8e")
-    .selectAll("rect")
-    .data(data)
-    .join("rect")
-      .attr("x", x(0))
-      .attr("y", d => y(d[keyField]))
-      .attr("width", d => x(+d[valueField]) - x(0))
-      .attr("height", y.bandwidth());
+    .on("mouseover", function (event, d) {
+      d3.select(this)
+        .attr("fill", "#a67b5b")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5);
+
+      tooltip
+        .style("opacity", 1)
+        .html(`<strong>${d[keyField]}</strong><br>${valueField}: ${d[valueField]}`);
+    })
+    .on("mousemove", function (event) {
+      tooltip
+        .style("left", (event.pageX + 12) + "px")
+        .style("top", (event.pageY - 10) + "px");
+    })
+    .on("mouseleave", function () {
+      d3.select(this)
+        .attr("fill", "#b29e8e")
+        .attr("stroke", "none");
+
+      tooltip.style("opacity", 0);
+    });
+
+// ✅ 添加动画：从 0 width 抬升展开
+bars.transition().duration(800)
+  .attr("width", d => x(+d[valueField]) - x(0));
+
 
     // 数值标签
     svg.append("g")
@@ -549,7 +582,6 @@ Sankey();
 
 
 // —— 1. 基本配置 —— 
-let tooltip; // 声明为全局变量，以便在多个函数中访问
 function mouseover(event, d) {
   console.log("🎯 mouseover 触发", d);
   tooltip.style("opacity", 1);
@@ -567,6 +599,7 @@ function mousemove(event, d) {
 function mouseleave(event, d) {
   tooltip.style("opacity", 0);
 }
+
 const margin = { top: 10, right: 60, bottom: 60, left: 60 };
 const svgTotalWidth = 500;
 const width  = svgTotalWidth - margin.left - margin.right;
@@ -590,7 +623,7 @@ function renderChart(data, metrics) {
   const x1 = d3.scaleBand().padding(0.05);
   const y0 = d3.scaleLinear().range([height, 0]);
   const y1 = d3.scaleLinear().range([height, 0]);
-  const color = d3.scaleOrdinal(d3.schemeCategory10);
+  const color = d3.scaleOrdinal(["#b29e8e",  "#d8c3a5",  "#eae7dc",  "#a67b5b",  "#6b4c3b",  "#ffddc1"]);
 
   // axes placeholders
   const xAxis = svg.append('g')
@@ -625,37 +658,47 @@ function renderChart(data, metrics) {
     .enter().append('g')
       .attr('transform', d => `translate(${x0(d.Country)},0)`);
 
-  country.selectAll('rect')
-    .data(d => metrics.map(m => ({ key:m, value:d[m] })))
-    .enter().append('rect')
-      .attr('x',      d => x1(d.key))
-      .attr('width',  x1.bandwidth())
-      .attr('y',      height)
-      .attr('height', 0)
-      .attr('fill',   d => color(d.key))
-.on("mouseover", function(event, d) {
-      console.log("✅ mouseover 触发", d); // 调试用
-      d3.select(this)
-        .attr("stroke", "#ff0000")
-        .attr("stroke-width", 2)
-        .attr("opacity", 0.8);
-      // 显示 tooltip
-      tooltip.style("opacity", 1)
-        .html(`<strong>${d.key}: ${d.value}</strong>`)
-        .style("left", `${event.pageX + 10}px`)
-        .style("top", `${event.pageY - 10}px`);
-    })
-    .on("mouseleave", function() {
-      d3.select(this)
-        .attr("stroke", "none")
-        .attr("opacity", 1);
-      tooltip.style("opacity", 0); // 隐藏 tooltip
-    })
-      .transition().duration(500)
-      .attr('y',      d => d.key===metrics[0]? y0(d.value) : y1(d.value))
-      .attr('height', d => d.key===metrics[0]
-                          ? height - y0(d.value)
-                          : height - y1(d.value))
+  const bars = country.selectAll('rect')
+  .data(d => metrics.map(m => ({ key: m, value: d[m] })))
+  .enter().append('rect')
+    .attr('x', d => x1(d.key))
+    .attr('width', x1.bandwidth())
+    .attr('y', height)
+    .attr('height', 0)
+    .attr('fill', d => color(d.key));
+
+// 添加交互效果
+bars
+  .on("mouseover", function(event, d) {
+    d3.select(this)
+      .attr("fill", "#a67b5b") // 深一点
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 1.5);
+
+    tooltip
+      .style("opacity", 1)
+      .html(`<strong>${d.key}</strong><br>${d.value}`);
+  })
+  .on("mousemove", function(event) {
+    tooltip
+      .style("left", `${event.pageX + 12}px`)
+      .style("top", `${event.pageY - 10}px`);
+  })
+  .on("mouseleave", function() {
+    d3.select(this)
+      .attr("fill", d => color(d.key))  // 恢复原色
+      .attr("stroke", "none");
+
+    tooltip.style("opacity", 0);
+  });
+
+// 再加动画
+bars
+  .transition().duration(500)
+  .attr('y', d => d.key === metrics[0] ? y0(d.value) : y1(d.value))
+  .attr('height', d => d.key === metrics[0]
+      ? height - y0(d.value)
+      : height - y1(d.value));
 }
 
 // 初次加载数据
