@@ -279,19 +279,21 @@
     font-size: 16px;
   }
 
+#barChartzone {
+  overflow: visible; /* 允许 tooltip 溢出 */
+}
 /* 放在你的 styles.css 里 */
 .tooltip {
-  position: absolute;
-  pointer-events: none;
-  opacity: 0;
-  background: rgba(0,0,0,0.75);
-  color: #fff;
-  padding: 4px 8px;
+  position: absolute;  /* 关键！脱离文档流 */
+  z-index: 1000;       /* 确保在最上层 */
+  background: white;
+  border: 1px solid #ccc;
+  padding: 8px;
   border-radius: 4px;
-  font-size: 12px;
-  transition: opacity 0.1s ease;
-  white-space: nowrap;
-  z-index: 60;
+  pointer-events: none; /* 防止遮挡鼠标事件 */
+  opacity: 0;           /* 初始透明 */
+  transition: opacity 0.3s;
+  color: black;
 }
 
   /* 自定义滚动条: 只显示中间灰色滑块 */
