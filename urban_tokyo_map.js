@@ -22,7 +22,15 @@ map.on('load', () => {
   closeOnClick: true,
   offset: 16
   });
-  
+  // 比例尺指北针
+    map.addControl(new mapboxgl.ScaleControl({
+    maxWidth: 120,
+    unit: 'metric'
+  }), 'bottom-right');
+
+  map.addControl(new mapboxgl.NavigationControl({
+    visualizePitch: true
+  }), 'top-right');
 
   // === 1. 边界图层（底层） ===
   map.addSource('boundary', {

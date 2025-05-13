@@ -49,6 +49,7 @@
             <span class="arrow">▼</span>
           </div>
           <div class="card-body" id="layer-toggle-panel">
+            <label><input type="checkbox" class="layer-toggle" data-type="Featured" checked /> Featured Cafés</label><br />
             <label><input type="checkbox" class="layer-toggle" data-type="Chain" checked /> Chain</label><br />
             <label><input type="checkbox" class="layer-toggle" data-type="Independent" checked /> Independent</label><br />
             <label><input type="checkbox" class="layer-toggle" data-type="Community/Old-fashioned" checked /> Community/Old-fashioned</label><br />
@@ -62,6 +63,7 @@
             <span class="arrow">▼</span>
           </div>
           <div class="card-body" id="legend-panel">
+            <div class="legend-item"><img src="image/TOYKO/star.png"class="legend-icon" alt="Featured Star" /><span> Featured Café</span></div>
             <div class="legend-item"><span class="legend-color" style="background-color: #b1150c;"></span> Chain</div>
             <div class="legend-item"><span class="legend-color" style="background-color: #7E8EA5;"></span> Independent</div>
             <div class="legend-item"><span class="legend-color" style="background-color: #5E382F;"></span> Community/Old-fashioned</div>
@@ -79,14 +81,15 @@
         </div>
       </div>
 
-      <!-- 视图重启 -->
-      <!-- <button id="reset-view-btn">
-        ⟲ Reset View
-      </button> -->
-
       <!-- 底部信息文字 -->
-      <div id="info-text">
-        <!-- JS will dynamically inject content here -->
+        <div id="info-text">
+          <p>
+            This visualisation reveals Aoyama's café micro-network — a fine-grained urban web where culture, commerce, and design intersect.
+          </p>
+          <p style="font-size: 14px; color: #555;">
+            · Hover over cafés or metro stations for details.<br>
+            · Click the main axis or featured cafés to explore deeper narratives.
+          </p>
       </div>
     </div>
 
@@ -95,19 +98,22 @@
       <div id="city-panel">
 
         <div class="city-collage-wrapper top-wrapper">
-          <img src="image/TOYKO/toyko_aoyama_top.png" alt="Aoyama Collage Top" class="city-collage-img">
-          <div id="city-text-overlay">
-            <p class="city-section-title">Aoyama - Delicate Details</p>
-            <p>Aoyama's café scene is composed, stylish, and often tucked into serene side streets.</p>
-            <p>Independent cafés dominate, offering minimal interiors and curated pour-overs.</p>
-            <p>Chain cafés are fewer, mostly around Omotesando station.</p>
-            <p>Community-style cafés are rare, but those that exist serve as intimate anchors for local creatives.</p>
-            <p>Aoyama is less about density, more about finesse — a quiet resonance in Tokyo's cultural pulse.</p>
+          <img src="image/TOYKO/aoyama_top.png" alt="Aoyama Collage Top" class="city-collage-img">
+          <div id="city-text-overlay" class="aoyama-text-style">
+            <p class="city-section-title">Where Elegance Meets Espresso</p>
+            <p>Tucked behind the vibrant Omotesando avenue, Aoyama's café landscape whispers quiet sophistication.</p>
+            <p>Independent cafés prevail here — understated in design, yet meticulous in craft — serving curated pour-overs within minimalist sanctuaries. Chain cafés, though fewer, gravitate toward the transport arteries, particularly around Omotesando Station, while community-style cafés appear sparingly, often acting as gentle nodes in the area's creative network.</p>
+            <p>Rather than density, Aoyama values delicacy. The café culture here is not loud — it resonates subtly, reflecting Tokyo's aesthetic of calm precision. </p>
+            <p>It is a micro-network where spatial charm meets cultural intent, revealing how even silence can connect a city.</p>
+            <p><strong><em>Click Button to explore general area⬇</em></strong></p>
+            <div id="zoom-buttons">
+            <button id="btn-aoyama">Tokyo</button>
+        </div>
           </div>
         </div>
 
         <div class="city-collage-wrapper bottom-wrapper">
-          <img src="image/TOYKO/toyko_aoyama_bottom.png" alt="Aoyama Collage Bottom" class="city-collage-img">
+          <img src="image/TOYKO/aoyama_bottom.png" alt="Aoyama Collage Bottom" class="city-collage-img">
         </div>
       </div>
     </div>
