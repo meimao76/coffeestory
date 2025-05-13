@@ -3,8 +3,8 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiaXh4aWlyaXMiLCJhIjoiY202aTB2bTI1MDNpNTJqc2h0N
 const map = new mapboxgl.Map({
   container: 'map',
   style: 'mapbox://styles/ixxiiris/cm8lrey81005d01s9byfx4474',
-  center: [139.710, 35.666], // Aoyama center
-  zoom: 15
+  center: [139.714, 35.668], // Aoyama center
+  zoom: 14.5
 });
 
 map.on('load', () => {
