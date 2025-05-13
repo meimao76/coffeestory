@@ -633,29 +633,38 @@ function renderChart(data, metrics) {
       .attr('y',      height)
       .attr('height', 0)
       .attr('fill',   d => color(d.key))
-      .on("mouseover", mouseover)
-      .on("mousemove", mousemove)
-      .on("mouseleave", mouseleave)
+.on("mouseover", function(event, d) {
+      console.log("✅ mouseover 触发", d); // 调试用
+      d3.select(this)
+        .attr("stroke", "#ff0000")
+        .attr("stroke-width", 2)
+        .attr("opacity", 0.8);
+      // 显示 tooltip
+      tooltip.style("opacity", 1)
+        .html(`<strong>${d.key}: ${d.value}</strong>`)
+        .style("left", `${event.pageX + 10}px`)
+        .style("top", `${event.pageY - 10}px`);
+    })
+    .on("mouseleave", function() {
+      d3.select(this)
+        .attr("stroke", "none")
+        .attr("opacity", 1);
+      tooltip.style("opacity", 0); // 隐藏 tooltip
+    })
       .transition().duration(500)
       .attr('y',      d => d.key===metrics[0]? y0(d.value) : y1(d.value))
       .attr('height', d => d.key===metrics[0]
                           ? height - y0(d.value)
-                          : height - y1(d.value));
+                          : height - y1(d.value))
 }
 
 // 初次加载数据
 d3.csv('coffee_consumption_cleaned.csv', d3.autoType).then(data => {
      // create a tooltip
-  tooltip = d3.select("#barChart")
-    .append("div")
-    .style("opacity", 0)
-    .attr("class", "tooltip")
-    .style("background-color", "white")
-    .style("border", "solid")
-    .style("border-width", "2px")
-    .style("border-radius", "5px")
-    .style("padding", "5px")
-
+  tooltip = d3.select("body")
+  .append("div")
+  .attr("class", "tooltip")
+  .style("opacity", 0);
   // 读取 checkbox 选项的函数
   function getMetrics() {
     const ms = d3.selectAll('input[name="sortOption"]:checked')
