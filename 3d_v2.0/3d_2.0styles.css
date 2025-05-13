@@ -23,7 +23,7 @@
   /* 侧边栏 */
   #sidebar {
     position: fixed;
-    top: 0px; /* 下方留给导航 */
+    top: 50px; /* 下方留给导航 */
     right: 0;
     width: 35%;
     height: 120%;
@@ -35,33 +35,97 @@
   
   
   /* 固定导航 */
-  #headerZone {
-    background-color: rgba(84, 54, 26, 0.8);
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background-color: #2d2326;
+    backdrop-filter: blur(8px);
+    z-index: 1000;
     display: flex;
-    align-items: center;
     justify-content: center;
-    margin-bottom: 12%;
-    height: 5%;
-
+    padding: 1rem;
   }
-  #navbar {
+  
+  .navbar ul {
+    list-style: none;
     display: flex;
-    gap: 45px;
-    z-index: 30;
+    gap: 2rem;
   }
-  .nav-item {
-    color: #EBDFC0;
+  
+  .navbar a {
     text-decoration: none;
+    color: #ebdfc0;
     font-weight: bold;
-    font-size: 20px;
+    transition: color 0.3s;
   }
-  .nav-item.active{
-    color: #EBDFC0;
+  
+  .navbar a:hover {
+    color: #ac8b72;
   }
 
-  .nav-item:hover {
-    color: #ffffff;
-  }
+  /* ===== Dropdown for Culture ===== */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2d2326;
+  padding: 8px 0;
+  display: none;
+  flex-direction: column;
+  min-width: 120px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  z-index: 1001;
+}
+
+.dropdown-menu li {
+  padding: 0;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-wrapper .dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color:  #2d2326;
+  flex-direction: column;
+  padding: 8px 0;
+  min-width: 120px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  border-radius: 6px;
+  z-index: 1001;
+}
+
+.dropdown-wrapper:hover .dropdown-menu {
+  display: flex;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 8px 16px;
+  color: #ebdfc0;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.dropdown-menu li a:hover {
+  color: #ac8b72;
+}
   
   /* 滚动内容区 */
   #sidebarContent {
@@ -234,7 +298,7 @@
    /* 固定商品选择 */
   #commoditySelectorWrapper {
     position: absolute;
-    top: 2%; /* 距离 mainContent 顶部 */
+    top: 10%; /* 距离 mainContent 顶部 */
     left: 2%;
     width: 17%;
     color: rgba(45, 35, 38);
