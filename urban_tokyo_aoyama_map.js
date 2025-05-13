@@ -728,4 +728,8 @@ map.on('load', () => {
       });
     });
 
+  // 跳转tokyo
+  document.getElementById('btn-tokyo').addEventListener('click', () => {
+    window.open('urban_tokyo.html', '_blank'); // 新窗口打开
+  });
 });
