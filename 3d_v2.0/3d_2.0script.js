@@ -61,7 +61,7 @@ const observer = new IntersectionObserver(entries => {
 // 初始化地球
 const globe = Globe()
   // 1. 地球表面贴图（暗面）
-  .globeImageUrl('globesurface2.png')
+  .globeImageUrl('globesurface3.png')
   .backgroundImageUrl('bg2.png')
   // 2. 地球高光／凹凸贴图（模拟山脉、海洋波纹）
   .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
