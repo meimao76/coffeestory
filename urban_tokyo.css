@@ -367,7 +367,7 @@ html, body {
 /* 所有文字浮层 */
 #city-text-overlay {
   position: absolute;
-  top: 50px;
+  top: 90%;
   left: 50%;
   transform: translateX(-50%);
   width: 85%;
