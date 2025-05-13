@@ -383,92 +383,170 @@ yearSel     .addEventListener('change', onFilterChange);
 // 5. 页面加载完成时先渲染一次
 onFilterChange();
 
-
-//Sankey
-function Sankey(){
-const width =500;
-const height = 160;
-
-// 选中 SVG 并设定画布大小
-const svg = d3.select("#sankey")
+// Sankey
+function Sankey() {
+  const width = 450, height = 200;
+  const svg = d3.select("#sankey")
     .attr("width", width)
     .attr("height", height);
 
-// 从 d3-sankey 插件拿到布局函数
-const { sankey, sankeyLinkHorizontal } = d3;
+  const { sankey, sankeyLinkHorizontal } = d3;
 
-// 读取 CSV 数据
-d3.csv("coffee_value_distribution_unweighted.csv", d3.autoType).then(raw => {
-  // data 是一个数组，形如 [{source: "...", target: "...", value: 1.23}, ...]
-   const data = raw.map(d => ({
-    source: d["Country"],                      // 用 Country 作为源
-    target: d["Type of cost"],            // 用 Value chain stage 作为中间节点
-    value: d["Value"],                       // 用 Value (€) 作为流量大小
-    middle: d["Value chain stage"]
-  }));
-  // 1) 构造节点列表（唯一去重）
-  const nodeNames = Array.from(
-    new Set(data.flatMap(d => [d.source, d.target, d.middle]))
-  );
+  d3.csv("coffee_value_distribution_unweighted.csv", d3.autoType)
+    .then(raw => {
+      // —— 1. 构造 nodes & links & 布局 —— 
+      const data = raw.map(d => ({
+        source: d.Country,
+        middle: d["Value chain stage"],
+        target: d["Type of cost"],
+        value: d.Value
+      }));
+      const nodeNames = Array.from(
+        new Set(data.flatMap(d => [d.source, d.middle, d.target]))
+      );
+      const nodes = nodeNames.map(name => ({ name }));
+      const nodeIndex = new Map(nodes.map((d,i) => [d.name,i]));
 
-  const nodes = nodeNames.map(name => ({ name }));
-  const nodeIndex = new Map(nodes.map((d,i) => [d.name, i]));
+      const links1 = data.map(d => ({
+        source: nodeIndex.get(d.source),
+        target: nodeIndex.get(d.middle),
+        value: d.value,
+        raw: d
+      }));
 
-  // 2) 构造 links 数组，注意 source/target 用索引
-  const links = data.map(d => ({
-    source: nodeIndex.get(d.source),
-    target: nodeIndex.get(d.middle),
-    value: d.value
-  }));
+      const links2 = data.map(d => ({
+        source: nodeIndex.get(d.middle),
+        target: nodeIndex.get(d.target),
+        value: d.value,
+        raw: d
+      }));
 
-    const links2 = data.map(d => ({
-    source: nodeIndex.get(d.middle),
-    target: nodeIndex.get(d.target),
-    value: d.value
-  }));
+      const allLinks = [...links1, ...links2];
 
-  const allLinks = [...links, ...links2];
+      const graph = sankey()
+        .nodeWidth(20)
+        .nodePadding(10)
+        .extent([[1,1],[width-1, height-6]])({
+          nodes: nodes.map(d=> ({...d})),
+          links: allLinks
+        });
 
-  // 3) 计算 sankey 布局
-  const sankeyGen = sankey()
-    .nodeWidth(20)
-    .nodePadding(10)
-    .extent([[1, 1], [width - 1, height - 6]]);
+      // —— 2. 定义配色 —— 
+      const nodeColorMap = {
+        "Brazil": "#b29e8e",
+        "Colombia": "#b29e8e",
+        "VAT": "#f7e8bd",
+        "Taxes": "#fff8e7",
+        "Retail": "#f7e8bd",
+        "Net profit margin": "#fff8e7",
+        "Costs": "#fff8e7",
+        "German Coffee Tax": "#f7e8bd",
+        "Roasting & Finished product manufacturing": "#f7e8bd",
+        "European logistic and trading": "#f7e8bd",
+        "Collection & Exportation": "#f7e8bd",
+        "Agricultural production": "#f7e8bd",
+        "Net coffee farm income": "#fff8e7"
+      };
 
-  const graph = sankeyGen({
-    nodes: nodes.map(d => Object.assign({}, d)),
-    links: allLinks
-  });
+      const color = name => nodeColorMap[name] || "#ccc";
 
-svg.append("g")
-  .selectAll("path")
-  .data(graph.links)
-  .join("path")
-    .attr("class", "link")
-    .attr("d", sankeyLinkHorizontal())
-    .attr("stroke-width", d => Math.max(1, d.width));
+      // —— 3. 绘制 link —— 
+      const link = svg.append("g")
+        .attr("class","links")
+        .selectAll("path")
+        .data(graph.links)
+        .join("path")
+          .attr("class","link")
+          .attr("d", sankeyLinkHorizontal())
+          .attr("stroke", d => color(d.source.name))
+          .attr("stroke-width", d => Math.max(1, d.width))
+          .attr("opacity", 0.5)
+          .attr("fill","none");
 
-svg.append("g")
-  .selectAll("rect")
-  .data(graph.nodes)
-  .join("rect")
-    .attr("x",      d => d.x0)
-    .attr("y",      d => d.y0)
-    .attr("width",  d => d.x1 - d.x0)
-    .attr("height", d => d.y1 - d.y0);
+      // —— 4. 绘制 node —— 
+      const node = svg.append("g")
+        .attr("class","nodes")
+        .selectAll("rect")
+        .data(graph.nodes)
+        .join("rect")
+          .attr("x", d=>d.x0)
+          .attr("y", d=>d.y0)
+          .attr("width",  d=>d.x1-d.x0)
+          .attr("height", d=>d.y1-d.y0)
+          .attr("fill", d => color(d.name))   
+          .append("title")
+            .text(d=>d.name);
 
-  // 6) 加上节点标签
-  svg.append("g")
-    .selectAll("text")
-    .data(graph.nodes)
-    .join("text")
-      .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
-      .attr("y", d => (d.y0 + d.y1) / 2)
-      .attr("dy", "0.35em")
-      .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
-      .text(d => d.name);
-});}
-Sankey()
+      // —— 5. 绘制标签 —— 
+      svg.append("g")
+        .selectAll("text")
+        .data(graph.nodes)
+        .join("text")
+          .attr("x", d=> d.x0 < width/2 ? d.x1+6 : d.x0-6)
+          .attr("y", d=> (d.y0+d.y1)/2)
+          .attr("dy","0.35em")
+          .attr("text-anchor", d=> d.x0<width/2 ? "start":"end")
+          .text(d=>d.name)
+          .style("font-size","11px")
+          .style("fill","#fff");
+
+      // —— 6. 选中 tooltip —— 
+      const tooltip = d3.select("#tooltip");
+
+      // —— 7. 给 link 加交互 —— 
+      link
+        .on("mouseover", (event,d) => {
+          link.attr("opacity", 0.1);
+          d3.select(event.currentTarget)
+            .attr("opacity", 1)
+            .raise();
+          tooltip
+            .html(`<b>${d.source.name} → ${d.target.name}</b><br/>${d.value}`)
+            .style("left", event.pageX + 10 + "px")
+            .style("top",  event.pageY +  5 + "px")
+            .style("opacity",1);
+        })
+        .on("mousemove", event => {
+          tooltip
+            .style("left", event.pageX + 10 + "px")
+            .style("top",  event.pageY +  5 + "px");
+        })
+        .on("mouseout", () => {
+          link.attr("opacity", 0.5);
+          tooltip.style("opacity", 0);
+        });
+
+      // —— 8. 给 node 加交互（高亮所有相关 flow） —— 
+      node
+        .on("mouseover", (event,nodeData) => {
+          link.attr("opacity", 0.1);
+          link.filter(d =>
+            d.source.name === nodeData.name ||
+            d.target.name === nodeData.name
+          )
+          .attr("opacity",1)
+          .raise();
+          tooltip
+            .html(`<b>${nodeData.name}</b>`)
+            .style("left", event.pageX + 10 + "px")
+            .style("top",  event.pageY +  5 + "px")
+            .style("opacity",1);
+        })
+        .on("mousemove", event => {
+          tooltip
+            .style("left", event.pageX + 10 + "px")
+            .style("top",  event.pageY +  5 + "px");
+        })
+        .on("mouseout", () => {
+          link.attr("opacity", 0.5);
+          tooltip.style("opacity", 0);
+        });
+
+    }); // end then
+}
+Sankey();
+
+
 
 // —— 1. 基本配置 —— 
 let tooltip; // 声明为全局变量，以便在多个函数中访问

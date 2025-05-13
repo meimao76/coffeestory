@@ -22,7 +22,15 @@ map.on('load', () => {
   closeOnClick: true,
   offset: 16
   });
-  
+  // 比例尺指北针
+    map.addControl(new mapboxgl.ScaleControl({
+    maxWidth: 120,
+    unit: 'metric'
+  }), 'bottom-right');
+
+  map.addControl(new mapboxgl.NavigationControl({
+    visualizePitch: true
+  }), 'top-right');
 
   // === 1. 边界图层（底层） ===
   map.addSource('boundary', {
@@ -111,7 +119,7 @@ map.on('load', () => {
         10, 15,
         14, 30
       ],
-      'heatmap-opacity': 0.4
+      'heatmap-opacity': 0.5
     }
   });
 
@@ -138,9 +146,21 @@ map.on('load', () => {
           16, 6
         ],
         'circle-color': color,
-        'circle-opacity': 0.6,
+        'circle-opacity': [
+          'interpolate', ['linear'], ['zoom'],
+          10, 0.4,  // zoom 小时几乎不可见
+          12, 0.6,
+          14, 0.8,
+          16, 1      // zoom in 时完全可见
+        ],
         'circle-stroke-color': '#ffffff',
-        'circle-stroke-width': 0.6
+        'circle-stroke-width':  [
+        'interpolate', ['linear'], ['zoom'],
+        10, 0.2,
+        12, 0.4,
+        14, 0.6,
+        16, 1
+      ]
       }
     });
   });
@@ -598,7 +618,7 @@ map.on('load', () => {
 
     const activeStr = `<p><em>Currently displaying:</em> <strong>${activeTypes.join(', ')}</strong></p>`;
 
-    infoText.innerHTML = baseText + activeStr;
+    infoText.innerHTML =  activeStr + baseText;
   }
 
   // 用于点击行政区后的 infoText 更新
