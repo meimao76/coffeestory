@@ -470,7 +470,7 @@ map.on('load', () => {
               forming a vibrant corridor that connects culture and commerce.
             </p>
             <p style="margin: 4px 0;">
-              📍 <strong>Planning Vision:</strong> Create an elegant and stylish space
+              <strong>Planning Vision:</strong> Create an elegant and stylish space
             </p>
             <p style="margin-top: 8px;">
               🔗 <a href="https://whenin.tokyo/Omotesando-Aoyama-Area-Guide/1000" target="_blank" rel="noopener">
