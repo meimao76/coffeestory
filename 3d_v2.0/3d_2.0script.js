@@ -87,6 +87,14 @@ const globe = Globe()
             return ['#cccccc', '#cccccc'];
         }
         })
+  // 飞线点击
+  .onArcClick(d => {
+    infoBox.style.display = 'block';
+    document.getElementById('infoRoute').textContent     = `${d.Exporter} → ${d.Importer}`;
+    document.getElementById('infoWeight').textContent    = `${d['Weight (1000kg)']} metric ton`;
+    document.getElementById('infoValue').textContent     = `${d['Value (1000USD)']}k USD`;
+    document.getElementById('infoCommodity').textContent = d.commodity;
+  })
   .arcsTransitionDuration(200)
   // 多边形样式
   .polygonsTransitionDuration(0) 
@@ -125,8 +133,6 @@ document.addEventListener('click', (e) => {
         infoBox.style.display = 'none';
     }
 })
-
-//旋转地球
 
 
 //渲染
@@ -404,13 +410,17 @@ function Sankey() {
       const links1 = data.map(d => ({
         source: nodeIndex.get(d.source),
         target: nodeIndex.get(d.middle),
-        value: d.value
+        value: d.value,
+        raw: d
       }));
+
       const links2 = data.map(d => ({
         source: nodeIndex.get(d.middle),
         target: nodeIndex.get(d.target),
-        value: d.value
+        value: d.value,
+        raw: d
       }));
+
       const allLinks = [...links1, ...links2];
 
       const graph = sankey()
@@ -539,7 +549,24 @@ Sankey();
 
 
 // —— 1. 基本配置 —— 
-// —— 1. 基本配置 —— 
+let tooltip; // 声明为全局变量，以便在多个函数中访问
+function mouseover(event, d) {
+  console.log("🎯 mouseover 触发", d);
+  tooltip.style("opacity", 1);
+}
+
+function mousemove(event, d) {
+  const countryData = d3.select(this.parentNode).datum();
+  console.log("🖱️ 鼠标悬停数据:", { d, countryData });
+  tooltip
+    .html(`<strong>${countryData.Country}</strong><br>${d.key}: ${d.value}`)
+    .style("left", (event.pageX + 10) + "px")
+    .style("top", (event.pageY - 10) + "px");
+}
+
+function mouseleave(event, d) {
+  tooltip.style("opacity", 0);
+}
 const margin = { top: 10, right: 60, bottom: 60, left: 60 };
 const svgTotalWidth = 500;
 const width  = svgTotalWidth - margin.left - margin.right;
@@ -606,7 +633,10 @@ function renderChart(data, metrics) {
       .attr('y',      height)
       .attr('height', 0)
       .attr('fill',   d => color(d.key))
-    .transition().duration(500)
+      .on("mouseover", mouseover)
+      .on("mousemove", mousemove)
+      .on("mouseleave", mouseleave)
+      .transition().duration(500)
       .attr('y',      d => d.key===metrics[0]? y0(d.value) : y1(d.value))
       .attr('height', d => d.key===metrics[0]
                           ? height - y0(d.value)
@@ -615,6 +645,17 @@ function renderChart(data, metrics) {
 
 // 初次加载数据
 d3.csv('coffee_consumption_cleaned.csv', d3.autoType).then(data => {
+     // create a tooltip
+  tooltip = d3.select("#barChart")
+    .append("div")
+    .style("opacity", 0)
+    .attr("class", "tooltip")
+    .style("background-color", "white")
+    .style("border", "solid")
+    .style("border-width", "2px")
+    .style("border-radius", "5px")
+    .style("padding", "5px")
+
   // 读取 checkbox 选项的函数
   function getMetrics() {
     const ms = d3.selectAll('input[name="sortOption"]:checked')
@@ -623,9 +664,34 @@ d3.csv('coffee_consumption_cleaned.csv', d3.autoType).then(data => {
            : [ d3.select('input[name="sortOption"]').node().value ];
   }
 
+//   // Three function that change the tooltip when user hover / move / leave a cell
+//   function mouseover(event, d) {
+//   tooltip.style("opacity", 1);
+// }
+
+// function mousemove(event, d) {
+//   console.log("🖱️ 鼠标悬停数据:", { d, countryData });
+//   const countryData = d3.select(this.parentNode).datum(); // 获取当前柱子的国家数据
+//   tooltip
+//     .html(`
+//       <strong>${countryData.Country}</strong><br>
+//       ${d.key}: ${d.value}
+//     `)
+//     .style("left", (event.pageX + 10) + "px")
+//     .style("top", (event.pageY - 10) + "px");
+// }
+
+// function mouseleave(event, d) {
+//   tooltip.style("opacity", 0);
+// }
+
+
+
   // 绑定 change 事件
-  d3.selectAll('input[name="sortOption"]').on('change', () => {
-    renderChart(data, getMetrics());
+  d3.selectAll('input[name="sortOption"]')
+  .on('change', () => {
+    renderChart(data, getMetrics())
+    ;
   });
 
   // 初始渲染

@@ -279,17 +279,20 @@
     font-size: 16px;
   }
 
-  #tooltip{
-    position: absolute;
-    pointer-events: none;
-    background: rgba(0,0,0,0.7);
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 12px;
-    opacity: 0;
-    transition: opacity 0.2s ease-in-out;
-  }
+/* 放在你的 styles.css 里 */
+.tooltip {
+  position: absolute;
+  pointer-events: none;
+  opacity: 0;
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  transition: opacity 0.1s ease;
+  white-space: nowrap;
+  z-index: 60;
+}
 
   /* 自定义滚动条: 只显示中间灰色滑块 */
   #sidebarContent {
