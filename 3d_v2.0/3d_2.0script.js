@@ -6,7 +6,7 @@ let topData = [];
 let coffeeByCountry = new Map();
 let info = [];
  // 保存全部数据
-
+let selectedCountryIso = null;
 let tooltip = d3.select("body")
   .append("div")
   .attr("class", "tooltip")
@@ -104,19 +104,23 @@ const globe = Globe()
   .arcsTransitionDuration(200)
   // 多边形样式
   .polygonsTransitionDuration(0) 
-  .polygonCapColor(feat => 'rgba(7, 166, 223, 0)') // 国界内部
+  .polygonCapColor(d => 
+  d.properties.ISO_A3?.toUpperCase?.() === selectedCountryIso 
+    ? 'rgba(255,255,255,0.5)' 
+    : 'rgba(7, 166, 223, 0.2)'
+)
   .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 侧边
   .polygonStrokeColor(() => '#54361a') // 国界线颜色
   .polygonAltitude(0.01)
-  .polygonLabel(({ properties }) => {
-    const iso = properties.ISO_A3;                // 或者你 GeoJSON 中实际的字段名
+  .polygonLabel(({  id,properties }) => {
+    const iso = id?.toUpperCase?.();
     const brands = coffeeByCountry.get(iso) || [];
     const listItems = brands.length
       ? brands.map(d => `<li>${d.Name} (${d['Number of locations']})</li>`).join('')
       : '<li>No brands found</li>';
     return `
       <div style="pointer-events:none; max-width:200px;">
-        <b style="font-size:1.1em;">${properties.NAME}</b><br/>
+        <b style="font-size:1.1em;">${properties.name}</b><br/>
         <small>${brands.length} brand${brands.length>1?'s':''}</small>
         <ul style="margin:4px 0 0 8px; padding:0; list-style:disc;">
           ${listItems}
@@ -125,10 +129,20 @@ const globe = Globe()
     `;
   })
   .onPolygonClick(({ properties }) => {
-    const iso = properties.ISO_A3;          // 或者 ADM0_A3_US，看你的字段
-    const brands = coffeeByCountry.get(iso) || [];
-    showCoffeeList(brands, properties.NAME);
-  });
+  const iso = properties.id?.toUpperCase?.();
+  selectedCountryIso = iso;
+
+  const brands = coffeeByCountry.get(iso) || [];
+  showCoffeeList(brands, properties.NAME);
+
+  // 强制刷新颜色
+  globe.polygonCapColor(d =>
+    d.properties.id?.toUpperCase?.() === selectedCountryIso
+      ? 'rgba(255,255,255,0.5)'
+      : 'rgba(7, 166, 223, 0.2)'
+  );
+});
+
   
 
 //飞线监听器
@@ -146,7 +160,7 @@ globe(document.getElementById('globeViz'));
 
 // 加载数据：国界线 + 贸易流
 Promise.all([
-    d3.json("selected_bond.geojson"),
+    d3.json("world.geojson"),
     d3.csv("combined_tradeflow.csv"),
     d3.csv("List_of_coffeehouse_chains_3.csv"),
 ]).then(function([boundaryData, merged_flow, brands]) {
@@ -166,7 +180,7 @@ Promise.all([
     .arcsData(topData);
 
     // 建立 ISO3 -> 品牌列表 的映射
-    coffeeByCountry = d3.group(brands, d => d.ISO3);
+    coffeeByCountry = d3.group(brands, d => d.ISO3?.toUpperCase?.());
   
     // 初始化显示
     updateGlobeArcs('all');
