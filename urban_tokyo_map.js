@@ -585,7 +585,7 @@ map.on('load', () => {
       <p>
       <strong>Chain cafés</strong> are strongly clustered around central commercial zones such as 
       <strong>Shinjuku</strong>, <strong>Ikebukuro</strong>, and <strong>Minato</strong>, 
-      closely following Tokyo’s retail and transportation corridors.<br>
+      closely following Tokyo's retail and transportation corridors.<br>
       <strong>Independent cafés</strong> form scattered yet dense clusters in creative and residential districts like 
       <strong>Setagaya</strong>, <strong>Bunkyo</strong>, and <strong>Suginami</strong>, 
       often appearing near university and cultural hubs.<br>
