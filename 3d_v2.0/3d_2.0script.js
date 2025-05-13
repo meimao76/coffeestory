@@ -3,18 +3,18 @@ let borders = []
 let rawData = [];   
 let roastData = []; 
 let topData = []; 
+let coffeeByCountry = new Map();
+let info = [];
  // 保存全部数据
 
-// 1. 渲染函数：直接重设数据
+// 1.定义设置交互对话框可见性的函数
 const infoBox     = document.getElementById('infoBox');
 const selectorBox = document.getElementById('commoditySelectorWrapper');
 
 function showBordersFlows() {
   globe
-    .polygonsData(borders)   // 显示国界
-    .arcsData(topData);     // 显示所有飞线
-
-  selectorBox.style.display = 'block'; // 显示筛选器
+    .arcsData(topData);     
+  selectorBox.style.display = 'block'; 
 }
 
 function showBordersOnly() {
@@ -58,14 +58,17 @@ const observer = new IntersectionObserver(entries => {
     if (el) observer.observe(el);
   });
 
-// 初始化地球
+
+//3 初始化地球
 const globe = Globe()
+
   // 1. 地球表面贴图（暗面）
-  .globeImageUrl('globesurface2.png')
+  .globeImageUrl('globesurface3.png')
   .backgroundImageUrl('bg2.png')
   // 2. 地球高光／凹凸贴图（模拟山脉、海洋波纹）
   .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
   .showAtmosphere(true)
+
   // 飞线样式
   .arcDashLength(0.5)
   .arcDashGap(0)
@@ -74,7 +77,6 @@ const globe = Globe()
   .arcDashGap(0.3)        // 虚线间隔
   .arcDashInitialGap(() => Math.random())  // 初始偏移（让飞线动感更自然）
   .arcDashAnimateTime(4000)  // 动画一圈的时间（毫秒）
-
   // 飞线颜色（起点颜色 + 终点颜色）
   .arcColor(d => {
         if (d.commodity === 'raw bean') {
@@ -84,44 +86,58 @@ const globe = Globe()
         } else {
             return ['#cccccc', '#cccccc'];
         }
-  })
-
+        })
   .arcsTransitionDuration(200)
+  // 多边形样式
   .polygonsTransitionDuration(0) 
-  .polygonCapColor(() => 'rgba(0, 0, 0, 0)') // 国界内部透明
-  .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 无侧边
-  .polygonStrokeColor(() => '#cccccc') // 国界线颜色
-
-
-  // 飞线交互
-  .onArcClick(d =>{
-    const infoBox = document.getElementById('infoBox');
-        
-    document.getElementById('infoRoute').textContent = `${d.Exporter} → ${d.Importer}`;
-    document.getElementById('infoWeight').textContent = `${d['Weight (1000kg)']} metric ton`;
-    document.getElementById('infoValue').textContent = `${d['Value (1000USD)']}k USD`;
-    document.getElementById('infoCommodity').textContent = d.commodity;
-    console.log(d);
-    infoBox.style.display = 'block';
+  .polygonCapColor(feat => 'rgba(7, 166, 223, 0)') // 国界内部
+  .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 侧边
+  .polygonStrokeColor(() => '#54361a') // 国界线颜色
+  .polygonAltitude(0.01)
+  .polygonLabel(({ properties }) => {
+    const iso = properties.ISO_A3;                // 或者你 GeoJSON 中实际的字段名
+    const brands = coffeeByCountry.get(iso) || [];
+    const listItems = brands.length
+      ? brands.map(d => `<li>${d.Name} (${d['Number of locations']})</li>`).join('')
+      : '<li>No brands found</li>';
+    return `
+      <div style="pointer-events:none; max-width:200px;">
+        <b style="font-size:1.1em;">${properties.NAME}</b><br/>
+        <small>${brands.length} brand${brands.length>1?'s':''}</small>
+        <ul style="margin:4px 0 0 8px; padding:0; list-style:disc;">
+          ${listItems}
+        </ul>
+      </div>
+    `;
+  })
+  .onPolygonClick(({ properties }) => {
+    const iso = properties.ISO_A3;          // 或者 ADM0_A3_US，看你的字段
+    const brands = coffeeByCountry.get(iso) || [];
+    showCoffeeList(brands, properties.NAME);
   });
+  
 
-    document.addEventListener('click', (e) => {
-        const infoBox = document.getElementById('infoBox');
-        // 如果点的不是飞线（这里简单判断）
-        if (!e.target.closest('canvas')) {
-            infoBox.style.display = 'none';
-        }
-    });
+//飞线监听器
+document.addEventListener('click', (e) => {
+    const infoBox = document.getElementById('infoBox');
+    // 如果点的不是飞线（这里简单判断）
+    if (!e.target.closest('canvas')) {
+        infoBox.style.display = 'none';
+    }
+})
+
+//旋转地球
+
+
 //渲染
 globe(document.getElementById('globeViz'));
 
 // 加载数据：国界线 + 贸易流
 Promise.all([
-    d3.json("sim_bond.geojson"),
+    d3.json("selected_bond.geojson"),
     d3.csv("combined_tradeflow.csv"),
-    d3.csv("raw_tradeflow_merged.csv"),
-    d3.csv("roasted_tradeflow_merged.csv")
-]).then(function([boundaryData, merged_flow, raw, roast]) {
+    d3.csv("List_of_coffeehouse_chains_3.csv"),
+]).then(function([boundaryData, merged_flow, brands]) {
 
     console.log("加载的数据：", merged_flow.slice(0, 5));
 
@@ -134,15 +150,12 @@ Promise.all([
         .filter(d => !isNaN(+d.lat_import))
         .filter(d => !isNaN(+d.lng_import));
     borders = boundaryData.features
-    globe.polygonsData(borders);
-    const countryMeshes = [];
-    // 三维场景中，所有多边形都是 Mesh，挂载了它的 feature 在 userData
-    globe.scene().traverse(obj => {
-    if (obj.type === 'Mesh' && obj.userData && obj.userData.properties) {
-        countryMeshes.push(obj);
-    }
-    });
+    globe
+    .arcsData(topData);
 
+    // 建立 ISO3 -> 品牌列表 的映射
+    coffeeByCountry = d3.group(brands, d => d.ISO3);
+  
     // 初始化显示
     updateGlobeArcs('all');
     const defaultYear    = document.getElementById('yearSelector').value;
@@ -303,8 +316,8 @@ Promise.all([
 // 页面初始化完毕之后，第一次渲染
 updateGraphs();
 
-}
-);
+});
+
 
 //飞线制图
 // 1. 先改造 updateGlobeArcs，接收两个参数
@@ -364,89 +377,206 @@ yearSel     .addEventListener('change', onFilterChange);
 // 5. 页面加载完成时先渲染一次
 onFilterChange();
 
+// Sankey
+function Sankey() {
+  const width = 450;
+  const height = 200;
 
-//Sankey
-const width =500;
-const height = 160;
-
-// 选中 SVG 并设定画布大小
-const svg = d3.select("#sankey")
+  const svg = d3.select("#sankey")
     .attr("width", width)
     .attr("height", height);
 
-// 从 d3-sankey 插件拿到布局函数
-const { sankey, sankeyLinkHorizontal } = d3;
+  const { sankey, sankeyLinkHorizontal } = d3;
 
-// 读取 CSV 数据
-d3.csv("coffee_value_distribution_unweighted.csv", d3.autoType).then(raw => {
-  // data 是一个数组，形如 [{source: "...", target: "...", value: 1.23}, ...]
-   const data = raw.map(d => ({
-    source: d["Country"],                      // 用 Country 作为源
-    target: d["Type of cost"],            // 用 Value chain stage 作为中间节点
-    value: d["Value"],                       // 用 Value (€) 作为流量大小
-    middle: d["Value chain stage"]
-  }));
-  // 1) 构造节点列表（唯一去重）
-  const nodeNames = Array.from(
-    new Set(data.flatMap(d => [d.source, d.target, d.middle]))
-  );
+  d3.csv("coffee_value_distribution_unweighted.csv", d3.autoType).then(raw => {
+    const data = raw.map(d => ({
+      source: d["Country"],
+      middle: d["Value chain stage"],
+      target: d["Type of cost"],
+      value: d["Value"]
+    }));
 
-  const nodes = nodeNames.map(name => ({ name }));
-  const nodeIndex = new Map(nodes.map((d,i) => [d.name, i]));
+    const nodeNames = Array.from(new Set(data.flatMap(d => [d.source, d.middle, d.target])));
+    const nodes = nodeNames.map(name => ({ name }));
+    const nodeIndex = new Map(nodes.map((d, i) => [d.name, i]));
+    const indexToName = new Map(nodes.map((d, i) => [i, d.name]));
 
-  // 2) 构造 links 数组，注意 source/target 用索引
-  const links = data.map(d => ({
-    source: nodeIndex.get(d.source),
-    target: nodeIndex.get(d.middle),
-    value: d.value
-  }));
+    const links = data.map(d => ({
+      source: nodeIndex.get(d.source),
+      target: nodeIndex.get(d.middle),
+      value: d.value
+    }));
 
     const links2 = data.map(d => ({
-    source: nodeIndex.get(d.middle),
-    target: nodeIndex.get(d.target),
-    value: d.value
-  }));
+      source: nodeIndex.get(d.middle),
+      target: nodeIndex.get(d.target),
+      value: d.value
+    }));
 
-  const allLinks = [...links, ...links2];
+    const allLinks = [...links, ...links2];
 
-  // 3) 计算 sankey 布局
-  const sankeyGen = sankey()
-    .nodeWidth(20)
-    .nodePadding(10)
-    .extent([[1, 1], [width - 1, height - 6]]);
+    const sankeyGen = sankey()
+      .nodeWidth(20)
+      .nodePadding(10)
+      .extent([[1, 1], [width - 1, height - 6]]);
 
-  const graph = sankeyGen({
-    nodes: nodes.map(d => Object.assign({}, d)),
-    links: allLinks
-  });
+    const graph = sankeyGen({
+      nodes: nodes.map(d => Object.assign({}, d)),
+      links: allLinks
+    });
 
-svg.append("g")
+
+const color = d3.scaleOrdinal()
+  .domain([nodeNames])
+  .range([
+    "#b29e8e", // Brazil
+    "#b29e8e", // Colombia
+    "#fff8e7", // VAT
+    "#a9917b", // Taxes
+    "#ffe8dc", // Retail
+    "#a9917b", // Net profit margin
+    "#a9917b", // cost
+    "#ffd1a1", // German Coffee Tax
+    "#fcd4c8", // Roasting & Finished product manufacturing
+    "#ffffff", // europ
+    "#f7d0a5", // colection
+    "#f7dda5", // agri
+    "#a9917b"  // net coffee farm
+  ]);
+
+    // --- 节点 ---
+    svg.append("g")
+      .selectAll("rect")
+      .data(graph.nodes)
+      .join("rect")
+        .attr("x", d => d.x0)
+        .attr("y", d => d.y0)
+        .attr("width", d => d.x1 - d.x0)
+        .attr("height", d => d.y1 - d.y0)
+        .attr("fill", d => color(d.name))
+        .append("title")
+        .text(d => `${d.name}`);
+
+    // --- 连线 ---
+    svg.append("g")
   .selectAll("path")
   .data(graph.links)
   .join("path")
-    .attr("class", "link")
     .attr("d", sankeyLinkHorizontal())
-    .attr("stroke-width", d => Math.max(1, d.width));
+    .attr("stroke-width", d => Math.max(1, d.width))
+    .attr("stroke", d => color(d.source.name) || "#ccc")
+    .attr("fill", "none")
+    .attr("opacity", 0.5);
 
-svg.append("g")
-  .selectAll("rect")
-  .data(graph.nodes)
-  .join("rect")
-    .attr("x",      d => d.x0)
-    .attr("y",      d => d.y0)
-    .attr("width",  d => d.x1 - d.x0)
-    .attr("height", d => d.y1 - d.y0);
 
-  // 6) 加上节点标签
-  svg.append("g")
-    .selectAll("text")
-    .data(graph.nodes)
-    .join("text")
-      .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
-      .attr("y", d => (d.y0 + d.y1) / 2)
-      .attr("dy", "0.35em")
-      .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
-      .text(d => d.name);
+    // --- 文本标签 ---
+    svg.append("g")
+      .selectAll("text")
+      .data(graph.nodes)
+      .join("text")
+        .attr("x", d => d.x0 < width / 2 ? d.x1 + 6 : d.x0 - 6)
+        .attr("y", d => (d.y0 + d.y1) / 2)
+        .attr("dy", "0.35em")
+        .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
+        .text(d => d.name)
+        .style("font-size", "11px")
+        .style("fill", "#ffffff");
+  });
+}
+Sankey();
+
+
+// —— 1. 基本配置 —— 
+// —— 1. 基本配置 —— 
+const margin = { top: 10, right: 60, bottom: 60, left: 60 };
+const svgTotalWidth = 500;
+const width  = svgTotalWidth - margin.left - margin.right;
+const height = 300 - margin.top - margin.bottom;
+
+// 把整个绘图流程封装
+function renderChart(data, metrics) {
+  // 先清空旧图
+  d3.select('#barChart').selectAll('*').remove();
+  
+  // 重新创建 svg + g
+  const svg = d3.select('#barChart')
+    .append('svg')
+      .attr('width',  svgTotalWidth)
+      .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
+
+  // scales
+  const x0 = d3.scaleBand().range([0, width]).paddingInner(0.1).paddingOuter(0.1);
+  const x1 = d3.scaleBand().padding(0.05);
+  const y0 = d3.scaleLinear().range([height, 0]);
+  const y1 = d3.scaleLinear().range([height, 0]);
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+  // axes placeholders
+  const xAxis = svg.append('g')
+      .attr('transform', `translate(0,${height})`);
+  const yAxisLeft  = svg.append('g');
+  const yAxisRight = svg.append('g')
+      .attr('transform', `translate(${width},0)`);
+
+  // 取前 10 排序 & slice
+  const sorted = data
+    .slice()      // 不破坏原 data
+    .sort((a,b) => b[metrics[0]] - a[metrics[0]])
+    .slice(0, 10);
+
+  // domains
+  x0.domain(sorted.map(d => d.Country));
+  x1.domain(metrics).range([0, x0.bandwidth()]);
+  y0.domain([0, d3.max(sorted, d => d[metrics[0]])]).nice();
+  if (metrics[1]) y1.domain([0, d3.max(sorted, d => d[metrics[1]])]).nice();
+
+  // draw axes
+  xAxis.call(d3.axisBottom(x0))
+       .selectAll("text")
+         .attr("transform","rotate(-20)")
+         .style("text-anchor","end");
+  yAxisLeft.call(d3.axisLeft(y0));
+  if (metrics[1]) yAxisRight.call(d3.axisRight(y1));
+
+  // draw bars
+  const country = svg.selectAll('.country')
+    .data(sorted)
+    .enter().append('g')
+      .attr('transform', d => `translate(${x0(d.Country)},0)`);
+
+  country.selectAll('rect')
+    .data(d => metrics.map(m => ({ key:m, value:d[m] })))
+    .enter().append('rect')
+      .attr('x',      d => x1(d.key))
+      .attr('width',  x1.bandwidth())
+      .attr('y',      height)
+      .attr('height', 0)
+      .attr('fill',   d => color(d.key))
+    .transition().duration(500)
+      .attr('y',      d => d.key===metrics[0]? y0(d.value) : y1(d.value))
+      .attr('height', d => d.key===metrics[0]
+                          ? height - y0(d.value)
+                          : height - y1(d.value));
+}
+
+// 初次加载数据
+d3.csv('coffee_consumption_cleaned.csv', d3.autoType).then(data => {
+  // 读取 checkbox 选项的函数
+  function getMetrics() {
+    const ms = d3.selectAll('input[name="sortOption"]:checked')
+      .nodes().map(n=>n.value);
+    return ms.length? ms
+           : [ d3.select('input[name="sortOption"]').node().value ];
+  }
+
+  // 绑定 change 事件
+  d3.selectAll('input[name="sortOption"]').on('change', () => {
+    renderChart(data, getMetrics());
+  });
+
+  // 初始渲染
+  renderChart(data, getMetrics());
 });
-
 

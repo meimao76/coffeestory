@@ -1,206 +1,289 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Coffee's Story</title>
-    <!-- css -->
-    <link rel="stylesheet" href="style.css" />
-    <!-- 网页图标 -->
-    <link rel="icon" href="image/coffeecup.png" type="image/x-icon">
-    <!-- 3d模型 -->
-    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.155.0/examples/js/loaders/GLTFLoader.js"></script>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coffee's Story</title>
+  <!-- css -->
+  <link rel="stylesheet" href="style.css" />
+  <!-- 网页图标 -->
+  <link rel="icon" href="image/coffeecup.png" type="image/x-icon">
 </head>
 
 <body>
+  <!-- 顶部菜单栏 -->
+  <nav class="navbar">
+    <ul>
+      <li><a href="#homepage">Home</a></li>
+      <li><a href="#section1">Introduction</a></li>
+      <li><a href="#section3">Trade</a></li>
+      <li class="dropdown">
+        <div class="dropdown-wrapper">
+          <a href="#section4">Culture ▼</a>
+          <ul class="dropdown-menu">
+            <li><a href="#culture1">Guangzhou</a></li>
+            <li><a href="#culture2">Melbourne</a></li>
+            <li><a href="#culture3">Rome</a></li>
+            <li><a href="urban_tokyo.html">Tokyo</a></li>
+          </ul>
+        </div>
+      </li>
+      <li><a href="#section5">Conclusion</a></li>
+      <li><a href="#section6">About</a></li>
+    </ul>
+  </nav>
 
-<!-- 顶部菜单栏 -->
-    <nav class="navbar">
-        <ul>
-            <li><a href="#homepage">Home</a></li>
-            <li><a href="#section1">Introduction</a></li>
-            <li><a href="#section3">Trade</a></li>
-            <li><a href="#section4">Culture</a></li>
-            <li><a href="#section5">Conclusion</a></li>
-            <li><a href="#section6">About</a></li>
-        </ul>
-    </nav>
-
-<!-- 页面分区 -->
-    <!-- 咖啡加加加到厌倦 -->
-    <div class="coffee-floating"></div>
-    <!-- 地球转转转 -->
-    <div class="earth-container">
-        <img src="image/globe5.png" alt="Earth" class="earth" />
-        <img src="image/globe6.png" alt="3D Earth" class="earth-fake3d" />
-        <canvas id="coffee-halo"></canvas>
+  <!-- 页面分区 -->
+  <!-- 咖啡加加加到厌倦 -->
+  <div class="coffee-floating"></div>
+  <!-- 地球转转转 -->
+  <div class="earth-container">
+    <img src="image/globe5.png" alt="Earth" class="earth" />
+    <img src="image/globe6.png" alt="3D Earth" class="earth-fake3d" />
+    <canvas id="coffee-halo"></canvas>
+  </div>
+    
+  <!-- 首页 -->
+  <section id="homepage" class="page-section">
+    <div class="homepage-text">
+      <h1>Cafe Road</h1>
+      <p>From Coffee Farms to Global Cities: A Trade & Culture Network</p>
     </div>
-
+  </section>
     
-    <!-- 首页 -->
-    <section id="homepage" class="page-section">
-        <div class="homepage-text">
-        <h1>Cafe Road</h1>
-        <p>From Coffee Farms to Global Cities: A Trade & Culture Network</p>
-        </div>
-    </section>
-    
-    <!-- sec1 -->
-    <section id="section1" class="page-section">
-        <div class="section-content">
-          <h1>Coffee, <br>a Global Urban Perspective</h1>
-          <p>A cup of coffee may seem mundane, but it holds stories of empire, trade winds, migration, and the modern city.</p>
-          <p id="culture-description-2">Move the mouse over the picture below.</p>
-        </div>
+  <!-- sec1 -->
+  <section id="section1" class="page-section">
+    <div class="section-content">
+      <h1>Coffee, <br>a Global Urban Perspective</h1>
+      <p>A cup of coffee may seem mundane, but it holds stories of empire, trade winds, migration, and the modern city.</p>
+      <p id="culture-description-2">Move the mouse over the picture below.</p>
+    </div>
       
-        <div class="scroll-container" id="scroll-container">
-          <div class="scroll-content" id="scroll-content">
-            <div class="image-box-2" data-text="The Legend of Ethiopian Coffee in 9th Century">
-              <img src="image/01.png" alt="1" />
-            </div>
-            <div class="image-box-2" data-text="The port of Mocha in Yemen in 15th Century">
-              <img src="image/02.png" alt="2" />
-            </div>
-            <div class="image-box-2" data-text="Istanbul Ancient Cafe">
-              <img src="image/03.png" alt="3" />
-            </div>
-            <div class="image-box-2" data-text="Coffee was introduced to Europe around 17th Century">
-              <img src="image/04.png" alt="4" />
-            </div>
-            <div class="image-box-2" data-text="Café de Flore in 19th Century">
-              <img src="image/05.png" alt="5" />
-            </div>
-            <div class="image-box-2" data-text="Starbucks in 20th Century">
-              <img src="image/06.png" alt="6" />
-            </div>
-            <div class="image-box-2" data-text="Morden Cafe">
-              <img src="image/07.png" alt="7" />
-            </div>
-            <!-- 为循环添加重复内容 -->
-            <div class="image-box-2" data-text="The Legend of Ethiopian Coffee in 9th Century">
-              <img src="image/01.png" alt="1" />
-            </div>
-            <div class="image-box-2" data-text="The port of Mocha in Yemen in 15th Century">
-              <img src="image/02.png" alt="2" />
-            </div>
-            <div class="image-box-2" data-text="Istanbul Ancient Cafe">
-              <img src="image/03.png" alt="3" />
-            </div>
-            <div class="image-box-2" data-text="Coffee was introduced to Europe around 17th Century">
-              <img src="image/04.png" alt="4" />
-            </div>
-            <div class="image-box-2" data-text="Café de Flore in 19th Century">
-              <img src="image/05.png" alt="5" />
-            </div>
-            <div class="image-box-2" data-text="Starbucks in 20th Century">
-              <img src="image/06.png" alt="6" />
-            </div>
-            <div class="image-box-2" data-text="Morden Cafe">
-              <img src="image/07.png" alt="7" />
-          </div>
+    <div class="scroll-container" id="scroll-container">
+      <div class="scroll-content" id="scroll-content">
+        <div class="image-box-2" data-text="The Legend of Ethiopian Coffee in 9th Century">
+          <a href="https://cornerperk.com/the-origin-story-of-ethiopian-coffee/" target="_blank">
+            <img src="image/01.png" alt="1" />
+          </a>
         </div>
-      </section>
-
-      <!-- sec2 -->
-    <section id="section2" class="page-section">
-      <div class="section-content">
-        <h1>From Ground to Screen</h1>
-        <p>A humble bean begins in the sun-soaked highlands, 
-          but travels through machines, markets, and meetings—until it lands in our hands.</p>
-        <p id="culture-description-1">Move the mouse over the picture below.</p>
+        <div class="image-box-2" data-text="The port of Mocha in Yemen in 15th Century">
+          <a href="https://www.thecollector.com/history-of-coffee-surprising-facts/" target="_blank">
+            <img src="image/02.png" alt="2" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Istanbul Ancient Cafe">
+          <a href="https://www.leipzig-lese.de/streifzuege/literarisches/legenden-um-das-haus-zum-arabischen-coffe-baum/" target="_blank">
+            <img src="image/03.png" alt="3" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Coffee was introduced to Europe around 17th Century">
+          <a href="https://saopaulosp55.blogspot.com/2010/10/o-ciclo-do-cafe.html" target="_blank">
+          <img src="image/04.png" alt="4"/>
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Café de Flore in 19th Century">
+          <a href="https://uk.pinterest.com/pin/304204149849935391/" target="_blank">
+            <img src="image/05.png" alt="5" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Starbucks in 20th Century">
+          <a href="https://www.linkedin.com/pulse/schultz-legacy-going-beyond-starbucks-its-more-than-coffee-cooper"target="_blank">
+            <img src="image/06.png" alt="6" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Morden Cafe">
+           <a href="https://pxhere.com/es/photo/1573427"target="_blank">
+            <img src="image/07.png" alt="7" />
+          </a>
+        </div>
+        <!-- 为循环添加重复内容 -->
+        <div class="image-box-2" data-text="The Legend of Ethiopian Coffee in 9th Century">
+          <a href="https://cornerperk.com/the-origin-story-of-ethiopian-coffee/" target="_blank">
+            <img src="image/01.png" alt="1" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="The port of Mocha in Yemen in 15th Century">
+          <a href="https://www.thecollector.com/history-of-coffee-surprising-facts/" target="_blank">
+            <img src="image/02.png" alt="2" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Istanbul Ancient Cafe">
+          <a href="https://www.leipzig-lese.de/streifzuege/literarisches/legenden-um-das-haus-zum-arabischen-coffe-baum/" target="_blank">
+            <img src="image/03.png" alt="3" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Coffee was introduced to Europe around 17th Century">
+          <a href="https://saopaulosp55.blogspot.com/2010/10/o-ciclo-do-cafe.html" target="_blank">
+          <img src="image/04.png" alt="4"/>
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Café de Flore in 19th Century">
+          <a href="https://uk.pinterest.com/pin/304204149849935391/" target="_blank">
+            <img src="image/05.png" alt="5" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Starbucks in 20th Century">
+          <a href="https://www.linkedin.com/pulse/schultz-legacy-going-beyond-starbucks-its-more-than-coffee-cooper"target="_blank">
+            <img src="image/06.png" alt="6" />
+          </a>
+        </div>
+        <div class="image-box-2" data-text="Morden Cafe">
+           <a href="https://pxhere.com/es/photo/1573427"target="_blank">
+            <img src="image/07.png" alt="7" />
+          </a>
+        </div>
       </div>
-
-      <div class="image-row-1">
-          <div class="image-box-1" data-text="Sunlight and the beans in the mountain">
-            <img src="image/11.png" alt="1">
-          </div>
-          <div class="image-box-1" data-text="From basket to burlap">
-            <img src="image/12.png" alt="2">
-          </div>
-          <div class="image-box-1" data-text="Fire transforms the flavor">
-            <img src="image/13.png" alt="3">
-          </div>
-          <div class="image-box-1" data-text="Fuel for modern life">
-            <img src="image/14.png" alt="4">
-          </div>
-          <div class="image-box-1" data-text="Order and digital delivery">
-            <img src="image/15.png" alt="4">
-          </div>
-      </div>
+    </div>  
   </section>
 
+  <!-- sec2 -->
+  <section id="section2" class="page-section">
+    <div class="section-content">
+      <h1>From Ground to Screen</h1>
+      <p>A humble bean begins in the sun-soaked highlands, 
+          but travels through machines, markets, and meetings—until it lands in our hands.</p>
+      <p id="culture-description-1">Move the mouse over the picture below.</p>
+    </div>
+
+    <div class="image-row-1">
+      <div class="image-box-1" data-text="Sunlight and the beans in the mountain">
+        <a href="https://icoff.ee/fa/%D9%81%D8%B1%D8%A2%D9%88%D8%B1%DB%8C-%D8%B7%D8%A8%DB%8C%D8%B9%DB%8C-%D8%AE%D8%B4%DA%A9-%D9%82%D9%87%D9%88%D9%87/" target="_blank">
+          <img src="image/11.png" alt="1">
+        </a>
+      </div>
+      <div class="image-box-1" data-text="Coffee Bean Sorting and Processing">
+        <a href="https://thekitchencommunity.org/coffee-bean-sorting/" target="_blank">
+          <img src="image/12.png" alt="2">
+        </a>
+      </div>
+      <div class="image-box-1" data-text="Ship the coffee">
+        <a href="https://mtpak.coffee/2021/03/sea-vs-air-method-of-transport-best-for-coffee/" target="_blank">
+          <img src="image/13.png" alt="3">
+        </a>
+      </div>
+      <div class="image-box-1" data-text="Fuel for modern life">
+        <a href="https://careerpathwritingsolutions.com/brush-up-on-coffee-meeting-etiquette/" target="_blank">
+          <img src="image/14.png" alt="4">
+        </a>
+      </div>
+      <div class="image-box-1" data-text="Order and digital delivery">
+        <a href="https://dribbble.com/shots/6340744-Coffee-Ordering-App-Starbucks" target="_blank">
+          <img src="image/15.png" alt="5">
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- sec2附加 -->
   <section id="section_add" class="page-section">
     <div class="section-content">
       <h1>Coffee is more than a drink</h1>
-      <p>It is the medium of modernity - a mobile substance that connects distant geographical locations with intimate everyday life.
-        <br>
-        In its journey, we read not just flavor, but movement, meaning, and the rhythms of city life.</p>
+      <p>It is the medium of modernity - a mobile substance that connects distant geographical locations with intimate everyday life.<br>
+        In its journey, we read not just flavor, but movement, meaning, and the rhythms of city life.
+      </p>
     </div>
-</section>       
+    <div>
+      <p class="caption">
+        Image by <a href="https://moa.coffee/%D9%86%D9%82%D8%B4-%D8%B4%D9%86%D8%A7%D8%B3%D9%86%D8%A7%D9%85%D9%87-%D9%82%D9%87%D9%88%D9%87-%D8%AF%D8%B1-%D9%86%D9%85%D8%A7%DB%8C%D8%B4-%DA%A9%DB%8C%D9%81%DB%8C%D8%AA-%D8%A2%D9%86/">Source</a>
+      </p>
+    </div>
+  </section>       
       
-
-    <section id="section3" class="page-section">
-        <div class="section-content">
-        <h1>Trade</h1>
-        <p>这里是贸易页。</p>
-        <a class="btn" href="3d_v2.0/3d_2.0index.html">Click For More</a> <!--换路径-->
-        </div>
-    </section>
-
-    <section id="section4" class="page-section">
-        <div class="section-content">
-        <h1>Culture</h1>
-        <p>这里是文化页。</p>
-        <!-- 皮都展开了 -->
-        <div class="earth-flat-container">
-          <img src="image/flat.png" alt="flat earth" class="earth-flat" />
-          <!-- 点位容器 -->
-          <div class="earth-flat-hotspot" style="top: 33%; left: 61%;" onclick="window.location.href='urban_tokyo.html'">
-            <img src="image/pin.png" class="icon-marker" />
-            <div class="hotspot-tooltip">Tokyo</div>
-          </div>
-          <div class="earth-flat-hotspot" style="top: 80%; left: 61%;" onclick="window.location.href='Melbourne.html'">
-            <img src="image/pin.png" class="icon-marker" />
-            <div class="hotspot-tooltip">Melbourne</div>
-          </div>
-          <div class="earth-flat-hotspot" style="top: 30%; left: 25.5%;" onclick="window.location.href='Rome.html'">
-            <img src="image/pin.png" class="icon-marker" />
-            <div class="hotspot-tooltip">Rome</div>
-          </div>
-          <div class="earth-flat-hotspot" style="top: 42%; left: 54%;" onclick="window.location.href=' Guangzhou.html'">
-            <img src="image/pin.png" class="icon-marker" />
-            <div class="hotspot-tooltip">Guangzhou</div>
-          </div>
-          
-
+  <!-- sec3 -->
+  <section id="section3" class="page-section">
+    <div class="section-content">
+      <h1>Trade</h1>
+      <p>From farm to cup, coffee flows through unequal global systems — 
+        <br>shaped by trade routes, value chains, and cultural consumption patterns.</p>
+      <a class="btn" href="3d_v2.0/3d_2.0index.html">Click For More</a>
     </div>
-        </div>
-    </section>
+  </section>
 
-    <section id="section5" class="page-section">
-        <div class="section-content">
-        <h1>Conclusion</h1>
-            <p>
-            From the highlands of Ethiopia to a quiet side-street café,
-            coffee journeys not only through supply chains — but through cultures, cities, and the spaces in between.
-            <br><br>
-            It begins as a raw commodity, yet transforms into a ritual: a gesture of pause, a symbol of taste, a habit wrapped in meaning.
-            What flows through ports and warehouses re-emerges in plazas, apps, kitchen counters, and lingering conversations.
-            <br><br>
-            In every city, coffee sketches a different negotiation — between labor and leisure, routine and resistance, sameness and local invention.
-            To trace coffee is to trace the hidden architectures of modern life:
-            the rhythms that order our time, the inequities that structure our markets,
-            and the desires that filter through cup after cup.
-            <br><br>
-            Coffee, in the end, is not just consumed — it is lived.
+  <!-- sec4 -->
+  <section id="section4" class="page-section">
+    <div class="section-content">
+      <h1>Culture</h1>
+      <p>Through cafés, coffee becomes a way of dwelling — <br>
+          a third space between work and home,
+          between global flows and grounded identity.
+      </p>
+      <!-- 皮都展开了 -->
+      <div class="earth-flat-container">
+        <img src="image/flat.png" alt="flat earth" class="earth-flat" />
+        <!-- 点位容器 -->
+        <div class="earth-flat-hotspot" style="top: 33%; left: 61%;" onclick="window.location.href='urban_tokyo.html'">
+          <img src="image/pin.png" class="icon-marker" />
+          <div class="hotspot-tooltip">
+            <h4>Tokyo</h4>
+            <p>In Tokyo, coffee is not loud. It's precise, minimal, ritualised.</p>
+            <img src="image/tokyo1.jpg"/>
+            <p class="caption">Image by <a href="https://magazine.hitosara.com/article/572/">Michinobu Ohtsuru</a></p>
+          </div>
+        </div>
+        <div class="earth-flat-hotspot" style="top: 80%; left: 61%;" onclick="window.location.href='Melbourne.html'">
+          <img src="image/pin.png" class="icon-marker" />
+          <div class="hotspot-tooltip">
+            <h4>Melbourne</h4>
+            <p>In Melbourne, coffee is culture. 
+                It's a social thread woven into everyday life.
             </p>
+            <img src="image/mel1.jpg"/>
+            <p class="caption">Image by <a href="https://manofmany.com/culture/drinks/best-coffee-melbourne">Brother Baba Budan</a></p>
+          </div>
         </div>
-    </section>
+        <div class="earth-flat-hotspot" style="top: 30%; left: 25.5%;" onclick="window.location.href='Rome.html'">
+          <img src="image/pin.png" class="icon-marker" />
+          <div class="hotspot-tooltip">
+            <h4>Rome</h4>
+            <p>
+              In Rome, coffee is fast. Not careless, but confident.
+            </p>
+            <img src="image/rome1.jpg"/>
+            <p class="caption">Image by <a href="https://rometravelogues.com/best-cafes-in-rome-italy/">Romeow Cat Bistrot</a></p>
+          </div>
+        </div>
+        <div class="earth-flat-hotspot" style="top: 42%; left: 54%;" onclick="window.location.href=' Guangzhou.html'">
+          <img src="image/pin.png" class="icon-marker" />
+          <div class="hotspot-tooltip">
+            <h4>Guangzhou</h4>
+            <p>In Guangzhou, coffee is flux. It adapts, blends, and reinvents.</p>
+            <img src="image/gz1.jpeg"/>
+            <p class="caption">Image by <a href="https://www.thisisjoycee.com/post/7-cafe-shop-must-visit-guangzhou">Bus Cafe</a></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 
-    <section id="section6" class="page-section">
+  <!-- sec5 -->
+  <section id="section5" class="page-section">
       <div class="section-content">
+        <h1>Conclusion</h1>
+        <p>
+        From the highlands of Ethiopia to a quiet side-street café,
+        coffee journeys not only through supply chains — but through cultures, cities, and the spaces in between.
+        <br><br>
+        It begins as a raw commodity, yet transforms into a ritual: a gesture of pause, a symbol of taste, a habit wrapped in meaning.
+        What flows through ports and warehouses re-emerges in plazas, apps, kitchen counters, and lingering conversations.
+        <br><br>
+        In every city, coffee sketches a different negotiation — between labor and leisure, routine and resistance, sameness and local invention.
+        To trace coffee is to trace the hidden architectures of modern life:
+        the rhythms that order our time, the inequities that structure our markets,
+        and the desires that filter through cup after cup.
+        <br><br>
+        Coffee, in the end, is not just consumed — it is lived.
+        </p>
+      </div>
+      <div>
+      <p class="caption">
+        Image by <a href="https://www.lifestylefoodies.com/roasted-rhino-coffee-visit-if-you-havent-already/">Source</a>
+      </p>
+    </div>
+  </section>
+
+  <!-- sec6 -->
+  <section id="section6" class="page-section">
+    <div class="section-content">
       <h1>References</h1>
       <p>
         - Arnould, E.J. and Thompson, C.J., 2005. Consumer culture theory (CCT): Twenty years of research. *Journal of Consumer Research*, 31(4), pp.868–882. <br>
@@ -213,62 +296,106 @@
         - Oldenburg, R., 2023. *The Great Good Place*. Reprinted & annotated edition. (Excerpts: Classic Coffeehouses, Personal Benefits, Introduction, Toward Better Times) <br>
         - Warde, A., 2005. Consumption and theories of practice. *Journal of Consumer Culture*, 5(2), pp.131–153.
       </p>
-      </div>
+    </div>
   </section>
 
-    <section id="section7" class="page-section">
-        <div class="section-content">
-          <div class="team-grid">
-            <div class="member-card">
-              <div class="card-inner">
-                <div class="card-front">
-                  <img src="image/zxy.jpg" alt="头像">
-                  <h4>Xinyi Zeng</h4>
-                  <p>Co-Producer</p>
-                </div>
-                <div class="card-back">
-                  <p>Email: <br> ixxiiris@163.com</p>
-                  <p>Github: <br><a href="https://github.com/ixxiiris" target="_blank">ixxiiris</a></p>
-                </div>
+  <!-- 表格sec -->
+  <section id="section6_add" class="page-section">
+    <h2 class="table-title">Dataset</h2>
+    <table class="data-table"> 
+        <thead>
+        <tr>
+          <th>Data</th>
+          <th>Source Link</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td>United States Department of Agriculture</td>
+          <td><a href="https://apps.fas.usda.gov/psdonline/app/index.html#/app/downloads">USDA</a></td>
+        </tr>
+        <tr>
+          <td>FAOSTAT-Crops and livestock products</td>
+          <td><a href="https://www.fao.org/faostat/en/#data/QCL">FOA</a></td>
+        </tr>
+          <tr>
+            <td>Gross revenue from coffee production in Brazil</td>
+            <td><a href="https://www.statista.com/statistics/741689/coffee-production-volume-brazil/">statista</a></td>
+          </tr>
+          <tr>
+            <td>Brazil coffee - Supply chain data</td>
+            <td><a href="https://trase.earth/open-data/datasets/supply-chains-brazil-coffee">trase</a></td>
+          </tr>
+          <tr>
+            <td>Cafe shop POI</td>
+            <td><a href="https://opensupplyhub.org/facilities?contributors=10002&contributors=10004&contributors=10006&contributors=10083&contributors=10086&contributors=10120&contributors=10124&contributors=10171&contributors=10177&contributors=10178&contributors=6800&contributor">osh</a></td>
+          </tr>
+          <tr>
+            <td>Mapbiomas collections</td>
+            <td><a href="https://brasil.mapbiomas.org/en/colecoes-mapbiomas/">mapbiomas</a></td>
+          </tr>
+          <tr>
+            <td>resource trade.earth</td>
+            <td><a href="https://resourcetrade.earth/?year=2022&category=906&units=value&autozoom=1">chatham house</a></td>
+          </tr>
+        </tbody>
+    </table>
+  </section>
+
+  <!-- 成员 -->
+  <section id="section7" class="page-section">
+      <div class="section-content">
+        <div class="team-grid">
+          <div class="member-card">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image/zxy.jpg" alt="头像">
+                <h4>Xinyi Zeng</h4>
+                <p>Co-Producer</p>
+              </div>
+              <div class="card-back">
+                <p>Email: <br> ixxiiris@163.com</p>
+                <p>Github: <br><a href="https://github.com/ixxiiris" target="_blank">ixxiiris</a></p>
               </div>
             </div>
-            <div class="member-card">
-              <div class="card-inner">
-                <div class="card-front">
-                  <img src="image/csy.jpg" alt="头像">
-                  <h4>Shiyu Cheng</h4>
-                  <p>Co-Producer</p>
-                </div>
-                <div class="card-back">
-                  <p>Email: <br> chengsy76@yeah.net</p>
-                  <p>Github: <br><a href="https://github.com/meimao76" target="_blank">meimao76</a></p>
-                </div>
+          </div>
+          <div class="member-card">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image/csy.jpg" alt="头像">
+                <h4>Shiyu Cheng</h4>
+                <p>Co-Producer</p>
+              </div>
+              <div class="card-back">
+                <p>Email: <br> chengsy76@yeah.net</p>
+                <p>Github: <br><a href="https://github.com/meimao76" target="_blank">meimao76</a></p>
               </div>
             </div>
-            <div class="member-card">
-              <div class="card-inner">
-                <div class="card-front">
-                  <img src="image/" alt="头像">
-                  <h4>Qicen Weng</h4>
-                  <p>balabalabala</p>
-                </div>
-                <div class="card-back">
-                  <p>balabalabala</p>
-                  <a href="https://github.com/TARTAR4600" target="_blank">GitHub</a>
-                </div>
+          </div>
+          <div class="member-card">
+            <div class="card-inner">
+              <div class="card-front">
+                <img src="image/wqc.png" alt="头像">
+                <h4>Qicen Weng</h4>
+                <p>Co-Producer</p>
+              </div>
+              <div class="card-back">
+                <p>Email: <br> qican.weng.24@ucl.ac.uk </p> 
+                <p>Github: <br><a href="https://github.com/TARTAR4600" target="_blank">TARTAR4600</a></p>
               </div>
             </div>
           </div>
         </div>
-    </section>
-    <footer class="footer-bar">
-    <p>Copyright © 2025 UCL CASA0003 Group 5
-      <br>
-    <em>This is Digital Visualisation Assessment for CASA0003.</em></p>
+      </div>
+      <footer class="footer-bar">
+      <p>Copyright © 2025 UCL CASA0003 Group 5
+        <br>
+      <em>This is Digital Visualisation Assessment for CASA0003.</em>
+      </p>
     </footer>
-
-
-    <script src="homepage.js"></script>
+  </section>
+    
+  <script src="homepage.js"></script>
 </body>
 </html>
 

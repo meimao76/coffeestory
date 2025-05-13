@@ -1,11 +1,14 @@
+[
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Trade Flows Globe</title>
   <link rel="stylesheet" href="3d_2.0styles.css" />
 </head>
+
 <body>
   <div id="appContainer">
     <!-- 侧边栏，内容可滚动，导航与筛选器固定在顶部 -->
@@ -13,13 +16,13 @@
       <!-- 固定导航栏区域 -->
       <div id="headerZone">
         <nav id="navbar">
-          <a href="/index.html" class="nav-item">Home</a>
+          <a href="/index.html#section3" class="nav-item">Home</a>
           <a href="#scrollContent1" class="nav-item">Origin</a>
           <a href="#scrollContent2" class="nav-item">Profit</a>
           <a href="#scrollContent3" class="nav-item">Comsumption</a>
         </nav>
       </div>
-      
+
 
       <!-- 可滚动内容区 -->
       <div id="sidebarContent">
@@ -28,12 +31,13 @@
           <div id="titleZone1" class="title-zone">Who Grows, Who Drinks?</div>
           <div id="textZone1" class="text-zone">
             <!-- 文本描述 -->
-            Coffee is grown in the XXX and consumed in the XXX. 
-            From the tropical highlands of XXX, beans travel thousands of miles — 
-            only to end up brewed in cafés, offices, and kitchens across the XXX. 
+            Coffee is grown in the Global South and consumed in the Global North.  
+            From the tropical highlands of Brazil and Colombia, beans travel thousands of miles —  
+            only to end up brewed in cafés, offices, and kitchens across the United States and Europe.
             <br><br>
-            Land and labor begin the story — but the value rarely stays where the coffee grows. 
-            As beans cross borders, they also cross power lines: between producer and consumer, visibility and invisibility.
+            Land and labor begin the story — but the value rarely stays where the coffee grows.
+            As beans cross borders, they also cross power lines: between producer and consumer, visibility and
+            invisibility.
           </div>
 
           <!-- 文本式切换：Trade Flows | Exporters | Importers -->
@@ -47,9 +51,9 @@
 
           <!-- graph zone -->
           <div id="graphZone1" class="graph-zone">
-            <div id="barChartTradeFlows"   class="chart-panel"></div>
-            <div id="barChartExporters"    class="chart-panel hidden"></div>
-            <div id="barChartImporters"    class="chart-panel hidden"></div>
+            <div id="barChartTradeFlows" class="chart-panel"></div>
+            <div id="barChartExporters" class="chart-panel hidden"></div>
+            <div id="barChartImporters" class="chart-panel hidden"></div>
           </div>
 
           <!-- 统计类型切换：Value ● Weight -->
@@ -62,18 +66,18 @@
         <!-- 第二部分：价值链 -->
         <div id="scrollContent2" class="scroll-group">
           <div id="titleZone2" class="title-zone">Who Makes the Money?</div>
-            <div id="textZone2" class="text-zone">
+          <div id="textZone2" class="text-zone">
             <!-- 文本描述 -->
             A coffee bean changes hands many times — but not all hands are equal.
             <br><br>
-            For every cup sold at $4, the grower might earn just 10 to 20 cents.  
-            Most of the profit concentrates after the bean leaves the farm — 
+            For every cup sold at $4, the grower might earn just 10 to 20 cents.
+            Most of the profit concentrates after the bean leaves the farm —
             in roasting, branding, distribution, and retail.
             <br><br>
             In this chain, power isn't just economic.  It's symbolic.Roasters and brands don't just add value — 
             they package meaning: authenticity, aspiration, and taste.
-            </div>
-          <div id="sankeyzone"class="graph-zone">
+          </div>
+          <div id="sankeyzone" class="graph-zone">
             <svg id="sankey" class="sankey" width="300" height="160"></svg>
           </div>
         </div>
@@ -83,19 +87,60 @@
           <div id="titleZone3" class="title-zone">Consumption is culture, too.</div>
           <div id="textZone3" class="text-zone">
             <!-- 文本描述 -->
-            A coffee bean changes hands many times — but not all hands are equal.
+            People don't just drink coffee. They drink a way of life.
+            In Finland, it's a daily comfort. In Italy, a cultural anchor. In the U.S., a mobile necessity.
             <br><br>
-            For every cup sold at $4, the grower might earn just 10 to 20 cents.  
-            Most of the profit concentrates after the bean leaves the farm — 
-            in roasting, branding, distribution, and retail.
-            <br><br>
-            In this chain, power isn't just economic.  It's symbolic.Roasters and brands don't just add value — 
-            they package meaning: authenticity, aspiration, and taste.
+            Each country brews not only differently, but meaningfully — through brands, rituals, expectations, and habits.
+            Global chains adapt, remix, or dominate these cultures. Some reinforce local practices. Others overwrite them.
           <div id="sankeyzone"class="graph-zone">
             <svg id="sankey" class="sankey" width="300" height="160"></svg>
           </div>
-          </div>
 
+          <div id="barChartzone" width="480" height="300">
+            <svg id="barChart" class="barChart" width="480" height="300"></svg>
+            <div id="tooltip" class="tooltip" ></div>
+          <div id="P3Selector" class="chart-switch">
+
+            <span id="sortby">Catalogue</span>
+            <div id="SortSelector">
+              <label class="checkbox-option">
+                <input type="checkbox" name="sortOption" value="Consumption(ton)">
+                Consumption (10<sup>3</sup> ton)
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" name="sortOption" value="YearlyCoffeePerCapita(KG)">
+                Yearly Coffee Per Capita (KG)
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" name="sortOption" value="DailyCoffeePerCapita(CUP)">
+                Daily Coffee Per Capita (CUP)
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" name="sortOption" value="LifetimeCupConsumption(CUP)">
+                Lifetime Cup Consumption (CUP)
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" name="sortOption" value="PricePerCupUSD">
+                Price Per Cup (USD)
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" name="sortOption" value="TotalLifetimeSpendingUSD">
+                Total Lifetime Spending (USD)
+              </label>
+              <label class="checkbox-option">
+                <input type="checkbox" name="sortOption" value="PricePerCupUSD">
+                Price Per Cup (USD)
+              </label>
+            </div>
+            <!-- 如果要选择国家数量就激活它
+  <span id="sortby">Count of Country</span>
+  <select id="CountrySelector">
+    <option value="5">5</option>
+    <option value="6">6</option>
+    <option value="7">7</option>
+  </select>第三部分 -->
+
+          </div>
         </div>
       </div>
     </aside>
@@ -105,22 +150,22 @@
       <div id="globeViz"></div>
       <div id="infoBox" class="info-box">
         <div class="info-line">
-        <span class="info-label">Route:</span>
-        <span id="infoRoute" class="info-value"></span>
-      </div>
-      <div class="info-line">
-        <span class="info-label">Weight:</span>
-        <span id="infoWeight" class="info-value"></span>
-      </div>
-      <div class="info-line">
-        <span class="info-label">Value:</span>
-        <span id="infoValue" class="info-value"></span>
-      </div>
-      <div class="info-line">
-        <span class="info-label">Commodity:</span>
-        <span id="infoCommodity" class="info-value"></span>
-      </div>
-      
+          <span class="info-label">Route:</span>
+          <span id="infoRoute" class="info-value"></span>
+        </div>
+        <div class="info-line">
+          <span class="info-label">Weight:</span>
+          <span id="infoWeight" class="info-value"></span>
+        </div>
+        <div class="info-line">
+          <span class="info-label">Value:</span>
+          <span id="infoValue" class="info-value"></span>
+        </div>
+        <div class="info-line">
+          <span class="info-label">Commodity:</span>
+          <span id="infoCommodity" class="info-value"></span>
+        </div>
+
       </div>
       <div id="commoditySelectorWrapper">
         <label for="commoditySelector" id="commodityLabel">Commodity Type</label>
@@ -140,14 +185,16 @@
       </div>
     </main>
 
-    
+
   </div>
 
   <!-- 引入脚本 -->
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
   <script src="https://unpkg.com/three/build/three.min.js"></script>
   <script src="https://unpkg.com/globe.gl"></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
   <script src="3d_2.0script.js"></script>
 </body>
+
 </html>
+]
