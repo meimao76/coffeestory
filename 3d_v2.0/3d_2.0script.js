@@ -182,8 +182,8 @@ Promise.all([
     data = data.filter(d => !isNaN(+d[valueField]));
         const barHeight   = 20;
         const marginTop   = 30;
-        const marginLeft  = 80;
-        const width       = 480;
+        const marginLeft  = 50;
+        const width       = 450;
         const height      = (data.length + 0.1) * barHeight + marginTop + 10;
 
     const x = d3.scaleLinear()
@@ -240,24 +240,6 @@ bars.transition().duration(800)
   .attr("width", d => x(+d[valueField]) - x(0));
 
 
-    // 数值标签
-    svg.append("g")
-    .attr("fill", "white")
-    .attr("text-anchor", "end")
-    .selectAll("text")
-    .data(data)
-    .join("text")
-    // 先把锚点放到条形的起点
-    .attr("x", d => x(+d[valueField]))
-    // 垂直居中
-    .attr("y", d => y(d[keyField]) + y.bandwidth() / 2)
-    // 改成左对齐
-    .attr("text-anchor", "start")
-    // 往右再移动一点，避免紧贴得太死
-    .attr("dx", "-60px")
-    // 纵向基准依然居中
-    .attr("alignment-baseline", "middle")
-    .text(d => format(d[valueField]));
 
     // 轴
     svg.append("g")
