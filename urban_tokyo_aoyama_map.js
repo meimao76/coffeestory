@@ -459,7 +459,7 @@ map.on('load', () => {
         .setHTML(`
           <div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-              <img src="image/TOYKO/aoyama_guide.PNG" width="30" height="40" alt="When in Tokyo logo" />
+              <img src="image/TOYKO/aoyama_guide.png" width="30" height="40" alt="When in Tokyo logo" />
               <div>
                 <strong style="font-size: 15px;">Aoyama Main Axis</strong><br>
                 <em style="color: #666;">Elegant and Stylish Space</em>
