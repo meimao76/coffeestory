@@ -598,7 +598,7 @@
 
 .hotspot-tooltip {
   position: absolute;
-  top: -150px;
+  top: -100px;
   left: 450%;
   transform: translateX(-50%);
   background: rgba(255,255,255,0.8);
