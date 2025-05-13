@@ -316,8 +316,8 @@ Promise.all([
 // 页面初始化完毕之后，第一次渲染
 updateGraphs();
 
-}
-);
+});
+
 
 //飞线制图
 // 1. 先改造 updateGlobeArcs，接收两个参数
@@ -379,6 +379,7 @@ onFilterChange();
 
 
 //Sankey
+function Sankey(){
 const width =500;
 const height = 160;
 
@@ -460,6 +461,128 @@ svg.append("g")
       .attr("dy", "0.35em")
       .attr("text-anchor", d => d.x0 < width / 2 ? "start" : "end")
       .text(d => d.name);
+});}
+Sankey()
+
+
+// —— 1. 基本配置 —— 
+
+// —— 1. 基本配置 —— 
+const margin = { top: 10, right: 60, bottom: 60, left: 60 };
+const svgTotalWidth  = 600;
+const width  = svgTotalWidth - margin.left - margin.right;
+const height = 300 - margin.top - margin.bottom;  // 给右轴留够空间
+
+const svg = d3.select('#barChart')
+  .append('svg')
+    .attr('width',  svgTotalWidth)
+    .attr('height', height + margin.top + margin.bottom)
+  .append('g')
+    .attr('transform', `translate(${margin.left},${margin.top})`);
+
+// x 轴用一套 band scales，不变
+const x0 = d3.scaleBand().range([0, width]).paddingInner(0.1);
+const x1 = d3.scaleBand().padding(0.05);
+
+// y0/y1 两套线性刻度
+const y0 = d3.scaleLinear().range([height, 0]);
+const y1 = d3.scaleLinear().range([height, 0]);
+
+// color 还是一套
+const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+// 画左、下轴
+const xAxis = svg.append('g')
+    .attr('class','x-axis')
+    .attr('transform', `translate(0,${height})`);
+const yAxisLeft = svg.append('g')
+    .attr('class','y-axis-left');
+// 再加一个右侧 y 轴
+const yAxisRight = svg.append('g')
+    .attr('class','y-axis-right')
+    .attr('transform', `translate(${width},0)`);
+
+d3.csv('coffee_consumption_cleaned.csv', d3.autoType).then(data => {
+
+  function updateChart() {
+    const metrics = Array.from(
+      d3.select('#SortSelector').node().selectedOptions,
+      opt => opt.value
+    );
+    if (metrics.length === 0) return;
+
+    const N = 10;
+    const sorted = data
+      .sort((a,b) => b[metrics[0]] - a[metrics[0]])
+      .slice(0, N);
+
+    x0.domain(sorted.map(d => d.Country));
+    x1.domain(metrics).range([0, x0.bandwidth()]);
+
+    // 左轴 —— 第一个指标的域
+    y0.domain([0, d3.max(sorted, d => d[metrics[0]])]).nice();
+
+    // 如果选了第二个指标，就给 y1 赋域；否则给 y1 一个空域
+    if (metrics[1]) {
+      y1.domain([0, d3.max(sorted, d => d[metrics[1]])]).nice();
+    } else {
+      y1.domain([0,0]);
+    }
+
+    // 画轴
+    xAxis.call(d3.axisBottom(x0))
+         .selectAll("text")
+           .attr("transform","rotate(-20)")
+           .style("text-anchor","end");
+    yAxisLeft.transition().duration(500)
+             .call(d3.axisLeft(y0));
+    // 只有在有第二指标时才画右轴
+    if (metrics[1]) {
+      yAxisRight.style('opacity',1)
+                .transition().duration(500)
+                .call(d3.axisRight(y1));
+    } else {
+      yAxisRight.style('opacity',0);
+    }
+
+    // 绑定 country-group
+    const country = svg.selectAll('.country-group')
+      .data(sorted, d => d.Country);
+    country.exit().remove();
+    const countryEnter = country.enter()
+      .append('g')
+        .attr('class','country-group')
+        .attr('transform', d => `translate(${x0(d.Country)},0)`);
+    const countryMerge = countryEnter.merge(country);
+
+    // 各指标的柱子
+    const bars = countryMerge.selectAll('rect')
+      .data(d => metrics.map(m => ({ key: m, value: d[m] })));
+
+    bars.exit().remove();
+
+    bars.enter()
+      .append('rect')
+        .attr('x', d => x1(d.key))
+        .attr('width', x1.bandwidth())
+        .attr('y', height)
+        .attr('height', 0)
+        .attr('fill', d => color(d.key))
+      .merge(bars)
+        .transition().duration(500)
+        .attr('x', d => x1(d.key))
+        .attr('width', x1.bandwidth())
+        // 根据是哪条指标选择 y0 或 y1
+        .attr('y', d => d.key === metrics[0]
+                       ? y0(d.value)
+                       : y1(d.value))
+        .attr('height', d => d.key === metrics[0]
+                       ? height - y0(d.value)
+                       : height - y1(d.value))
+        .attr('fill', d => color(d.key));
+  }
+
+  // 首次绘制 & 监听下拉
+  updateChart();
+  d3.select('#SortSelector').on('change', updateChart);
 });
-
-

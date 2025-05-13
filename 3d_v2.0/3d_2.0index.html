@@ -91,11 +91,33 @@
             <br><br>
             In this chain, power isn't just economic.  It's symbolic.Roasters and brands don't just add value — 
             they package meaning: authenticity, aspiration, and taste.
-          <div id="sankeyzone"class="graph-zone">
-            <svg id="sankey" class="sankey" width="300" height="160"></svg>
-          </div>
           </div>
 
+          <div id="barChartzone" width="480" height="300">
+            <svg id="barChart" class="barChart" width="480" height="300"></svg>
+          </div>
+
+          <div id="P3Selector" class="chart-switch">
+            
+            <span id="sortby">Catalogue</span>
+            <select id="SortSelector" multiple>
+              <option value="Consumption(ton)">Consumption (10^3 ton)</option>
+              <option value="YearlyCoffeePerCapita(KG)">Yearly Coffee Per Capita (KG)</option>
+              <option value="DailyCoffeePerCapita(CUP)">Daily Coffee Per Capita (CUP)</option>
+              <option value="LifetimeCupConsumption(CUP)">LifetimeCupConsumption(CUP)</option>
+              <option value="PricePerCupUSD">PricePerCupUSD</option>
+              <option value="TotalLifetimeSpendingUSD">TotalLifetimeSpendingUSD</option>
+              <option value="PricePerCupUSD">PricePerCupUSD</option>
+            </select>
+            <!-- 如果要选择国家数量就激活它
+            <span id="sortby">Count of Country</span>
+            <select id="CountrySelector">
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+            </select>第三部分 -->
+            
+          </div>
         </div>
       </div>
     </aside>
