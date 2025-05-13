@@ -63,8 +63,8 @@ const observer = new IntersectionObserver(entries => {
 const globe = Globe()
 
   // 1. 地球表面贴图（暗面）
-  .globeImageUrl('bg3.png')
-  .backgroundColor('rgba(0, 0, 0, 0)')
+  .globeImageUrl('globesurface3.png')
+  .backgroundImageUrl('bg2.png')
   // 2. 地球高光／凹凸贴图（模拟山脉、海洋波纹）
   .bumpImageUrl('//cdn.jsdelivr.net/npm/three-globe/example/img/earth-topology.png')
   .showAtmosphere(true)
@@ -464,125 +464,97 @@ svg.append("g")
 });}
 Sankey()
 
-
 // —— 1. 基本配置 —— 
-
 // —— 1. 基本配置 —— 
 const margin = { top: 10, right: 60, bottom: 60, left: 60 };
-const svgTotalWidth  = 600;
+const svgTotalWidth = 500;
 const width  = svgTotalWidth - margin.left - margin.right;
-const height = 300 - margin.top - margin.bottom;  // 给右轴留够空间
+const height = 300 - margin.top - margin.bottom;
 
-const svg = d3.select('#barChart')
-  .append('svg')
-    .attr('width',  svgTotalWidth)
-    .attr('height', height + margin.top + margin.bottom)
-  .append('g')
-    .attr('transform', `translate(${margin.left},${margin.top})`);
+// 把整个绘图流程封装
+function renderChart(data, metrics) {
+  // 先清空旧图
+  d3.select('#barChart').selectAll('*').remove();
+  
+  // 重新创建 svg + g
+  const svg = d3.select('#barChart')
+    .append('svg')
+      .attr('width',  svgTotalWidth)
+      .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+      .attr('transform', `translate(${margin.left},${margin.top})`);
 
-// x 轴用一套 band scales，不变
-const x0 = d3.scaleBand().range([0, width]).paddingInner(0.1);
-const x1 = d3.scaleBand().padding(0.05);
+  // scales
+  const x0 = d3.scaleBand().range([0, width]).paddingInner(0.1).paddingOuter(0.1);
+  const x1 = d3.scaleBand().padding(0.05);
+  const y0 = d3.scaleLinear().range([height, 0]);
+  const y1 = d3.scaleLinear().range([height, 0]);
+  const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-// y0/y1 两套线性刻度
-const y0 = d3.scaleLinear().range([height, 0]);
-const y1 = d3.scaleLinear().range([height, 0]);
+  // axes placeholders
+  const xAxis = svg.append('g')
+      .attr('transform', `translate(0,${height})`);
+  const yAxisLeft  = svg.append('g');
+  const yAxisRight = svg.append('g')
+      .attr('transform', `translate(${width},0)`);
 
-// color 还是一套
-const color = d3.scaleOrdinal(d3.schemeCategory10);
+  // 取前 10 排序 & slice
+  const sorted = data
+    .slice()      // 不破坏原 data
+    .sort((a,b) => b[metrics[0]] - a[metrics[0]])
+    .slice(0, 10);
 
-// 画左、下轴
-const xAxis = svg.append('g')
-    .attr('class','x-axis')
-    .attr('transform', `translate(0,${height})`);
-const yAxisLeft = svg.append('g')
-    .attr('class','y-axis-left');
-// 再加一个右侧 y 轴
-const yAxisRight = svg.append('g')
-    .attr('class','y-axis-right')
-    .attr('transform', `translate(${width},0)`);
+  // domains
+  x0.domain(sorted.map(d => d.Country));
+  x1.domain(metrics).range([0, x0.bandwidth()]);
+  y0.domain([0, d3.max(sorted, d => d[metrics[0]])]).nice();
+  if (metrics[1]) y1.domain([0, d3.max(sorted, d => d[metrics[1]])]).nice();
 
+  // draw axes
+  xAxis.call(d3.axisBottom(x0))
+       .selectAll("text")
+         .attr("transform","rotate(-20)")
+         .style("text-anchor","end");
+  yAxisLeft.call(d3.axisLeft(y0));
+  if (metrics[1]) yAxisRight.call(d3.axisRight(y1));
+
+  // draw bars
+  const country = svg.selectAll('.country')
+    .data(sorted)
+    .enter().append('g')
+      .attr('transform', d => `translate(${x0(d.Country)},0)`);
+
+  country.selectAll('rect')
+    .data(d => metrics.map(m => ({ key:m, value:d[m] })))
+    .enter().append('rect')
+      .attr('x',      d => x1(d.key))
+      .attr('width',  x1.bandwidth())
+      .attr('y',      height)
+      .attr('height', 0)
+      .attr('fill',   d => color(d.key))
+    .transition().duration(500)
+      .attr('y',      d => d.key===metrics[0]? y0(d.value) : y1(d.value))
+      .attr('height', d => d.key===metrics[0]
+                          ? height - y0(d.value)
+                          : height - y1(d.value));
+}
+
+// 初次加载数据
 d3.csv('coffee_consumption_cleaned.csv', d3.autoType).then(data => {
-
-  function updateChart() {
-    const metrics = Array.from(
-      d3.select('#SortSelector').node().selectedOptions,
-      opt => opt.value
-    );
-    if (metrics.length === 0) return;
-
-    const N = 10;
-    const sorted = data
-      .sort((a,b) => b[metrics[0]] - a[metrics[0]])
-      .slice(0, N);
-
-    x0.domain(sorted.map(d => d.Country));
-    x1.domain(metrics).range([0, x0.bandwidth()]);
-
-    // 左轴 —— 第一个指标的域
-    y0.domain([0, d3.max(sorted, d => d[metrics[0]])]).nice();
-
-    // 如果选了第二个指标，就给 y1 赋域；否则给 y1 一个空域
-    if (metrics[1]) {
-      y1.domain([0, d3.max(sorted, d => d[metrics[1]])]).nice();
-    } else {
-      y1.domain([0,0]);
-    }
-
-    // 画轴
-    xAxis.call(d3.axisBottom(x0))
-         .selectAll("text")
-           .attr("transform","rotate(-20)")
-           .style("text-anchor","end");
-    yAxisLeft.transition().duration(500)
-             .call(d3.axisLeft(y0));
-    // 只有在有第二指标时才画右轴
-    if (metrics[1]) {
-      yAxisRight.style('opacity',1)
-                .transition().duration(500)
-                .call(d3.axisRight(y1));
-    } else {
-      yAxisRight.style('opacity',0);
-    }
-
-    // 绑定 country-group
-    const country = svg.selectAll('.country-group')
-      .data(sorted, d => d.Country);
-    country.exit().remove();
-    const countryEnter = country.enter()
-      .append('g')
-        .attr('class','country-group')
-        .attr('transform', d => `translate(${x0(d.Country)},0)`);
-    const countryMerge = countryEnter.merge(country);
-
-    // 各指标的柱子
-    const bars = countryMerge.selectAll('rect')
-      .data(d => metrics.map(m => ({ key: m, value: d[m] })));
-
-    bars.exit().remove();
-
-    bars.enter()
-      .append('rect')
-        .attr('x', d => x1(d.key))
-        .attr('width', x1.bandwidth())
-        .attr('y', height)
-        .attr('height', 0)
-        .attr('fill', d => color(d.key))
-      .merge(bars)
-        .transition().duration(500)
-        .attr('x', d => x1(d.key))
-        .attr('width', x1.bandwidth())
-        // 根据是哪条指标选择 y0 或 y1
-        .attr('y', d => d.key === metrics[0]
-                       ? y0(d.value)
-                       : y1(d.value))
-        .attr('height', d => d.key === metrics[0]
-                       ? height - y0(d.value)
-                       : height - y1(d.value))
-        .attr('fill', d => color(d.key));
+  // 读取 checkbox 选项的函数
+  function getMetrics() {
+    const ms = d3.selectAll('input[name="sortOption"]:checked')
+      .nodes().map(n=>n.value);
+    return ms.length? ms
+           : [ d3.select('input[name="sortOption"]').node().value ];
   }
 
-  // 首次绘制 & 监听下拉
-  updateChart();
-  d3.select('#SortSelector').on('change', updateChart);
+  // 绑定 change 事件
+  d3.selectAll('input[name="sortOption"]').on('change', () => {
+    renderChart(data, getMetrics());
+  });
+
+  // 初始渲染
+  renderChart(data, getMetrics());
 });
+

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Culture - Aoyama</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+  <link rel="stylesheet" href="urban_tokyo_aoyama.css" />
+</head>
+
+<body>
+  <!-- 顶部导航 -->
+  <nav class="navbar">
+    <ul class="navbar-menu">
+      <li><a href="urban_tokyo.html">Tokyo Overview</a></li>
+      <li><a href="#" class="active">Aoyama</a></li>
+    </ul>
+  </nav>
+
+  <!-- 主容器 -->
+  <div id="urban-container">
+
+    <!-- 地图区域 -->
+    <div id="map-area">
+      <div id="map"></div>
+
+      <!-- 左侧三个可折叠卡片 -->
+      <div id="map-left-panel">
+
+        <!-- 统计图 -->
+        <div class="collapsible-card">
+          <div class="card-header no-collapse">
+            <span class="card-title">Statistics</span>
+          </div>
+          <div class="card-body" id="chart-panel">
+            <canvas id="coffee-stats-chart"></canvas>
+            <div id="chart-caption">Hover over bars to see exact café counts</div>
+          </div>
+        </div>
+
+        <!-- 图层开关 -->
+        <div class="collapsible-card">
+          <div class="card-header">
+            <span class="card-title">Layers</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="card-body" id="layer-toggle-panel">
+            <label><input type="checkbox" class="layer-toggle" data-type="Chain" checked /> Chain</label><br />
+            <label><input type="checkbox" class="layer-toggle" data-type="Independent" checked /> Independent</label><br />
+            <label><input type="checkbox" class="layer-toggle" data-type="Community/Old-fashioned" checked /> Community/Old-fashioned</label><br />
+          </div>
+        </div>
+
+        <!-- 图例 -->
+        <div class="collapsible-card">
+          <div class="card-header">
+            <span class="card-title">Legend</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="card-body" id="legend-panel">
+            <div class="legend-item"><span class="legend-color" style="background-color: #b1150c;"></span> Chain</div>
+            <div class="legend-item"><span class="legend-color" style="background-color: #7E8EA5;"></span> Independent</div>
+            <div class="legend-item"><span class="legend-color" style="background-color: #5E382F;"></span> Community/Old-fashioned</div>
+
+            <!-- heatmap 图例 -->
+            <div class="heat-legend">
+              <div class="legend-label">Heat Intensity</div>
+              <div class="heat-gradient-bar"></div>
+              <div class="heat-labels">
+                <span>Low</span>
+                <span>High</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 视图重启 -->
+      <!-- <button id="reset-view-btn">
+        ⟲ Reset View
+      </button> -->
+
+      <!-- 底部信息文字 -->
+      <div id="info-text">
+        <!-- JS will dynamically inject content here -->
+      </div>
+    </div>
+
+    <!-- 右侧拼贴图部分 -->
+    <div id="right-panel">
+      <div id="city-panel">
+
+        <div class="city-collage-wrapper top-wrapper">
+          <img src="image/TOYKO/toyko_aoyama_top.png" alt="Aoyama Collage Top" class="city-collage-img">
+          <div id="city-text-overlay">
+            <p class="city-section-title">Aoyama - Delicate Details</p>
+            <p>Aoyama's café scene is composed, stylish, and often tucked into serene side streets.</p>
+            <p>Independent cafés dominate, offering minimal interiors and curated pour-overs.</p>
+            <p>Chain cafés are fewer, mostly around Omotesando station.</p>
+            <p>Community-style cafés are rare, but those that exist serve as intimate anchors for local creatives.</p>
+            <p>Aoyama is less about density, more about finesse — a quiet resonance in Tokyo's cultural pulse.</p>
+          </div>
+        </div>
+
+        <div class="city-collage-wrapper bottom-wrapper">
+          <img src="image/TOYKO/toyko_aoyama_bottom.png" alt="Aoyama Collage Bottom" class="city-collage-img">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="urban_tokyo_aoyama_map.js"></script>
+</body>
+</html>
