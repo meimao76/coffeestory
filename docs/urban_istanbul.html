@@ -9,7 +9,7 @@
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-  <link rel="stylesheet" href="urban_tokyo.css" />
+  <link rel="stylesheet" href="urban_istanbul.css" />
 </head>
 <body>
   <!-- Navigation -->
@@ -21,10 +21,8 @@
       <li class="dropdown">
         <a class="active" href="#">Culture ▾</a>
         <ul class="dropdown-menu">
-          <li><a href="#" onclick="selectCity('Guangzhou')">Guangzhou</a></li>
-          <li><a href="#" onclick="selectCity('Melbourne')">Melbourne</a></li>
-          <li><a href="#" onclick="selectCity('Rome')">Rome</a></li>
-          <li><a href="#" onclick="selectCity('Istanbul')">Istanbul</a></li>
+            <li><a href="urban_tokyo.html">Tokyo</a></li>
+            <li><a href="urban_istanbul.html">Istanbul</a></li>
         </ul>
       </li>
       <li><a href="index.html#section5">Conclusion</a></li>
@@ -92,11 +90,15 @@
           <img src="image/ISTANBUL/istanbul_top.png" alt="Istanbul Collage Top" class="city-collage-img">
           <div id="city-text-overlay">
             <p class="city-section-title">"Layers of Legacy and Leisure"</p>
-            <p>In Istanbul, coffee is both memory and performance — woven through centuries of tradition and repurposed in modern social life.</p>
-            <p>From historic <em>kahvehane</em> to contemporary cafés along Istiklal and Karaköy, coffee spaces span spiritual, political, and everyday realms.</p>
-            <p>Independent cafés thrive in artistic quarters, coexisting with global chains and heritage venues.</p>
-            <p>Their spatial presence reflects Istanbul’s dual nature — east and west, slow and fast, past and present.</p>
-            <p>Coffee here is layered — a cultural bridge across styles, generations, and urban tempos.</p>
+          <p>In Istanbul, coffee is both memory and performance — woven through centuries of tradition and repurposed in modern social life.</p>
+          <p>From historic <em>kahvehane</em> to contemporary cafés along Istiklal and Karaköy, coffee spaces span spiritual, political, and everyday realms.</p>
+          <p>Independent cafés thrive in artistic quarters, while chain cafés align with commercial spines and transit hubs. Community cafés linger in quieter peripheries, sustaining local rhythms.</p>
+          <p>This spatial diversity reflects Istanbul's dual nature — east and west, slow and fast, past and present — with café geographies tracing the city's layered identity.</p>
+          <p>Coffee here is more than beverage; it is a cultural bridge across styles, generations, and urban tempos.</p>
+          <p><strong><em>Click Button to explore specific area⬇</em></strong></p>
+          <div id="zoom-buttons">
+          <button id="btn-aoyama">xxxx</button>
+          </div>
           </div>
         </div>
         <div class="city-collage-wrapper bottom-wrapper">

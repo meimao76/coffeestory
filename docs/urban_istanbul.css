@@ -1,0 +1,445 @@
+/* ===== General Layout ===== */
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  height: 100%;
+  background-color: #efeae3;
+  overflow: hidden;
+}
+
+/* ===== Navigation Bar ===== */
+.navbar {
+  background-color: #2d2326;
+  padding: 12px 20px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+.navbar-menu {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li a {
+  color: #ebdfc0;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+.navbar-menu li a:hover,
+.navbar-menu li a.active {
+  color: #ac8b72;
+}
+
+/* ===== Dropdown for Culture ===== */
+.dropdown {
+  position: relative;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #2d2326;
+  padding: 8px 0;
+  display: none;
+  flex-direction: column;
+  min-width: 120px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  border-radius: 6px;
+  z-index: 1001;
+}
+
+.dropdown-menu li {
+  padding: 0;
+}
+
+.dropdown-menu li a {
+  display: block;
+  padding: 8px 16px;
+  color: #ebdfc0;
+  text-decoration: none;
+  font-weight: normal;
+}
+
+.dropdown-menu li a:hover {
+  background-color: #3e2f31;
+}
+
+/* Show dropdown on hover */
+.dropdown:hover .dropdown-menu {
+  display: flex;
+}
+
+/* ===== Main Container ===== */
+#urban-container {
+  display: grid;
+  grid-template-columns: 1fr 400px; /* 可调整右侧宽度 */
+  grid-template-rows: 1fr;
+  height: calc(100vh - 40px);
+  margin-top: 40px;
+}
+
+/* ===== Map Area ===== */
+#map-area {
+  position: relative;
+  grid-column: 1 / 2;
+  width: 100%;
+  height: 100%;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+/* ===== Left Panel (Floating Collapsible Cards) ===== */
+#map-left-panel {
+  position: absolute;
+  top: 10px;
+  bottom: 120px;
+  left: 10px;
+  width: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  overflow-y: auto;
+  z-index: 10;
+}
+
+/* ===== Card Structure ===== */
+.collapsible-card {
+  background: #ffffffe3;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.card-header {
+  padding: 10px 12px;
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.card-header:hover {
+  background-color: #f1f1f1;
+}
+
+.arrow {
+  transition: transform 0.3s ease;
+}
+
+/* 让箭头旋转 */
+.card-header.collapsed .arrow {
+  transform: rotate(-90deg);
+}
+
+.card-body {
+  padding: 12px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.card-body.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding: 0 12px;
+  overflow: hidden;
+}
+/* ===== chart 换行 ===== */
+#chart-caption {
+  font-size: 12px;
+  color: #666;
+  text-align: center;
+  margin-top: 0px;
+  font-style: italic;
+  line-height: 1.4;
+}
+
+/* ===== Layer 控制器整体样式 ===== */
+#layer-toggle-panel {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #222;
+}
+
+#layer-toggle-panel label.layer-option {
+  display: flex;
+  margin-bottom: 12px;
+  font-size: 14px;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ===== Legend 图例整体样式 ===== */
+#legend-panel {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  color: #222;
+}
+
+/* ===== 单个图例项：颜色块 + 文本 ===== */
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+
+.legend-color {
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border-radius: 3px;
+  border: 1px solid #ccc;
+  flex-shrink: 0;
+}
+
+.legend-icon {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  margin-left: 0px;
+  margin-right: 4px;
+  flex-shrink: 0;
+}
+
+/* ===== 热力图图例条带 ===== */
+.heat-legend {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin-top: 12px;
+}
+
+.legend-label {
+  font-weight: bold;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.heat-gradient-bar {
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  background: linear-gradient(to right, 
+    rgba(0,0,255,0), 
+    #74add1, 
+    #abd9e9, 
+    #fdae61, 
+    #f46d43, 
+    #d73027);
+  margin-bottom: 4px;
+}
+
+.heat-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #555;
+  padding: 0 2px;
+}
+
+/* ===== 重启视图  ===== */
+#reset-view-btn {
+  position: absolute;
+  bottom: 180px;
+  right: 10px;
+  z-index: 10;
+  background-color: #4c3a2f;
+  color: white;
+  padding: 6px 14px;
+  border-radius: 5px;
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+#reset-view-btn:hover {
+  background-color: #6a4c3c;
+}
+
+/* ===== 行政区弹窗 ===== */
+.mapboxgl-popup-content {
+  background-color: #fffaf3;
+  color: #3b2f2f;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  border-radius: 6px;
+  padding: 10px 14px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  border: 1px solid #d2b48c;
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: #fffaf3; /* 箭头颜色 */
+}
+
+/* ===== 行政区hover box ===== */
+#info-text p {
+  margin: 0 0 6px;
+  display: block;
+}
+#hover-label {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 6px 12px;
+  background-color: rgba(255, 255, 255, 0.9);
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  border-radius: 4px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+  z-index: 20;
+  pointer-events: none;
+  max-width: 240px;
+  display: none;  /* 默认隐藏 */
+}
+
+/* ===== Info Text (Bottom Floating他妈的直接给我盖上去) ===== */
+#info-text {
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+  right:10px;
+  background-color: rgba(212, 197, 184, 0.95);
+  padding: 12px 15px;
+  font-size: 15px;
+  line-height: 1.5;
+  border-radius: 8px;
+  border-top: 1px solid #855a46;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  max-height: 80px;         /* 自动适配几行内容 */
+  overflow-y: auto;          /* 超出时可滚动 */
+  display: block;            /* 替代 flex，允许段落换行 */
+  white-space: normal;       /* 确保不强制一行 */
+}
+
+/* ===== Right Panel ===== */
+/* 面板通用布局 */
+#right-panel {
+  width: 100%;
+  padding: 0;
+}
+
+#city-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.top-wrapper {
+  position: relative;
+  top: 5px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto 20px auto;
+}
+
+.city-collage-img {
+  width: 100%;
+  display: block;
+}
+/* 让 bottom 图像固定到底部 */
+.bottom-wrapper {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+/* 所有文字浮层 */
+#city-text-overlay {
+  position: absolute;
+  top: 90%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  background: rgba(255, 255, 255, 0);
+  padding: 5px;
+  border-radius: 10px;
+  text-align: center;
+  z-index: 2;
+  box-sizing: border-box;
+}
+
+/* 标题 */
+.city-section-title {
+  font-size: 17px;
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #222;
+  line-height: 1.2;
+  letter-spacing: 0.2px;
+}
+
+/* 正文段落 */
+#city-text-overlay p:not(.city-section-title) {
+  font-size: 14px;
+  line-height: 1;
+  color: #444;
+  margin-bottom: 10px;
+}
+
+/* 按钮组 */
+#zoom-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+#zoom-buttons button {
+  flex: 1;
+  max-width: 100px;
+  background: #57453b;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 6px 10px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#zoom-buttons button:hover {
+  background-color: #3d3129;
+}
+
+/* ===== Legend Styles ===== */
+.legend-item {
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+.legend-color {
+  width: 14px;
+  height: 14px;
+  margin-right: 8px;
+  border-radius: 50%; 
+  border: 1px solid #ccc;
+}
+.legend-color.poi { background-color: #7ea386; }
+.legend-color.heat { background-color: #b08861; }
+
+/* ==== 比例尺指北针 ==== */
+.mapboxgl-ctrl-bottom-right {
+  bottom: 120px !important;
+  right: 0px !important;  
+}
