@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Culture - Istanbul</title>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
+  <script src="https://d3js.org/d3.v6.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
+  <link rel="stylesheet" href="urban_tokyo.css" />
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <ul class="navbar-menu">
+      <li><a href="index.html#homepage">Home</a></li>
+      <li><a href="index.html#section1">Introduction</a></li>
+      <li><a href="index.html#section3">Trade</a></li>
+      <li class="dropdown">
+        <a class="active" href="#">Culture ▾</a>
+        <ul class="dropdown-menu">
+          <li><a href="#" onclick="selectCity('Guangzhou')">Guangzhou</a></li>
+          <li><a href="#" onclick="selectCity('Melbourne')">Melbourne</a></li>
+          <li><a href="#" onclick="selectCity('Rome')">Rome</a></li>
+          <li><a href="#" onclick="selectCity('Istanbul')">Istanbul</a></li>
+        </ul>
+      </li>
+      <li><a href="index.html#section5">Conclusion</a></li>
+      <li><a href="index.html#section6">About</a></li>
+    </ul>
+  </nav>
+
+  <div id="urban-container">
+    <!-- Map area -->
+    <div id="map-area">
+      <div id="map"></div>
+      <div id="map-left-panel">
+        <!-- Statistics card -->
+        <div class="collapsible-card">
+          <div class="card-header no-collapse">
+            <span class="card-title">Statistics</span>
+          </div>
+          <div class="card-body" id="chart-panel">
+            <canvas id="coffee-stats-chart"></canvas>
+            <div id="chart-caption">Hover over bars to see exact café counts</div>
+          </div>
+        </div>
+        <!-- Layer toggles -->
+        <div class="collapsible-card">
+          <div class="card-header">
+            <span class="card-title">Layers</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="card-body" id="layer-toggle-panel">
+            <label><input type="checkbox" class="layer-toggle" data-type="Chain" checked /> Chain</label><br />
+            <label><input type="checkbox" class="layer-toggle" data-type="Independent" checked /> Independent</label><br />
+            <label><input type="checkbox" class="layer-toggle" data-type="Community/Old-fashioned" checked /> Community/Old-fashioned</label><br />
+          </div>
+        </div>
+        <!-- Legend -->
+        <div class="collapsible-card">
+          <div class="card-header">
+            <span class="card-title">Legend</span>
+            <span class="arrow">▼</span>
+          </div>
+          <div class="card-body" id="legend-panel">
+            <div class="legend-item"><span class="legend-color" style="background-color: #b1150c;"></span> Chain</div>
+            <div class="legend-item"><span class="legend-color" style="background-color: #7E8EA5;"></span> Independent</div>
+            <div class="legend-item"><span class="legend-color" style="background-color: #5E382F;"></span> Community/Old-fashioned</div>
+            <div class="heat-legend">
+              <div class="legend-label">Heat Intensity</div>
+              <div class="heat-gradient-bar"></div>
+              <div class="heat-labels">
+                <span>Low</span>
+                <span>High</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button id="reset-view-btn">⟲ Reset View</button>
+      <div id="info-text"></div>
+      <div id="hover-label"></div>
+    </div>
+
+    <!-- Right panel -->
+    <div id="right-panel">
+      <div id="city-panel">
+        <div class="city-collage-wrapper top-wrapper">
+          <img src="image/ISTANBUL/istanbul_top.png" alt="Istanbul Collage Top" class="city-collage-img">
+          <div id="city-text-overlay">
+            <p class="city-section-title">"Layers of Legacy and Leisure"</p>
+            <p>In Istanbul, coffee is both memory and performance — woven through centuries of tradition and repurposed in modern social life.</p>
+            <p>From historic <em>kahvehane</em> to contemporary cafés along Istiklal and Karaköy, coffee spaces span spiritual, political, and everyday realms.</p>
+            <p>Independent cafés thrive in artistic quarters, coexisting with global chains and heritage venues.</p>
+            <p>Their spatial presence reflects Istanbul’s dual nature — east and west, slow and fast, past and present.</p>
+            <p>Coffee here is layered — a cultural bridge across styles, generations, and urban tempos.</p>
+          </div>
+        </div>
+        <div class="city-collage-wrapper bottom-wrapper">
+          <img src="image/ISTANBUL/istanbul_bottom.png" alt="Istanbul Collage Bottom" class="city-collage-img">
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="urban_istanbul_map.js"></script>
+</body>
+</html>
