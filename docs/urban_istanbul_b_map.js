@@ -459,22 +459,24 @@ map.on('load', () => {
         .setHTML(`
           <div>
             <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
-              <img src="image/TOYKO/aoyama_guide.png" width="30" height="40" alt="When in Tokyo logo" />
+              <img src="image/ist/beyogul.png" width="30" height="40" alt="When in Tokyo logo" />
               <div>
-                <strong style="font-size: 15px;">Aoyama Main Axis</strong><br>
-                <em style="color: #666;">Elegant and Stylish Space</em>
+                <strong style="font-size: 15px;">Beyoğlu Cultural Route</strong><br>
+                <em style="color: #666;">Where Heritage Meets Hospitality</em>
               </div>
             </div>
             <p style="margin: 4px 0;">
-              Cafés are densely distributed along both sides of this central street,
-              forming a vibrant corridor that connects culture and commerce.
+              Stretching from Galata Tower to Taksim Square, this cultural corridor invites visitors to explore Istanbul’s rich layers — from Ottoman-era streets to contemporary arts venues — all interwoven with the scent of coffee.
             </p>
             <p style="margin: 4px 0;">
-              <strong>Planning Vision:</strong> Create an elegant and stylish space
+              Traditional Turkish cafés sit beside modern roasters, each acting as a node in a walkable urban web shaped by tourism and cultural revival.
+            </p>
+            <p style="margin: 4px 0;">
+              <strong>Planning Vision:</strong> Promote local identity and tourism through heritage preservation, spatial charm, and vibrant café culture.
             </p>
             <p style="margin-top: 8px;">
-              🔗 <a href="https://whenin.tokyo/Omotesando-Aoyama-Area-Guide/1000" target="_blank" rel="noopener">
-                View Omotesando-Aoyama Lifestyle Guide (external link)
+            🔗 <a href="https://test.akmistanbul.gov.tr/beyoglu-culture-route" target="_blank" rel="noopener">
+              View Beyoglu Culture Route Guide (external link)
               </a>
             </p>
           </div>
