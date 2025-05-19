@@ -11,19 +11,6 @@
     background: linear-gradient(to bottom, 
     #1A120D 0%, #281c11 20%, #57453b 30%, #837064 40%,#b9a99c 50%, #e3dfd7 60%, #d5d2c9 70%, #ebebe3 80%, #b29e8e 100%); 
   }
-
-  /* 加纹理 */
-  /* body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: url('image/texture.png');
-    background-size: cover;
-    opacity: 0.1;
-    pointer-events: none;
-    z-index: 0;
-  }   */
   
   .navbar {
     position: fixed;
@@ -598,7 +585,7 @@
 }
 
 .city-left {
-  background-image: url('image/istanbul1.jpg');
+  background-image: url('image/istanbul_0.png');
   clip-path: polygon(0 0, 70% 0, 30% 100%, 0 100%);
   z-index: 1;
   filter: grayscale(60%);

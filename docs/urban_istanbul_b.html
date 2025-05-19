@@ -3,39 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Urban Culture - Istanbul</title>
+  <title>Urban Culture - Beyoğlu Kültür Yolu</title>
   <link href="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.css" rel="stylesheet" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v2.12.0/mapbox-gl.js"></script>
   <script src="https://d3js.org/d3.v6.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/@turf/turf@6/turf.min.js"></script>
-  <link rel="stylesheet" href="urban_istanbul.css" />
+  <link rel="stylesheet" href="urban_istanbul_b.css" />
 </head>
+
 <body>
-  <!-- Navigation -->
+  <!-- 顶部导航 -->
   <nav class="navbar">
     <ul class="navbar-menu">
-      <li><a href="index.html#homepage">Home</a></li>
-      <li><a href="index.html#section1">Introduction</a></li>
-      <li><a href="index.html#section3">Trade</a></li>
-      <li class="dropdown">
-        <a class="active" href="#">Culture ▾</a>
-        <ul class="dropdown-menu">
-            <li><a href="urban_tokyo.html">Tokyo</a></li>
-            <li><a href="urban_istanbul.html">Istanbul</a></li>
-        </ul>
-      </li>
-      <li><a href="index.html#section5">Conclusion</a></li>
-      <li><a href="index.html#section6">About</a></li>
+      <li><a href="urban_istanbul.html">Istanbul Overview</a></li>
+      <li><a href="#" class="active">Beyoğlu Cultural Route</a></li>
     </ul>
   </nav>
 
+  <!-- 主容器 -->
   <div id="urban-container">
-    <!-- Map area -->
+
+    <!-- 地图区域 -->
     <div id="map-area">
       <div id="map"></div>
+
+      <!-- 左侧三个可折叠卡片 -->
       <div id="map-left-panel">
-        <!-- Statistics card -->
+
+        <!-- 统计图 -->
         <div class="collapsible-card">
           <div class="card-header no-collapse">
             <span class="card-title">Statistics</span>
@@ -45,28 +41,34 @@
             <div id="chart-caption">Hover over bars to see exact café counts</div>
           </div>
         </div>
-        <!-- Layer toggles -->
+
+        <!-- 图层开关 -->
         <div class="collapsible-card">
           <div class="card-header">
             <span class="card-title">Layers</span>
             <span class="arrow">▼</span>
           </div>
           <div class="card-body" id="layer-toggle-panel">
+            <label><input type="checkbox" class="layer-toggle" data-type="Featured" checked /> Featured Cafés</label><br />
             <label><input type="checkbox" class="layer-toggle" data-type="Chain" checked /> Chain</label><br />
             <label><input type="checkbox" class="layer-toggle" data-type="Independent" checked /> Independent</label><br />
             <label><input type="checkbox" class="layer-toggle" data-type="Community/Old-fashioned" checked /> Community/Old-fashioned</label><br />
           </div>
         </div>
-        <!-- Legend -->
+
+        <!-- 图例 -->
         <div class="collapsible-card">
           <div class="card-header">
             <span class="card-title">Legend</span>
             <span class="arrow">▼</span>
           </div>
           <div class="card-body" id="legend-panel">
+            <div class="legend-item"><img src="image/TOYKO/star.png"class="legend-icon" alt="Featured Star" /><span> Featured Café</span></div>
             <div class="legend-item"><span class="legend-color" style="background-color: #b1150c;"></span> Chain</div>
             <div class="legend-item"><span class="legend-color" style="background-color: #7E8EA5;"></span> Independent</div>
             <div class="legend-item"><span class="legend-color" style="background-color: #5E382F;"></span> Community/Old-fashioned</div>
+
+            <!-- heatmap 图例 -->
             <div class="heat-legend">
               <div class="legend-label">Heat Intensity</div>
               <div class="heat-gradient-bar"></div>
@@ -78,35 +80,45 @@
           </div>
         </div>
       </div>
-      <button id="reset-view-btn">⟲ Reset View</button>
-      <div id="info-text"></div>
-      <div id="hover-label"></div>
+
+      <!-- 底部信息文字 -->
+        <div id="info-text">
+          <p>
+            This visualisation reveals Beyoğlu Cultural Route's café micro-network — An intricate urban tapestry woven from tourism, heritage, and the aroma of coffee.
+          </p>
+          <p style="font-size: 14px; color: #555;">
+            · Hover over cafés or metro stations for details.<br>
+            · Click the main axis or featured cafés to explore deeper narratives.
+          </p>
+      </div>
     </div>
 
-    <!-- Right panel -->
+    <!-- 右侧拼贴图部分 -->
     <div id="right-panel">
       <div id="city-panel">
+
         <div class="city-collage-wrapper top-wrapper">
-          <img src="image/ist/turkey_top.png" alt="Istanbul Collage Top" class="city-collage-img">
-          <div id="city-text-overlay">
-            <p class="city-section-title">"Layers of Legacy and Leisure"</p>
-          <p>In Istanbul, coffee is both memory and performance — woven through centuries of tradition and repurposed in modern social life.</p>
-          <p>From historic <em>kahvehane</em> to contemporary cafés along Istiklal and Karaköy, coffee spaces span spiritual, political, and everyday realms.</p>
-          <p>Independent cafés thrive in artistic quarters, while chain cafés align with commercial spines and transit hubs. Community cafés linger in quieter peripheries, sustaining local rhythms.</p>
-          <p>This spatial diversity reflects Istanbul's dual nature — east and west, slow and fast, past and present — with café geographies tracing the city's layered identity.</p>
-          <p>Coffee here is more than beverage; it is a cultural bridge across styles, generations, and urban tempos.</p>
-          <p><strong><em>Click Button to explore specific area⬇</em></strong></p>
-          <div id="zoom-buttons">
-          <button id="btn-aoyama">Beyoğlu</button>
-          </div>
+          <img src="image/ist/istanbul_top.png" alt="Aoyama Collage Top" class="city-collage-img">
+          <div id="city-text-overlay" class="aoyama-text-style">
+            <p class="city-section-title">Where Heritage Meets Hospitality</p>
+            <p>Threaded along the storied Beyoğlu Cultural Route, this district unfolds as a living archive of Istanbul's layered identity.</p>
+            <p>Here, tourism breathes new life into historic passageways — drawing visitors not just to monuments, but to the rhythms of daily life shaped by coffeehouses, craft, and conversation. Traditional Turkish cafés — small, time-worn, and deeply communal — anchor the side streets near Galata Tower, while newer venues reinterpret legacy through design and specialty brews.</p>
+            <p>Rather than uniformity, Beyoğlu celebrates contrast. The café culture bridges Ottoman memory and global curiosity, offering visitors a pause between museum and promenade.</p>
+            <p>It is a cultural corridor where tradition steeps in every cup, and where tourism becomes a gateway to intimate urban experience.</p>
+            <p><strong><em>Click Button to explore general area⬇</em></strong></p>
+            <div id="zoom-buttons">
+            <button id="btn-istanbul">Istanbul</button>
+        </div>
           </div>
         </div>
+
         <div class="city-collage-wrapper bottom-wrapper">
-          <img src="image/ist/turkey_bottom.png" alt="Istanbul Collage Bottom" class="city-collage-img">
+          <img src="image/ist/istanbul_bottom.png" alt="Aoyama Collage Bottom" class="city-collage-img">
         </div>
       </div>
     </div>
   </div>
-  <script src="urban_istanbul_map.js"></script>
+
+  <script src="urban_istanbul_b_map.js"></script>
 </body>
 </html>
