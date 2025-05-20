@@ -2,9 +2,9 @@ mapboxgl.accessToken = 'pk.eyJ1IjoiY3N5LWNmIiwiYSI6ImNtN3AwMGNwcDBiZ2QyanF5MjY3e
 
 const map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/mapbox/light-v10',
+  style: 'mapbox://styles/csy-cf/cmawrlx76006e01sdeb23ga5d',
   center: [28.9764, 41.0305], // galata tower center
-  zoom: 14.2
+  zoom: 14.5
 });
 
 map.on('load', () => {
@@ -77,7 +77,7 @@ map.on('load', () => {
 
     // === 主轴线图层 ===
     map.addLayer({
-        id: 'aoyama-axis-line',
+        id: 'beyogul-axis-line',
         type: 'line',
         source: 'b-line',
         'source-layer': 'b_line-c7qmoo',
@@ -99,28 +99,28 @@ map.on('load', () => {
 
 
   // === aoyama cafe === 
-  map.addSource('cafes_aoyama', {
+  map.addSource('cafes_beyogul', {
     type: 'vector',
-    url: 'mapbox://ixxiiris.6bngd8eg'
+    url: 'mapbox://csy-cf.6y6sw3sa'
   });
 
   // 地铁图层
-  map.addSource('aoyama-metro', {
+  map.addSource('beyogul_tourism', {
     type: 'vector',
-    url: 'mapbox://ixxiiris.d40r7h06'
+    url: 'mapbox://csy-cf.7yxz4m92'
     });
 
-  map.loadImage('image/TOYKO/Tokyo_Metro_logo.png', (error, image) => {
+  map.loadImage('image/ist/tourism.png', (error, image) => {
   if (error) throw error;
-  map.addImage('metro-icon', image);
+  map.addImage('tourism-icon', image);
 
   map.addLayer({
-    id: 'aoyama-metro-symbol',
+    id: 'beyogul_tourism-symbol',
     type: 'symbol',
-    source: 'aoyama-metro',
-    'source-layer': 'aoyama_metro-9zwz3d',
+    source: 'beyogul_tourism',
+    'source-layer': 'b_tourism1-5641on',
     layout: {
-      'icon-image': 'metro-icon',
+      'icon-image': 'tourism-icon',
       'icon-size': [
         'interpolate',
         ['linear'],
@@ -147,10 +147,10 @@ map.on('load', () => {
 
   // 热力图图层
   map.addLayer({
-    id: 'aoyama-heatmap',
+    id: 'beyogul-heatmap',
     type: 'heatmap',
-    source: 'cafes_aoyama',
-    'source-layer': 'aoyama_cafes_utf8-c1r9t3',
+    source: 'cafes_beyogul',
+    'source-layer': 'b_cafe-de1a7u',
     layout: { visibility: 'visible' },
     paint: {
       'heatmap-weight': 1,
@@ -189,9 +189,9 @@ map.on('load', () => {
     map.addLayer({
       id: layerId,
       type: 'circle',
-      source: 'cafes_aoyama',
-      'source-layer': 'aoyama_cafes_utf8-c1r9t3',
-      filter: ['==', ['get', 'cafe_cat_1'], type],
+      source: 'cafes_beyogul',
+      'source-layer': 'b_cafe-de1a7u',
+      filter: ['==', ['get', 'category'], type],
       paint: {
         'circle-radius': [
           'interpolate', ['linear'], ['zoom'],
@@ -215,15 +215,15 @@ map.on('load', () => {
 
       // 精选咖啡
       const featuredChecked = activeTypes.includes('Featured');
-      if (map.getLayer('aoyama-featured-cafes')) {
-        map.setLayoutProperty('aoyama-featured-cafes', 'visibility', featuredChecked ? 'visible' : 'none');
+      if (map.getLayer('beyogul-featured-cafes')) {
+        map.setLayoutProperty('beyogul-featured-cafes', 'visibility', featuredChecked ? 'visible' : 'none');
       }
 
       // 三类咖啡
       const typeToLayerId = {
-        'Chain': 'aoyama-chain',
-        'Independent': 'aoyama-independent',
-        'Community/Old-fashioned': 'aoyama-communityoldfashioned'
+        'Chain': 'beyogul-chain',
+        'Independent': 'beyogul-independent',
+        'Community/Old-fashioned': 'beyogul-communityoldfashioned'
       };
         
       // 控制三类 POI 图层显隐
@@ -235,12 +235,12 @@ map.on('load', () => {
       });
 
       // 控制热力图图层显隐与过滤
-      if (map.getLayer('aoyama-heatmap')) {
+      if (map.getLayer('beyogul-heatmap')) {
         if (activeTypes.length > 0) {
-          map.setLayoutProperty('aoyama-heatmap', 'visibility', 'visible');
-          map.setFilter('aoyama-heatmap', ['in', ['get', 'cafe_cat_1'], ['literal', activeTypes]]);
+          map.setLayoutProperty('beyogul-heatmap', 'visibility', 'visible');
+          map.setFilter('beyogul-heatmap', ['in', ['get', 'category'], ['literal', activeTypes]]);
         } else {
-          map.setLayoutProperty('aoyama-heatmap', 'visibility', 'none');
+          map.setLayoutProperty('beyogul-heatmap', 'visibility', 'none');
         }
       }
     });
@@ -249,8 +249,8 @@ map.on('load', () => {
 
   // 统计图（全区域）
   function updateStats() {
-    const features = map.querySourceFeatures('cafes_aoyama', {
-    sourceLayer: 'aoyama_cafes_utf8-c1r9t3' 
+    const features = map.querySourceFeatures('cafes_beyogul', {
+    sourceLayer: 'b_cafe-de1a7u' 
     });
 
 
@@ -261,7 +261,7 @@ map.on('load', () => {
     };
 
     features.forEach(f => {
-        const cat = f.properties.cafe_cat_1;
+        const cat = f.properties.category;
         if (counts[cat] !== undefined) counts[cat]++;
     });
 
@@ -339,16 +339,16 @@ map.on('load', () => {
   });
 
   const poiLayers = [
-    'aoyama-chain',
-    'aoyama-independent',
-    'aoyama-communityoldfashioned'
+    'beyogul-chain',
+    'beyogul-independent',
+    'beyogul-communityoldfashioned'
   ];
 
   poiLayers.forEach(layerId => {
     map.on('mouseenter', layerId, e => {
       // 检查是否也命中 featured café
         const overlapped = map.queryRenderedFeatures(e.point, {
-          layers: ['aoyama-featured-cafes']
+          layers: ['beyogul-featured-cafes']
         });
 
         if (overlapped.length > 0) return; // 如果命中精选，跳过普通 hover
@@ -358,7 +358,7 @@ map.on('load', () => {
       const coordinates = e.features[0].geometry.coordinates.slice();
       const props = e.features[0].properties;
       const name = props.name || 'Unnamed Café';
-      const type = props.cafe_cat_1;
+      const type = props.category;
 
       const popupHTML = `<strong>${name}</strong><br><em>${type}</em>`;
 
@@ -394,7 +394,7 @@ map.on('load', () => {
     closeOnClick: false
   });
 
-  map.on('mouseenter', 'aoyama-axis-line', e => {
+  map.on('mouseenter', 'beyogul-axis-line', e => {
     const feature = e.features[0];
     hoveredAxisId = feature.id;
 
@@ -403,7 +403,7 @@ map.on('load', () => {
     // 启动闪烁动画
     let toggle = true;
     axisFlashInterval = setInterval(() => {
-      map.setPaintProperty('aoyama-axis-line', 'line-color', toggle ? '#f09134' : '#862906');
+      map.setPaintProperty('beyogul-axis-line', 'line-color', toggle ? '#f09134' : '#862906');
       toggle = !toggle;
     }, 500);
 
@@ -418,7 +418,7 @@ map.on('load', () => {
       .addTo(map);
   });
 
-  map.on('mouseleave', 'aoyama-axis-line', () => {
+  map.on('mouseleave', 'beyogul-axis-line', () => {
     map.getCanvas().style.cursor = '';
     
     // 停止闪烁
@@ -426,7 +426,7 @@ map.on('load', () => {
     axisFlashInterval = null;
 
     // 恢复颜色
-    map.setPaintProperty('aoyama-axis-line', 'line-color', '#6f1d1b');
+    map.setPaintProperty('beyogul-axis-line', 'line-color', '#6f1d1b');
 
     // 移除 popup
     axisHoverPopup.remove();
@@ -435,11 +435,11 @@ map.on('load', () => {
   });
 
     // 点击后展现信息 + Area guide
-    map.on('click', 'aoyama-axis-line', e => {
+    map.on('click', 'beyogul-axis-line', e => {
 
       // 检查该点是否也命中了地铁站图层
       const overlappingMetro = map.queryRenderedFeatures(e.point, {
-        layers: ['aoyama-metro-symbol']
+        layers: ['beyogul_tourism-symbol']
       });
 
       // 如果有地铁图层点在这个位置，跳过轴线逻辑
@@ -486,22 +486,22 @@ map.on('load', () => {
   
   // === 地铁站信息展示 ===
   // hover信息
-    const metroPopup = new mapboxgl.Popup({
+    const tourismPopup = new mapboxgl.Popup({
       closeButton: false,
       closeOnClick: false
     });
 
-    map.on('mouseenter', 'aoyama-metro-symbol', e => {
+    map.on('mouseenter', 'beyogul_tourism-symbol', e => {
       map.getCanvas().style.cursor = 'pointer';
 
-      const name = e.features[0].properties.name || 'Metro Station';
-      metroPopup
+      const name = e.features[0].properties.name || 'Tourism';
+      tourismPopup
         .setLngLat(e.lngLat)
         .setHTML(`
         <div style="display: flex; align-items: center; gap: 6px;">
-          <img src="image/TOYKO/Tokyo_Metro_logo.png" width="20" height="20" alt="Metro Icon" />
+          <img src="image/ist/tourism.png" width="40" height="40" alt="toursm Icon" />
           <div>
-            <strong>Omotesando Station</strong><br>
+            <strong>Beyogul Tourism Attraction</strong><br>
             <em>Click to explore nearby cafés</em>
           </div>
         </div>
@@ -509,26 +509,26 @@ map.on('load', () => {
         .addTo(map);
     });
 
-    map.on('mouseleave', 'aoyama-metro-symbol', () => {
+    map.on('mouseleave', 'beyogul_tourism-symbol', () => {
       map.getCanvas().style.cursor = '';
-      metroPopup.remove();
+      tourismPopup.remove();
     });
 
   // Click + 生成buffer 与统计咖啡厅
     // 封装函数先
     function removeMetroBuffer() {
-    if (map.getLayer('metro-buffer')) {
-      map.removeLayer('metro-buffer');
+    if (map.getLayer('tourism-buffer')) {
+      map.removeLayer('tourism-buffer');
     }
-    if (map.getSource('metro-buffer')) {
-      map.removeSource('metro-buffer');
+    if (map.getSource('tourism-buffer')) {
+      map.removeSource('tourism-buffer');
     }
   }
 
   function handleMetroClick(e) {
     const feature = e.features[0];
     const lngLat = e.lngLat;
-    const stationName = feature.properties.name || 'Metro Station';
+    const stationName = feature.properties.name || 'Tourism';
 
     // 1. Create 300m buffer using Turf
     const center = turf.point(lngLat.toArray());
@@ -536,24 +536,24 @@ map.on('load', () => {
 
     // 2. Draw buffer on map
     removeMetroBuffer(); // remove previous one if exists
-    map.addSource('metro-buffer', {
+    map.addSource('tourism-buffer', {
       type: 'geojson',
       data: buffer
     });
     map.addLayer({
-      id: 'metro-buffer',
+      id: 'tourism-buffer',
       type: 'fill',
-      source: 'metro-buffer',
+      source: 'tourism-buffer',
       paint: {
         'fill-color': '#f09134',
         'fill-opacity': 0.3,
         'fill-outline-color': '#a6490c'
       }
-    }, 'aoyama-chain'); // insert below POI layer
+    }, 'beyogul-chain'); // insert below POI layer
 
     // 3. Query cafés within buffer
-    const allPOIs = map.querySourceFeatures('cafes_aoyama', {
-      sourceLayer: 'aoyama_cafes_utf8-c1r9t3'
+    const allPOIs = map.querySourceFeatures('cafes_beyogul', {
+      sourceLayer: 'b_cafe-de1a7u'
     });
 
     const cafesInBuffer = allPOIs.filter(f => {
@@ -567,7 +567,7 @@ map.on('load', () => {
       'Community/Old-fashioned': 0
     };
     cafesInBuffer.forEach(f => {
-      const cat = f.properties.cafe_cat_1;
+      const cat = f.properties.category;
       if (counts[cat] !== undefined) counts[cat]++;
     });
 
@@ -596,12 +596,12 @@ map.on('load', () => {
   }
   
   // 点击地铁站调用click后显示buffer与弹窗
-  map.on('click', 'aoyama-metro-symbol', handleMetroClick);
+  map.on('click', 'beyogul_tourism-symbol', handleMetroClick);
 
   // 点击空白处清除
   map.on('click', e => {
     const features = map.queryRenderedFeatures(e.point, {
-      layers: ['aoyama-metro-symbol']
+      layers: ['beyogul_tourism-symbol']
     });
 
     if (features.length === 0) {
@@ -612,7 +612,7 @@ map.on('load', () => {
   // // === 精选咖啡厅 ===
   // 1. 定义精选 café 名称精确列表
     const featuredCafeNames = [
-      "Blue Bottle Coffee",
+      "Mandabatmaz",
       "Nomu",
       "Torsys café • An Stand",
       "Cafe Kitsune",
@@ -621,11 +621,11 @@ map.on('load', () => {
 
     // 2. 每个 café 的详细信息
     const featuredCafeInfo = {
-      "Blue Bottle Coffee": {
-        title: "Blue Bottle Coffee AOYAMA",
-        description: "A minimalist coffee space focusing on hand-drip craft and brand aesthetics.",
-        image: "image/TOYKO/bluebottle.jpg",
-        link: "https://www.instagram.com/explore/locations/653780848/blue-bottle-coffee-at-aoyama/"
+      "Mandabatmaz": {
+        title: "Mandabatmaz Beyogul",
+        description: "An iconic Turkish café near Istiklal Avenue, known for its authentic brews, tiny stools, and deep-rooted local charm.",
+        image: "image/ist/mandabatmaz.jpg",
+        link: "https://www.instagram.com/mandabatmazkahvesi/?hl=en"
       },
       "Nomu": {
         title: "NOMU (by Nicolai Bergmann)",
@@ -665,10 +665,10 @@ map.on('load', () => {
       }
 
       map.addLayer({
-        id: 'aoyama-featured-cafes',
+        id: 'b_cafe-de1a7u-featured-cafes',
         type: 'symbol',
-        source: 'cafes_aoyama',
-        'source-layer': 'aoyama_cafes_utf8-c1r9t3',
+        source: 'cafes_b_cafe-de1a7u',
+        'source-layer': 'b_cafe-de1a7u',
         filter: ['in', ['get', 'name'], ['literal', featuredCafeNames]],
         layout: {
           'icon-image': 'featured-star-icon',
@@ -683,12 +683,12 @@ map.on('load', () => {
       }, null);
       
       // 强制刷新一次
-      map.setLayoutProperty('aoyama-featured-cafes', 'visibility', 'none');
-      map.setLayoutProperty('aoyama-featured-cafes', 'visibility', 'visible');
+      map.setLayoutProperty('beyogul-featured-cafes', 'visibility', 'none');
+      map.setLayoutProperty('beyogul-featured-cafes', 'visibility', 'visible');
 
       // Hover 提示
-      map.on('mouseenter', 'aoyama-featured-cafes', e => {
-        if (map.getLayoutProperty('aoyama-featured-cafes', 'visibility') !== 'visible') return;
+      map.on('mouseenter', 'beyogulv-featured-cafes', e => {
+        if (map.getLayoutProperty('beyogul-featured-cafes', 'visibility') !== 'visible') return;
 
         const name = e.features[0].properties.name;
         map.getCanvas().style.cursor = 'pointer';
@@ -699,14 +699,14 @@ map.on('load', () => {
           .addTo(map);
       });
 
-      map.on('mouseleave', 'aoyama-featured-cafes', () => {
+      map.on('mouseleave', 'beyogul-featured-cafes', () => {
         map.getCanvas().style.cursor = '';
         featuredPopup.remove();
       });
 
       // Click 弹出图文介绍
-      map.on('click', 'aoyama-featured-cafes', e => {
-        if (map.getLayoutProperty('aoyama-featured-cafes', 'visibility') !== 'visible') return;
+      map.on('click', 'beyogul-featured-cafes', e => {
+        if (map.getLayoutProperty('beyogul-featured-cafes', 'visibility') !== 'visible') return;
 
         const props = e.features[0].properties;
         const cafeData = featuredCafeInfo[props.name];
@@ -730,7 +730,7 @@ map.on('load', () => {
       });
     });
 
-  // 跳转tokyo
+  // 跳转istanbul
   document.getElementById('btn-istanbul').addEventListener('click', () => {
     window.open('urban_istanbul.html', '_blank'); // 新窗口打开
   });
