@@ -649,4 +649,9 @@ map.on('load', () => {
         hoverLabel.style.display = 'none';
         });
 
+        // 跳转aoyama
+        document.getElementById('btn-aoyama').addEventListener('click', () => {
+        window.open('urban_istanbul_b.html', '_blank'); // 新窗口打开
+});
+
   })

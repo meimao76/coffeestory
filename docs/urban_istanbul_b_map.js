@@ -1,10 +1,10 @@
-mapboxgl.accessToken = 'pk.eyJ1IjoiaXh4aWlyaXMiLCJhIjoiY202aTB2bTI1MDNpNTJqc2h0NW0xeTdlZSJ9.Oh-wamriLR992Hi8Vqm8tg';
+mapboxgl.accessToken = 'pk.eyJ1IjoiY3N5LWNmIiwiYSI6ImNtN3AwMGNwcDBiZ2QyanF5MjY3enNjYmUifQ.PtjSbRT97fZ1jfmVSdJ7gw';
 
 const map = new mapboxgl.Map({
   container: 'map',
-  style: 'mapbox://styles/ixxiiris/cm8lrey81005d01s9byfx4474',
-  center: [28.9734, 41.0325], // galata tower center
-  zoom: 14.5
+  style: 'mapbox://styles/mapbox/light-v10',
+  center: [28.9764, 41.0305], // galata tower center
+  zoom: 14.2
 });
 
 map.on('load', () => {
@@ -26,18 +26,18 @@ map.on('load', () => {
       visualizePitch: true
     }), 'top-right');
 
-  // Aoyama Boundary图层
-  // === Aoyama 边界图层 ===
-  map.addSource('aoyama-boundary', {
+  // beyogul Boundary图层
+  // === beyogul 边界图层 ===
+  map.addSource('beyogul-boundary', {
     type: 'vector',
-    url: 'mapbox://ixxiiris.33k3uexb'
+    url: 'mapbox://csy-cf.d5ob0yz2'
     });
 
   map.addLayer({
-    id: 'aoyama-boundary-fill',
+    id: 'beyogul-boundary-fill',
     type: 'fill',
-    source: 'aoyama-boundary',
-    'source-layer': 'tokyo_ayoma_boundary-2cw7di', 
+    source: 'beyogul-boundary',
+    'source-layer': 'b_boundary-46gwce', 
     paint: {
         'fill-color': '#f6e9cd',
         'fill-opacity': 0.25
@@ -45,10 +45,10 @@ map.on('load', () => {
     });
 
   map.addLayer({
-    id: 'aoyama-boundary-line',
+    id: 'beyogul-boundary-line',
     type: 'line',
-    source: 'aoyama-boundary',
-    'source-layer': 'tokyo_ayoma_boundary-2cw7di',
+    source: 'beyogul-boundary',
+    'source-layer': 'b_boundary-46gwce',
     paint: {
         'line-color': '#8c5e3c',
         'line-width': 2,
@@ -57,30 +57,30 @@ map.on('load', () => {
     });
   
     map.addLayer({
-    id: 'aoyama-boundary-shadow',
+    id: 'beyogul-boundary-shadow',
     type: 'line',
-    source: 'aoyama-boundary',
-    'source-layer': 'tokyo_ayoma_boundary-2cw7di',
+    source: 'beyogul-boundary',
+    'source-layer': 'b_boundary-46gwce',
     paint: {
       'line-color': 'rgba(0, 0, 0, 0.13)', // 黑色透明度即阴影感
       'line-width': 6, // 阴影比主线宽
       'line-blur': 2   // 模糊边缘
     }
-  }, 'aoyama-boundary-line'); //
+  }, 'beyogul-boundary-line'); //
 
 
     // === 添加主轴线数据源 ===
-    map.addSource('aoyama-axis', {
+    map.addSource('b-line', {
     type: 'vector',
-    url: 'mapbox://ixxiiris.ch1d5akl'
+    url: 'mapbox://csy-cf.34elyui6'
     });
 
     // === 主轴线图层 ===
     map.addLayer({
         id: 'aoyama-axis-line',
         type: 'line',
-        source: 'aoyama-axis',
-        'source-layer': 'aoyama_axis-27o82p',
+        source: 'b-line',
+        'source-layer': 'b_line-c7qmoo',
         layout: {
             'line-cap': 'round',
             'line-join': 'round'
@@ -466,7 +466,7 @@ map.on('load', () => {
               </div>
             </div>
             <p style="margin: 4px 0;">
-              Stretching from Galata Tower to Taksim Square, this cultural corridor invites visitors to explore Istanbul’s rich layers — from Ottoman-era streets to contemporary arts venues — all interwoven with the scent of coffee.
+              Stretching from Galata Tower to Taksim Square, this cultural corridor invites visitors to explore Istanbul's rich layers — from Ottoman-era streets to contemporary arts venues — all interwoven with the scent of coffee.
             </p>
             <p style="margin: 4px 0;">
               Traditional Turkish cafés sit beside modern roasters, each acting as a node in a walkable urban web shaped by tourism and cultural revival.
