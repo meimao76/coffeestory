@@ -30,4 +30,31 @@
 → 每个模块前用表格列出问题 + 解决方案
 → 后续选取2–3个典型挑战，用函数 + 代码块解释
 
+---
 
+## PDF 渲染依赖安装说明（首次配置时请完成）
+
+若你计划通过 `jupyter nbconvert` 将 `.ipynb` 转换为 PDF，请确保安装以下组件：
+
+### 所需依赖清单
+
+| 依赖工具 | 用途 | 检查命令 | 安装方式 |
+|----------|------|-----------|-----------|
+| **nbconvert** | 核心转换工具 | `jupyter nbconvert --version` | 已包含在 Jupyter 中，若缺失：`pip install nbconvert` |
+| **pandoc** | Markdown → LaTeX 支持 | `pandoc --version` | 推荐命令：`brew install pandoc` / `conda install -c conda-forge pandoc` |
+| **LaTeX 环境**（如 `xelatex`） | PDF 渲染引擎 | `xelatex --version` / `which xelatex` | **macOS**：`brew install --cask mactex` <br>**Windows**：下载 [MiKTeX](https://miktex.org/download) 并完整安装 |
+
+---
+
+### 检查是否已安装的快速命令（复制运行）
+
+```bash
+jupyter nbconvert --version
+pandoc --version
+xelatex --version
+```
+
+### 转换PDF的命令
+``` bash
+jupyter nbconvert --to pdf Template_submission_CASA0003.ipynb
+```
