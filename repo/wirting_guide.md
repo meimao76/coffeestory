@@ -31,3 +31,7 @@
 → 后续选取2–3个典型挑战，用函数 + 代码块解释
 
 
+## 转换PDF的命令
+``` bash
+jupyter nbconvert --to pdf Template_submission_CASA0003.ipynb
+```
