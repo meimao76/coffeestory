@@ -58,3 +58,12 @@ xelatex --version
 ``` bash
 jupyter nbconvert --to pdf Template_submission_CASA0003.ipynb
 ```
+
+## 方案二
+先使用
+``` bash
+jupyter nbconvert Template_submission_CASA0003.ipynb --to html
+``` 
+导出为html，再使用浏览器打印<br>
+注：为了美观需要自己改页边距<br>
+弊端：这种方法会失去超链接
