@@ -65,6 +65,18 @@ const observer = new IntersectionObserver(entries => {
   });
 
 
+//color scheme 这里是调整地图颜色的地方
+// 1. 定义阈值和对应的颜色（跟你 QGIS 里那 6 个 range/ symbol 一一对应）
+function getColorByCount(v) {
+  if (v <=   1)    return 'rgba(7, 166, 223, 0.2)';   // 0.0 – 0.0
+  if (v <= 458)    return '#c7d0e5';   // 1 – 458
+  if (v <= 2295)   return '#91b6d6';   // 458 – 2295
+  if (v <= 7006)   return '#579dc8';   // 2295 – 7006
+  if (v <= 32345)  return '#2382b4';   // 7006 – 32345
+  // 剩余 ≥32345
+  return '#045a8d';                   // 32345 – 47838 及以上
+}
+
 //3 初始化地球
 const globe = Globe()
 
@@ -103,15 +115,24 @@ const globe = Globe()
   })
   .arcsTransitionDuration(200)
   // 多边形样式
-  .polygonsTransitionDuration(0) 
-  .polygonCapColor(d => 
-  d.properties.ISO_A3?.toUpperCase?.() === selectedCountryIso 
-    ? 'rgba(255,255,255,0.5)' 
-    : 'rgba(7, 166, 223, 0.2)'
+  .polygonsTransitionDuration(300) 
+  .polygonCapColor(f => {
+    const c = +f.properties.count_int;  // 或者 f.properties.count
+    return getColorByCount(c);
+  }
 )
   .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 侧边
   .polygonStrokeColor(() => '#54361a') // 国界线颜色
   .polygonAltitude(0.01)
+  .onPolygonHover(hoverD => {
+  globe
+    .polygonAltitude(d => d === hoverD ? 0.04 : 0.01)
+    .polygonCapColor(d =>
+      d === hoverD
+              ? '#7FFFD4'                   // ← 水绿色
+      : getColorByCount(+d.properties.count_int)  // ← 其余仍旧用分级色
+    );
+})
   .polygonLabel(({  id,properties }) => {
     const iso = id?.toUpperCase?.();
     const brands = coffeeByCountry.get(iso) || [];
