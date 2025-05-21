@@ -127,21 +127,7 @@ const globe = Globe()
         </ul>
       </div>
     `;
-  })
-  .onPolygonClick(({ properties }) => {
-  const iso = properties.id?.toUpperCase?.();
-  selectedCountryIso = iso;
-
-  const brands = coffeeByCountry.get(iso) || [];
-  showCoffeeList(brands, properties.NAME);
-
-  // 强制刷新颜色
-  globe.polygonCapColor(d =>
-    d.properties.id?.toUpperCase?.() === selectedCountryIso
-      ? 'rgba(255,255,255,0.5)'
-      : 'rgba(7, 166, 223, 0.2)'
-  );
-});
+  });
 
   
 
@@ -160,7 +146,7 @@ globe(document.getElementById('globeViz'));
 
 // 加载数据：国界线 + 贸易流
 Promise.all([
-    d3.json("world.geojson"),
+    d3.json("world2.geojson"),
     d3.csv("combined_tradeflow.csv"),
     d3.csv("List_of_coffeehouse_chains_3.csv"),
 ]).then(function([boundaryData, merged_flow, brands]) {
@@ -176,6 +162,10 @@ Promise.all([
         .filter(d => !isNaN(+d.lat_import))
         .filter(d => !isNaN(+d.lng_import));
     borders = boundaryData.features
+    boundaryData.features.forEach(f => { 
+      f.id = f.properties.id; 
+    });
+    console.table( boundaryData.features.map(f => f.id) )
     globe
     .arcsData(topData);
 
@@ -576,7 +566,7 @@ function Sankey() {
 Sankey();
 
 
-
+//Part 3 barchart
 // —— 1. 基本配置 —— 
 function mouseover(event, d) {
   console.log("🎯 mouseover 触发", d);
@@ -711,29 +701,6 @@ d3.csv('coffee_consumption_cleaned.csv', d3.autoType).then(data => {
     return ms.length? ms
            : [ d3.select('input[name="sortOption"]').node().value ];
   }
-
-//   // Three function that change the tooltip when user hover / move / leave a cell
-//   function mouseover(event, d) {
-//   tooltip.style("opacity", 1);
-// }
-
-// function mousemove(event, d) {
-//   console.log("🖱️ 鼠标悬停数据:", { d, countryData });
-//   const countryData = d3.select(this.parentNode).datum(); // 获取当前柱子的国家数据
-//   tooltip
-//     .html(`
-//       <strong>${countryData.Country}</strong><br>
-//       ${d.key}: ${d.value}
-//     `)
-//     .style("left", (event.pageX + 10) + "px")
-//     .style("top", (event.pageY - 10) + "px");
-// }
-
-// function mouseleave(event, d) {
-//   tooltip.style("opacity", 0);
-// }
-
-
 
   // 绑定 change 事件
   d3.selectAll('input[name="sortOption"]')
