@@ -5,6 +5,7 @@ let roastData = [];
 let topData = []; 
 let coffeeByCountry = new Map();
 let info = [];
+let altitudeScale;
  // 保存全部数据
 let selectedCountryIso = null;
 let tooltip = d3.select("body")
@@ -16,29 +17,56 @@ let tooltip = d3.select("body")
 // 1.定义设置交互对话框可见性的函数
 const infoBox     = document.getElementById('infoBox');
 const selectorBox = document.getElementById('commoditySelectorWrapper');
+const countryselector = document.getElementById('country-selector');
 
 function showBordersFlows() {
   globe
     .arcsData(topData);     
   selectorBox.style.display = 'block'; 
+  countryselector.style.display = 'none';
 }
 
 function showBordersOnly() {
   globe
-    .polygonsData(borders)   // 显示国界
-    .arcsData([]);           // 隐藏所有飞线
+
+  .polygonsData(borders)
+    .polygonsTransitionDuration(300)
+    .polygonCapColor(f => {
+      const v = +f.properties['count_int'] || 0;
+      return getColorByCount(v);
+    })
+    .onPolygonHover(hoverD => globe
+      .polygonAltitude(d => d === hoverD ? 0.04 : 0.02)
+      .polygonCapColor(d =>
+        d === hoverD
+          ? '#7FFFD4'
+          : getColorByCount(+d.properties['count_int'])
+      )
+    )
+    .polygonAltitude(0.02)
+    .arcsData([]);
 
   infoBox.style.display     = 'none';  // 隐藏
   selectorBox.style.display = 'none'; // 
+  countryselector.style.display = 'block';
 }
 
 function showFlowsOnly() {
   globe
-    .polygonsData([])        // 隐藏国界
-    .arcsData(topData);     // 显示所有飞线
+    .polygonsData(borders)
+    // 分级着色，改用 DailyCoffeePerCapita(CUP)
+    .polygonCapColor(f => {
+      const v = +f.properties['DailyCoffeePerCapita(CUP)'] || 0;
+      return getCoffeeColor(v);
+    })
+    .polygonSideColor(() => 'rgba(35, 35, 99, 0.4)')
+    .polygonStrokeColor(() => '#54361a')
+    .polygonAltitude(0.02)   // 保留固定抬升高度
+    .arcsData([]);
 
   infoBox.style.display     = 'none';  // 隐藏
   selectorBox.style.display = 'none'; // 
+  countryselector.style.display = 'block';
 }
 
 // 2. 章节映射
@@ -65,16 +93,26 @@ const observer = new IntersectionObserver(entries => {
   });
 
 
-//color scheme 这里是调整地图颜色的地方
+//color scheme part2这里是调整地图颜色的地方
 // 1. 定义阈值和对应的颜色（跟你 QGIS 里那 6 个 range/ symbol 一一对应）
 function getColorByCount(v) {
-  if (v <=   1)    return 'rgba(7, 166, 223, 0.2)';   // 0.0 – 0.0
+  if (v <=   1)    return 'rgba(7, 166, 223, 0.1)';   // 0.0 – 0.0
   if (v <= 458)    return '#c7d0e5';   // 1 – 458
   if (v <= 2295)   return '#91b6d6';   // 458 – 2295
   if (v <= 7006)   return '#579dc8';   // 2295 – 7006
   if (v <= 32345)  return '#2382b4';   // 7006 – 32345
   // 剩余 ≥32345
   return '#045a8d';                   // 32345 – 47838 及以上
+}
+
+//color scheme part2 第三章的地图颜色
+function getCoffeeColor(v) {
+  if (v <= 0.23)  return '#EDF8FB';  // rgb(237,248,251)
+  if (v <= 0.74)  return '#B2E2E2';  // rgb(178,226,226)
+  if (v <= 1.25)  return '#66C2A4';  // rgb(102,194,164)
+  if (v <= 2.59)  return '#2CA25F';  // rgb(44,162,95)
+  if (v <= 5.31)  return '#006D2C';  // rgb(0,109,44)
+  return '#006D2C';                  // ≥5.31 同最深色
 }
 
 //3 初始化地球
@@ -115,24 +153,17 @@ const globe = Globe()
   })
   .arcsTransitionDuration(200)
   // 多边形样式
-  .polygonsTransitionDuration(300) 
-  .polygonCapColor(f => {
-    const c = +f.properties.count_int;  // 或者 f.properties.count
-    return getColorByCount(c);
-  }
-)
-  .polygonSideColor(() => 'rgba(0, 0, 0, 0)') // 侧边
+  .polygonSideColor(() => 'rgba(35, 35, 99, 0.4)') // 侧边
   .polygonStrokeColor(() => '#54361a') // 国界线颜色
-  .polygonAltitude(0.01)
   .onPolygonHover(hoverD => {
   globe
-    .polygonAltitude(d => d === hoverD ? 0.04 : 0.01)
+    .polygonAltitude(d => d === hoverD ? 0.04 : 0.02)
     .polygonCapColor(d =>
       d === hoverD
               ? '#7FFFD4'                   // ← 水绿色
       : getColorByCount(+d.properties.count_int)  // ← 其余仍旧用分级色
     );
-})
+  })
   .polygonLabel(({  id,properties }) => {
     const iso = id?.toUpperCase?.();
     const brands = coffeeByCountry.get(iso) || [];
@@ -170,7 +201,8 @@ Promise.all([
     d3.json("world2.geojson"),
     d3.csv("combined_tradeflow.csv"),
     d3.csv("List_of_coffeehouse_chains_3.csv"),
-]).then(function([boundaryData, merged_flow, brands]) {
+    d3.csv("Data_with_Country_Names.csv"),
+]).then(function([boundaryData, merged_flow, brands, consum]) {
 
     console.log("加载的数据：", merged_flow.slice(0, 5));
 
@@ -192,7 +224,7 @@ Promise.all([
 
     // 建立 ISO3 -> 品牌列表 的映射
     coffeeByCountry = d3.group(brands, d => d.ISO3?.toUpperCase?.());
-  
+    
     // 初始化显示
     updateGlobeArcs('all');
     const defaultYear    = document.getElementById('yearSelector').value;
@@ -362,8 +394,43 @@ bars.transition().duration(800)
 // 页面初始化完毕之后，第一次渲染
 updateGraphs();
 
-});
+ const flySelect = document.getElementById('capital-select');
+  // 1) 填充下拉框
+  consum.forEach(d => {
+    const opt = document.createElement('option');
+    // 文本显示 ISO3，你也可以改成国家名，如果 CSV 里有的话
+    opt.textContent = d.country;
+    // value 存 “lat,lng”
+    opt.value = `${d.lat},${d.lng}`;
+    flySelect.appendChild(opt);
+  });
 
+  // 2) 监听 change，选中后飞镜头
+  flySelect.addEventListener('change', () => {
+    const val = flySelect.value;
+    if (!val) return;  // “请选择”或空值时不执行
+    const [lat, lng] = val.split(',').map(Number);
+    globe.pointOfView(
+      { lat, lng, altitude: 1.5 },  // altitude 值调远近
+      1500                          // 动画时长 ms
+    );
+  });
+
+  boundaryData.features.forEach(f => {
+    f.id = f.properties.id;
+  });
+  borders = boundaryData.features;
+
+  // —— 2. 在这里定义你的 altitudeScale ——  
+  //    先取出所有 DailyCoffeePerCapita(CUP) 值
+const cupExtent = d3.extent(
+    boundaryData.features,
+    f => +f.properties['DailyCoffeePerCapita(CUP)'] || 0
+  );
+  altitudeScale = d3.scaleSqrt()
+    .domain(cupExtent)
+    .range([0.3, 0.1]);
+});
 
 //飞线制图
 // 1. 先改造 updateGlobeArcs，接收两个参数
