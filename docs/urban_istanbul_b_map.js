@@ -107,7 +107,7 @@ map.on('load', () => {
   // 地铁图层
   map.addSource('beyogul_tourism', {
     type: 'vector',
-    url: 'mapbox://csy-cf.7yxz4m92'
+    url: 'mapbox://csy-cf.d54fgodk'
     });
 
   map.loadImage('image/ist/tourism.png', (error, image) => {
@@ -118,16 +118,16 @@ map.on('load', () => {
     id: 'beyogul_tourism-symbol',
     type: 'symbol',
     source: 'beyogul_tourism',
-    'source-layer': 'b_tourism1-5641on',
+    'source-layer': 'b_tourism2-3zs1p1',
     layout: {
       'icon-image': 'tourism-icon',
       'icon-size': [
         'interpolate',
         ['linear'],
         ['zoom'],
-        11, 0.02,   // zoom 11 及以下：缩小显示
-        14, 0.05,   // zoom 14：正常显示
-        17, 0.1 ,   // zoom 17：稍大一点
+        11, 0.1,   // zoom 11 及以下：缩小显示
+        14, 0.2,   // zoom 14：正常显示
+        17, 0.5 ,   // zoom 17：稍大一点
         ],
       'icon-anchor': 'bottom',
       'icon-allow-overlap': true,
@@ -613,10 +613,10 @@ map.on('load', () => {
   // 1. 定义精选 café 名称精确列表
     const featuredCafeNames = [
       "Mandabatmaz",
-      "Nomu",
-      "Torsys café • An Stand",
-      "Cafe Kitsune",
-      "Aoyama Flower Market (青山フラワーマーケット）"
+      "Hafiz Mustafa 1864",
+      "Viyana Kahvesi",
+      "Drip Coffee",
+      "Noir Pit"
     ];
 
     // 2. 每个 café 的详细信息
@@ -627,29 +627,29 @@ map.on('load', () => {
         image: "image/ist/mandabatmaz.jpg",
         link: "https://www.instagram.com/mandabatmazkahvesi/?hl=en"
       },
-      "Nomu": {
-        title: "NOMU (by Nicolai Bergmann)",
-        description: "A flower café blending Nordic simplicity with immersive floral displays.",
-        image: "image/TOYKO/nomu.jpg",
-        link: "https://whenin.tokyo/NOMU-Flower-Cafe-Aoyama"
+      "Hafiz Mustafa 1864": {
+        title: "Hafiz Mustafa 1864",
+        description: "An iconic Istanbul dessert institution since 1864, blending Ottoman tradition with indulgent sweets in a gilded setting.",
+        image: "image/ist/hafiz_mustafa_1864.jpg",
+        link: "https://www.hafizmustafa.com/en"
       },
-      "Torsys café • An Stand": {
-        title: "Toraya Café An Stand",
-        description: "A refined Japanese-style café offering wagashi and minimalism in equal measure.",
-        image: "image/TOYKO/toraya.jpg",
-        link: "https://whenin.tokyo/Toraya-Cafe-An-Stand-Aoyama"
+      "Viyana Kahvesi": {
+        title: "Viyana Kahvesi",
+        description: "nspired by Vienna's coffee legacy, this café reinterprets Turkish flavors and hospitality with a modern twist of chocolate and elegance.",
+        image: "image/ist/viyana_kahvesi.jpg",
+        link: "https://viyanakahvesi.com/"
       },
-      "Cafe Kitsune": {
-        title: "Café Kitsuné Aoyama",
-        description: "A café by fashion label Maison Kitsuné, fusing espresso culture with global aesthetic.",
-        image: "image/TOYKO/kitsune.jpg",
-        link: "https://maisonkitsune.com/mk/find-a-store/cafe-kitsune-aoyama-3/"
+      "Drip Coffee": {
+        title: "Drip Coffee",
+        description: "A hidden local favorite for serious coffee lovers, offering peaceful patio vibes and a devotion to drip.",
+        image: "image/ist/drip_coffee.jpg",
+        link: "https://www.yelp.com/biz/drip-coffeeist-istanbul-4"
       },
-      "Aoyama Flower Market (青山フラワーマーケット）": {
-        title: "Aoyama Flower Market Teahouse",
-        description: "A botanical café embedded in a floral store, blending green ambiance with urban calm.",
-        image: "image/TOYKO/flowermarket.jpg",
-        link: "https://foreign.aoyamaflowermarket.com/foreign/teahouse/pc/"
+      "Noir Pit": {
+        title: "Noir Pit Coffee Co. Pera",
+        description: "A friendly and relaxed café praised for its cold brews, affordable treats, and quietly welcoming atmosphere.",
+        image: "image/ist/noir.jpg",
+        link: "https://www.noirpit.com/"
       }
     };
 
@@ -665,9 +665,9 @@ map.on('load', () => {
       }
 
       map.addLayer({
-        id: 'b_cafe-de1a7u-featured-cafes',
+        id: 'beyogul-featured-cafes',
         type: 'symbol',
-        source: 'cafes_b_cafe-de1a7u',
+        source: 'cafes_beyogul',
         'source-layer': 'b_cafe-de1a7u',
         filter: ['in', ['get', 'name'], ['literal', featuredCafeNames]],
         layout: {
@@ -687,7 +687,7 @@ map.on('load', () => {
       map.setLayoutProperty('beyogul-featured-cafes', 'visibility', 'visible');
 
       // Hover 提示
-      map.on('mouseenter', 'beyogulv-featured-cafes', e => {
+      map.on('mouseenter', 'beyogul-featured-cafes', e => {
         if (map.getLayoutProperty('beyogul-featured-cafes', 'visibility') !== 'visible') return;
 
         const name = e.features[0].properties.name;
