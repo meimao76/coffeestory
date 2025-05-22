@@ -19,6 +19,10 @@ const infoBox     = document.getElementById('infoBox');
 const selectorBox = document.getElementById('commoditySelectorWrapper');
 const countryselector = document.getElementById('country-selector');
 
+// 新增一个全局变量控制滑动显示的图层
+let currentColorMode = 'count'; // 'count' | 'coffee'
+let currentActiveSection = null;
+
 function showBordersFlows() {
   globe
     .arcsData(topData);     
@@ -35,11 +39,13 @@ function showBordersOnly() {
       const v = +f.properties['count_int'] || 0;
       return getColorByCount(v);
     })
+    .polygonSideColor(() => 'rgba(255, 255, 255, 0.25)') 
+    .polygonStrokeColor(() => '#54361a') 
     .onPolygonHover(hoverD => globe
       .polygonAltitude(d => d === hoverD ? 0.04 : 0.02)
       .polygonCapColor(d =>
         d === hoverD
-          ? '#7FFFD4'
+          ? '#f8e1c1'
           : getColorByCount(+d.properties['count_int'])
       )
     )
@@ -49,6 +55,7 @@ function showBordersOnly() {
   infoBox.style.display     = 'none';  // 隐藏
   selectorBox.style.display = 'none'; // 
   countryselector.style.display = 'block';
+  currentColorMode = 'count';
 }
 
 function showFlowsOnly() {
@@ -59,7 +66,16 @@ function showFlowsOnly() {
       const v = +f.properties['DailyCoffeePerCapita(CUP)'] || 0;
       return getCoffeeColor(v);
     })
-    .polygonSideColor(() => 'rgba(35, 35, 99, 0.4)')
+    // 新增重新绑定hover
+    .onPolygonHover(hoverD => globe
+      .polygonAltitude(d => d === hoverD ? 0.04 : 0.02)
+      .polygonCapColor(d =>
+        d === hoverD
+          ? '#f8e1c1'
+          : getCoffeeColor(+d.properties['DailyCoffeePerCapita(CUP)'])
+      )
+    )
+    .polygonSideColor(() => 'rgba(255, 255, 255, 0.25)')
     .polygonStrokeColor(() => '#54361a')
     .polygonAltitude(0.02)   // 保留固定抬升高度
     .arcsData([]);
@@ -67,6 +83,7 @@ function showFlowsOnly() {
   infoBox.style.display     = 'none';  // 隐藏
   selectorBox.style.display = 'none'; // 
   countryselector.style.display = 'block';
+  currentColorMode = 'coffee'; //增加滑动显示的提示
 }
 
 // 2. 章节映射
@@ -81,7 +98,11 @@ const sidebar = document.getElementById('sidebarContent');
 const observer = new IntersectionObserver(entries => {
   entries.forEach(entry => {
     if (entry.isIntersecting && sectionActions[entry.target.id]) {
-      sectionActions[entry.target.id]();
+      const newSection = entry.target.id;
+      if (newSection !== currentActiveSection) {
+      sectionActions[newSection]();
+      currentActiveSection = newSection;
+      }
     }
   });
 }, { root: sidebar, threshold: 0.5 });
@@ -96,23 +117,23 @@ const observer = new IntersectionObserver(entries => {
 //color scheme part2这里是调整地图颜色的地方
 // 1. 定义阈值和对应的颜色（跟你 QGIS 里那 6 个 range/ symbol 一一对应）
 function getColorByCount(v) {
-  if (v <=   1)    return 'rgba(7, 166, 223, 0.1)';   // 0.0 – 0.0
-  if (v <= 458)    return '#c7d0e5';   // 1 – 458
-  if (v <= 2295)   return '#91b6d6';   // 458 – 2295
-  if (v <= 7006)   return '#579dc8';   // 2295 – 7006
-  if (v <= 32345)  return '#2382b4';   // 7006 – 32345
+  if (v <=   1)    return 'rgba(204, 185, 150, 0.1)';   // 0.0 – 0.0
+  if (v <= 458)    return '#e9d8b9';   // 1 – 458
+  if (v <= 2295)   return '#d8b48f';   // 458 – 2295
+  if (v <= 7006)   return '#c69c6d';   // 2295 – 7006
+  if (v <= 32345)  return '#8b5e3c';   // 7006 – 32345
   // 剩余 ≥32345
-  return '#045a8d';                   // 32345 – 47838 及以上
+  return '#4f2d1b';                   // 32345 – 47838 及以上
 }
 
 //color scheme part2 第三章的地图颜色
 function getCoffeeColor(v) {
-  if (v <= 0.23)  return '#EDF8FB';  // rgb(237,248,251)
-  if (v <= 0.74)  return '#B2E2E2';  // rgb(178,226,226)
-  if (v <= 1.25)  return '#66C2A4';  // rgb(102,194,164)
-  if (v <= 2.59)  return '#2CA25F';  // rgb(44,162,95)
-  if (v <= 5.31)  return '#006D2C';  // rgb(0,109,44)
-  return '#006D2C';                  // ≥5.31 同最深色
+  if (v <= 0.23)  return '#f5f0e1';  // 
+  if (v <= 0.74)  return '#e0c9a6';  // 
+  if (v <= 1.25)  return '#cba07a';  // 
+  if (v <= 2.59)  return '#a97453';  // 
+  if (v <= 5.31)  return '#6b4c3b';  // 
+  return '#6b4c3b';                  // 
 }
 
 //3 初始化地球
@@ -136,9 +157,9 @@ const globe = Globe()
   // 飞线颜色（起点颜色 + 终点颜色）
   .arcColor(d => {
         if (d.commodity === 'raw bean') {
-            return [`rgb(255, 255, 255)`, `rgba(255, 248, 231, 0.5)`, `rgb(255, 209, 161)`];
+            return [`rgb(224, 123, 57)`, `rgba(244, 194, 122, 0.5)`, `rgb(255, 209, 161)`];
         } else if (d.commodity === 'roasted bean') {
-            return [`rgb(255, 232, 220)`, `rgba(252, 212, 200, 0.5)`,`rgb(247, 187, 165)`];
+            return [`rgb(222, 106, 70)`, `rgba(242, 163, 126, 0.5)`,`rgb(247, 187, 165)`];
         } else {
             return ['#cccccc', '#cccccc'];
         }
@@ -153,16 +174,19 @@ const globe = Globe()
   })
   .arcsTransitionDuration(200)
   // 多边形样式
-  .polygonSideColor(() => 'rgba(35, 35, 99, 0.4)') // 侧边
+  .polygonSideColor(() => 'rgba(255, 255, 255, 0.25)') // 侧边
   .polygonStrokeColor(() => '#54361a') // 国界线颜色
   .onPolygonHover(hoverD => {
   globe
     .polygonAltitude(d => d === hoverD ? 0.04 : 0.02)
-    .polygonCapColor(d =>
-      d === hoverD
-              ? '#7FFFD4'                   // ← 水绿色
-      : getColorByCount(+d.properties.count_int)  // ← 其余仍旧用分级色
-    );
+    .polygonCapColor(d =>{
+      if (d === hoverD) return '#7FFFD4'; // 高亮颜色
+      if (currentColorMode === 'count') {
+        return getColorByCount(+d.properties.count_int);
+      } else {
+        return getCoffeeColor(+d.properties['DailyCoffeePerCapita(CUP)']);
+      }
+    });
   })
   .polygonLabel(({  id,properties }) => {
     const iso = id?.toUpperCase?.();

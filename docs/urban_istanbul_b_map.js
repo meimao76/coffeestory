@@ -185,7 +185,7 @@ map.on('load', () => {
   };
 
   Object.entries(cafeTypes).forEach(([type, color]) => {
-    const layerId = `aoyama-${type.toLowerCase().replace(/[^a-z]/g, '')}`;
+    const layerId = `beyogul-${type.toLowerCase().replace(/[^a-z]/g, '')}`;
     map.addLayer({
       id: layerId,
       type: 'circle',
