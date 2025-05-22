@@ -67,18 +67,32 @@ function showFlowsOnly() {
       return getCoffeeColor(v);
     })
     // 新增重新绑定hover
-    .onPolygonHover(hoverD => globe
-      .polygonAltitude(d => d === hoverD ? 0.04 : 0.02)
-      .polygonCapColor(d =>
-        d === hoverD
-          ? '#f8e1c1'
-          : getCoffeeColor(+d.properties['DailyCoffeePerCapita(CUP)'])
-      )
-    )
+    .onPolygonHover(hoverD => {
+  globe
+    .polygonAltitude(d => d === hoverD ? 0.04 : 0.02)
+    .polygonCapColor(d =>
+      d === hoverD
+        ? '#f8e1c1'
+        : getCoffeeColor(+d.properties['DailyCoffeePerCapita(CUP)'])
+    );
+
+  if (hoverD && currentColorMode === 'coffee') {
+    const p = hoverD.properties;
+    tooltip
+      .html(`
+        <strong>${p.name}</strong><br/>
+        Daily per capita: ${p['DailyCoffeePerCapita(CUP)']} cup<br/>
+      `)
+      .style("opacity", 1);
+  } else {
+    tooltip.style("opacity", 0);
+  }
+})
     .polygonSideColor(() => 'rgba(255, 255, 255, 0.25)')
     .polygonStrokeColor(() => '#54361a')
     .polygonAltitude(0.02)   // 保留固定抬升高度
-    .arcsData([]);
+    .arcsData([])
+    .polygonLabel(() => null)
 
   infoBox.style.display     = 'none';  // 隐藏
   selectorBox.style.display = 'none'; // 
@@ -126,7 +140,7 @@ function getColorByCount(v) {
   return '#4f2d1b';                   // 32345 – 47838 及以上
 }
 
-//color scheme part2 第三章的地图颜色
+//color scheme part3 第三章的地图颜色
 function getCoffeeColor(v) {
   if (v <= 0.23)  return '#f5f0e1';  // 
   if (v <= 0.74)  return '#e0c9a6';  // 
@@ -215,6 +229,19 @@ document.addEventListener('click', (e) => {
         infoBox.style.display = 'none';
     }
 })
+
+document.getElementById('globeViz').addEventListener('mousemove', (e) => {
+  if (currentColorMode === 'coffee') {
+    tooltip
+      .style("left", (e.pageX + 10) + "px")
+      .style("top", (e.pageY - 10) + "px");
+  }
+});
+
+document.getElementById('globeViz').addEventListener('mouseleave', () => {
+  tooltip.style("opacity", 0);
+});
+
 
 
 //渲染
