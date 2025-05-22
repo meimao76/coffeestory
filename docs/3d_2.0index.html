@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <!-- 固定导航栏区域 -->
+  <!-- Fixed navigation bar area -->
   <nav class="navbar">
     <ul>
       <li><a href="index.html#homepage">Home</a></li>
@@ -39,15 +39,15 @@
   </nav>
 
   <div id="appContainer">
-    <!-- 侧边栏，内容可滚动，导航与筛选器固定在顶部 -->
+    <!-- The sidebar has scrollable content, with navigation and filters fixed at the top -->
     <aside id="sidebar">
-      <!-- 可滚动内容区 -->
+      <!-- Scrollable content area -->
       <div id="sidebarContent">
-        <!-- 第一部分：贸易流部分 -->
+        <!-- Part One: Trade Flow Section -->
         <div id="scrollContent1" class="scroll-group">
           <div id="titleZone1" class="title-zone">Who Grows, Who Drinks?</div>
           <div id="textZone1" class="text-zone">
-            <!-- 文本描述 -->
+            <!-- description -->
             Coffee is grown in the Global South and consumed in the Global North.  
             From the tropical highlands of Brazil and Colombia, beans travel thousands of miles —  
             only to end up brewed in cafés, offices, and kitchens across the United States and Europe.
@@ -57,7 +57,7 @@
             invisibility.
           </div>
 
-          <!-- 文本式切换：Trade Flows | Exporters | Importers -->
+          <!-- Trade Flows | Exporters | Importers -->
           <div id="chartSwitch1" class="chart-switch">
             <span data-view="flows" class="switch-btn active">Trade Flows</span>
             <span class="separator">|</span>
@@ -73,18 +73,18 @@
             <div id="barChartImporters" class="chart-panel hidden"></div>
           </div>
 
-          <!-- 统计类型切换：Value ● Weight -->
+          <!-- Value ● Weight -->
           <div id="measureSwitch1" class="measure-switch">
             <label><input type="radio" name="measure1" value="value" checked /> Value</label>
             <label><input type="radio" name="measure1" value="weight" /> Weight</label>
           </div>
         </div>
 
-        <!-- 第二部分：价值链 -->
+        <!-- Part Two: Value Chain -->
         <div id="scrollContent2" class="scroll-group">
           <div id="titleZone2" class="title-zone">Who Makes the Money?</div>
           <div id="textZone2" class="text-zone">
-            <!-- 文本描述 -->
+            <!-- description-->
             A coffee bean changes hands many times — but not all hands are equal.
             <br><br>
             For every cup sold at $4, the grower might earn just 10 to 20 cents.
@@ -99,11 +99,11 @@
           </div>
         </div>
 
-        <!-- 第三部分 -->
+        <!-- part 3 -->
         <div id="scrollContent3" class="scroll-group">
           <div id="titleZone3" class="title-zone">Consumption is culture, too.</div>
           <div id="textZone3" class="text-zone">
-            <!-- 文本描述 -->
+            <!-- description -->
             People don't just drink coffee. They drink a way of life.
             In Finland, it's a daily comfort. In Italy, a cultural anchor. In the U.S., a mobile necessity.
             <br><br>
@@ -158,7 +158,7 @@
       </div>
     </aside>
 
-    <!-- 主内容区：3D 地球 + 信息弹窗 -->
+    <!-- Main content area: 3D Earth + Information pop-up Window -->
     <main id="mainContent">
       <div id="globeViz"></div>
       <div id="infoBox" class="info-box">
@@ -183,7 +183,7 @@
 
       <div id="country-selector">
       <div>
-        <label id= "fly-label" for="capital-select">Fly to：</label>
+        <label id= "fly-label" for="capital-select">Fly to: </label>
         <select id="capital-select">
           <option value="">-- Please Select --</option>
         </select>
@@ -213,7 +213,7 @@
 
   </div>
   <div id="tooltip"></div>
-  <!-- 引入脚本 -->
+  <!-- the script -->
    
   <script src="https://unpkg.com/three/build/three.min.js"></script>
   <script src="https://unpkg.com/globe.gl"></script>
